@@ -1,0 +1,60 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\begin{document}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+\setlength{\arraycolsep}{12pt}
+
+\title{MACM 316 Lecture 6}
+\author{Alexander Ng}
+\date{January 17, 2025}
+
+\maketitle
+
+\section{Partial Pivoting}
+
+Parital pivoting is the simplest technique to avoid generating massive roundoff
+errors in the Gaussian Elimination algorithm.
+
+The idea is to find the largest element beneath the pivot and swap its row with
+the pivot row.
+
+Parital pivoting is sufficient for most linear systems. However, it can be
+inadequate for certain problems.
+
+\subsection{Example}
+
+Consider the linear system:
+
+\quad $E_1: 30.00x_1 + 591400x_2 = 491700$
+
+\quad $E_2: 5.291x_1 - 6.130x_2 = 46.78$
+
+No row exchanges are carried out during partial pivoting.
+
+Now, the multiplier is $m_{21} = \frac{5.291}{30.000} = 0.1764$ and 
+($E_2-m_{21}E_1 \to E_1$) gives the system
+
+\quad $30.00x_1 + 591400x_2 \approx 591700$
+
+\quad $-104300x_1 \approx -104400$
+
+\end{document}

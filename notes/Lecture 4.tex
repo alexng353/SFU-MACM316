@@ -1,0 +1,139 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+\newcommand{\ex}{\textbf{ex.}\xspace}
+\newcommand{\Ex}{\textbf{Ex.}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textit{Lemma}\xspace}
+\newcommand{\bproof}{\textit{Proof ($\impliedby$).}\xspace}
+\newcommand{\fproof}{\textit{Proof ($\implies$).}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\begin{document}
+
+\title{MACM 316 Lecture 4 - Numerical Approximation and Big-O Notation}
+\author{Alexander Ng}
+\date{Monday, January 13, 2025}
+
+\maketitle
+\section{Linear Approximation of $\sqrt{16.1}$}
+
+We approximate $\sqrt{16.1}$ without using the square root algorithm.
+
+\subsection{Solution}
+Let $f(x) = \sqrt{x}$ and choose an expansion point $x_0 = 16$, since 
+$\sqrt{16} = 4 \in \mathbb{Z}$ is easily computable. Using the first-order 
+Taylor approximation:
+\begin{equation*}
+    f(x_0 + h) \approx f(x_0) + h f'(x_0),
+\end{equation*}
+where $h = 0.1$.
+
+\subsection{Computation}
+\begin{align*}
+    f(16) &= \sqrt{16} = 4, \\
+    f'(x) &= \frac{1}{2\sqrt{x}}, \quad f'(16) = \frac{1}{8}, \\
+    f(16.1) &\approx 4 + 0.1 \times \frac{1}{8} = 4.0125.
+\end{align*}
+The exact value is $4.01248052955\dots$, with a small truncation error.
+Since the machine error is on the order of $10^{-14}$, it is negligible compared 
+to the Taylor approximation error.
+
+\section{Algorithm Quantification}
+
+Numerical methods construct a sequence of better approximations, converging to 
+a solution $\alpha$.
+
+Given a sequence $\{\alpha_n\}$:
+\begin{equation*}
+    \lim_{n\to\infty} \alpha_n = \alpha.
+\end{equation*}
+We quantify convergence speed by analyzing $|\alpha - \alpha_n| \leq c$, where 
+$c$ is a target error.
+
+\subsection{Example: Convergence of $\sin(1/n)$}
+
+Consider $\alpha_n = \sin(1/n)$, which converges to $\alpha = 0$ as $n \to \infty$.
+We rewrite:
+\begin{equation*}
+    \lim_{n \to \infty} \sin(1/n) = \lim_{h \to 0} \sin(h),
+\end{equation*}
+which is easier to analyze. Expanding $\sin(h)$ in a Taylor series:
+\begin{equation*}
+    \sin(h) = h - \frac{h^3}{3!} + \frac{h^5}{5!} + \dots.
+\end{equation*}
+For small $h$, $\sin(h) \approx h$, implying:
+\begin{equation*}
+    |\alpha_n - \alpha| \leq \frac{1}{n}.
+\end{equation*}
+Thus, $\alpha_n$ converges to $\alpha = 0$ with rate of convergence $O(1/n)$.
+
+\section{Big-O Notation}
+
+For a sequence $\{A_n\}$, if:
+\begin{equation*}
+    |A_n - A| \leq k |B_n| \quad \text{for sufficiently large } n,
+\end{equation*}
+where $k$ is a constant, then we say:
+\begin{equation*}
+    A_n = A + O(B_n).
+\end{equation*}
+
+\subsection{Example: $\sin(1/n)$ Convergence}
+
+From before, $|\alpha_n - \alpha| \leq 1/n$, so:
+\begin{equation*}
+    A_n = \sin(1/n) \text{ converges to } A = 0 
+    \text{ with rate of convergence } O(1/n).
+\end{equation*}
+
+\subsection{Example: Convergence of $n \sin(1/n)$}
+
+We evaluate:
+\begin{equation*}
+    \lim_{n \to \infty} n \sin(1/n) = 1.
+\end{equation*}
+Changing variables, $h = 1/n$, we obtain:
+\begin{equation*}
+    \lim_{h \to 0} \frac{\sin(h)}{h} = 1.
+\end{equation*}
+Expanding $\sin(h)/h$ in Taylor form:
+\begin{equation*}
+    \frac{\sin(h)}{h} = 1 - \frac{h^2}{6} + O(h^4).
+\end{equation*}
+For small $h$:
+\begin{equation*}
+    \frac{\sin(h)}{h} - 1 \approx -\frac{h^2}{6},
+\end{equation*}
+so $\alpha_n$ converges to $\alpha = 1$ with rate $O(1/n^2)$.
+
+\section{Takeaways}
+
+Big-O notation quantifies algorithm efficiency by ignoring constants and focusing 
+on convergence trends. Constants vary across systems, so we care about general 
+convergence patterns rather than specific values.
+\end{document}

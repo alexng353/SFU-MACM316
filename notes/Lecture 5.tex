@@ -1,0 +1,145 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\begin{document}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+\setlength{\arraycolsep}{12pt} 
+
+\title{MACM 316 Lecture 5}
+\author{Alexander Ng}
+\date{January 15, 2025}
+
+\maketitle
+
+\section{Review}
+
+Why did we expand around $h_0 = 0$?
+
+\quad Because we want to know what happens with $h_0$, choosing $0$ as our 
+expansion point makes sense. The Taylor series approximation is more accurate 
+the closer you are to your expansion point.
+
+% As $h \to 0$, the Taylor series approximation converges to the function.
+
+\section{Another Example}
+
+Find the rate of convergence of the following $h\to 0$.
+
+\begin{equation*}
+  \lim_{h \to 0} \cos h + \frac{1}{2} h^2 = 1
+\end{equation*}
+
+$\alpha = 1$
+
+$\alpha_h = cos h + \frac{1}{2} h^2$
+
+\begin{align*}
+  \alpha_h - \alpha &= cos h + \frac{1}{2} h^2 - 1\\
+  &= 1-\frac{h^2}{2!}+\frac{h^4}{4!} + O(h^6) + \frac{1}{2}h^2 - 1 \\
+  &= \frac{h^4}{4!} + O(h^6) \\
+  = O(h^4)
+\end{align*}
+
+\hline
+
+\section{Chapter 6 - Direct methods for solving linear systems}
+
+\subsubsection*{Preface}
+
+In MATH 240, we learned methods for solving linear systems of equations where
+our $n \times m$ matrix has few rows and few columns. In Numerical Analysis, we
+will learn methods for solving linear systems where our matrix has thousands or
+millions of rows and columns.
+
+We will first study methods that give an answer ina  fixed number of steps, 
+subject only to roundoff errors. This method only has error from the accumulation
+of numerical representation errors.
+
+\subsection{Linear Systems of Equations}
+
+Linear Systems of Equations
+
+\begin{equation*}
+  \begin{bmatrix}
+    a_{11} x_1 + a_{12} x_2 + \dots + a_{1n} x_n = b_1 \\
+    a_{21} x_1 + a_{22} x_2 + \dots + a_{2n} x_n = b_2 \\
+    \vdots \\
+    a_{n1} x_1 + a_{n2} x_2 + \dots + a_{nn} x_n = b_n
+  \end{bmatrix}
+\end{equation*}
+
+\subsection{Elementary Row Operations}
+
+\begin{enumerate}
+\item Multiply row $i$ by a constant $\lambda \ne 0$, denoted by 
+  $\lambda E_i \to E_i$
+\item Add a multiple of row $i$ to row $j$, denoted by $E_i + \lambda E_j \to E_i$
+\item Interchange rows $i$ and $j$, denoted by $E_i \leftrightarrow E_j$
+\end{enumerate}
+
+\subsection{Notes on Gaussian Elimination}
+
+The idea behind \uline{Gaussian Elimination} is to transform the matrix into
+a \enquote*{triangular} equivalent matrix problem of the upper triangular
+or lower triangular form.
+
+\subsection{Example 1}
+
+\begin{equation*}
+  \begin{bmatrix}
+  1 & -1 & 2 & -1 & -8\\
+  2 & -2 & 3 & -3 & -20\\
+  1 & 1 & 1 & 0 & -2\\
+  1 & -1 & 4 & 3 & 12\\
+  \end{bmatrix}
+\end{equation*}
+
+\section{Complexity of Gaussian Elimination}
+
+How does the number of operations change with the size of the matrices?
+
+We can count up the number of multiplications and divisions to go to upper
+triangular form.
+
+\begin{equation*}
+  \begin{bmatrix}
+  * & \dots & * & x_1\\
+  \vdots & \ddots & \vdots & \vdots\\
+  * & \dots & * & x_n\\
+  \end{bmatrix} 
+  \to
+  \begin{bmatrix}
+   * & * & \dots & * & x_1\\
+   0 & * &  & \vdots &  \vdots \\
+   \vdots & \vdots & & * & x_n \\
+   0 & * & \dots & * & x_{n+1} \\
+  \end{bmatrix}
+\end{equation*}
+
+This proceeds as follows:
+
+Provided $a_{11} \ne 0$, the operation corresponding to 
+
+\begin{equation*}
+  E_j - \frac{a_{ji}}{a_{11}} E_i \to E_j
+\end{equation*}
+
+\end{document}

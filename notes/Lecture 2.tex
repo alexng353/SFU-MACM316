@@ -1,0 +1,167 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\fl}{fl}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+\newcommand{\ex}{\textbf{ex.}\xspace}
+\newcommand{\Ex}{\textbf{Ex.}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textit{Lemma}\xspace}
+\newcommand{\bproof}{\textit{Proof ($\impliedby$).}\xspace}
+\newcommand{\fproof}{\textit{Proof ($\implies$).}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\begin{document}
+
+\title{MACM 316 Lecture 2 - More Computer Arithmetic}
+\author{Alexander Ng}
+\date{Wednesday, January 8, 2025}
+
+\maketitle
+
+\section{Floating Point Decimal Normalization}
+
+Can we write all real numbers in normalized scientific notation?
+\begin{align*}
+    732.5051 &\rightarrow +0.7325051 \times 10^{+3} \\
+    -0.005612 &\rightarrow -0.5612 \times 10^{-2}
+\end{align*}
+For $x \in \mathbb{R}$, we can express it as:
+\begin{equation*}
+    x = \pm r \times 10^{\pm n}, \quad \text{where } \frac{1}{10} \leq r \leq 1.
+\end{equation*}
+
+In binary, we write:
+\begin{equation*}
+    x = \pm q \times 2^{\pm m}, \quad \text{where } \frac{1}{2} \leq q < 1.
+\end{equation*}
+Here, $q$ is the mantissa and $m$ is the integer exponent.
+
+We limit $r$ and $q$ so that when $k < 1/\text{BASE}$, we can shift the decimal 
+place and normalize the number further. When we have $1.x$, we rewrite it 
+as $0.x \times \text{base}^1$.
+
+\section{Rounding or Chopping (Sources of Error)}
+
+Given $x = 0.a_1 a_2 \dots a_n a_{n+1} \dots a_m$ using $m$ digits, rounding 
+to $n$ places follows:
+\begin{itemize}
+    \item If $0 \leq a_{n+1} < 5$, then $x = 0.a_1 a_2 \dots a_n$.
+    \item If $5 \leq a_{n+1} \leq 9$, then $x = 0.a_1 a_2 \dots (a_n + 1)$.
+\end{itemize}
+
+\textbf{Example:}
+\begin{align*}
+    \text{round}(0.125) &= 0.13, \\
+    \text{round}(-0.125) &= -0.13.
+\end{align*}
+
+Instead of rounding, truncation follows:
+\begin{equation*}
+    x = 0.a_1 a_2 \dots a_n.
+\end{equation*}
+
+Truncation introduces larger errors but is computationally cheaper than 
+rounding.
+
+\section{Error}
+
+We define:
+\begin{itemize}
+    \item Absolute error: $|p - p^*|$.
+    \item Relative error: $\frac{|p - p^*|}{|p|}$.
+\end{itemize}
+Absolute error is used when magnitude matters, particularly for small values. 
+Relative error is preferred when values differ in scale.
+
+\textbf{Example:}
+\begin{align*}
+    \text{Exact: } & 0.1, \quad \text{Approximate: } 0.099, \\
+    \text{Relative Error: } & \frac{|0.1 - 0.099|}{0.1} = 0.01.
+\end{align*}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+    \hline
+    $t$ & $5 \times 10^{-t}$ & \text{Is error within bound?} \\
+    \hline
+    0 & 5 & $\checkmark$ \\
+    1 & 0.5 & $\checkmark$ \\
+    2 & 0.05 & $\checkmark$ \\
+    3 & 0.005 & $\times$ \\
+    \hline
+\end{tabular}
+\end{center}
+
+Since $0.01 < 5 \times 10^{-2}$ but not $5 \times 10^{-3}$, we have two 
+significant digits.
+
+\section{Computations and Machine Representation}
+
+Let $\fl(x)$ denote the machine representation of $x$. Computations on a 
+machine follow:
+\begin{equation*}
+    \fl(\fl(x) + \fl(y)).
+\end{equation*}
+Each step introduces an error.
+
+\textbf{Example:}
+\begin{align*}
+    p &= 0.54617, \quad q = 0.54601, \\
+    r &= p - q = 0.00016.
+\end{align*}
+With 4-digit rounding,
+\begin{align*}
+    p^* &= 0.5462, \quad q^* = 0.5460, \\
+    r^* &= p^* - q^* = -0.0002.
+\end{align*}
+Relative error:
+\begin{equation*}
+    \frac{|r - r^*|}{|r|} = 0.25.
+\end{equation*}
+A high relative error results when subtracting close numbers.
+
+\section{Minimizing Error}
+
+Consider computing $f(x) = \frac{1 - \cos x}{x^2}$ for $\bar{x} = 1.2 \times 10^{-5}$.
+
+With 10-digit rounding:
+\begin{align*}
+    c &= \fl(\cos \bar{x}) = 0.9999999999, \\
+    1 - c &= 0.0000000001.
+\end{align*}
+This results in a large error.
+
+Using $\cos x = 1 - 2\sin^2(x/2)$:
+\begin{equation*}
+    f(x) = \frac{1}{2} \left( \frac{\sin(x/2)}{x/2} \right)^2.
+\end{equation*}
+This provides a more accurate computation.
+
+\textbf{Conclusion:} Avoid subtracting close numbers. Use alternative 
+representations like Taylor series or trigonometric identities.
+
+\end{document}

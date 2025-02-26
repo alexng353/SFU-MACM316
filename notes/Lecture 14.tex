@@ -1,0 +1,174 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+\newcommand{\ex}{\textbf{Ex.}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textbf{Lemma}\xspace}
+\newcommand{\Proof}{\textbf{Proof}\xspace}
+\newcommand{\bproof}{\textbf{Proof ($\impliedby$)}\xspace}
+\newcommand{\fproof}{\textbf{Proof ($\implies$)}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\begin{document}
+
+\title{MACM 316 Lecture 14}
+\author{Alexander Ng}
+\date{Wednesday, February 5, 2025}
+
+\maketitle
+
+\lemma If the spectral radius $\rho(T)$ satisfies $\rho(T) < 1$ then 
+$(I-T)^{-1} = I + T + T^2 + \dots$
+
+And we will prove the following theorem:
+
+\thm For any $x^{(0)} \in \mathbb{R}^n, \left\{ x^{(k)} \right\}_{k=0}^\infty$
+the sequence defined by 
+
+\begin{equation*}
+  x^{(k)} = Tx^{(k-1)} + c
+\end{equation*}
+
+converges to the unique solution of 
+
+\begin{equation*}
+  x = Tx + c \text{ if and only if }  \rho(T)<1
+\end{equation*}
+
+\bproof: assume $\rho(T)<1$
+
+\begin{align*}
+  x^{(k)} &= Tx^{(k-1)} + c \\
+  &= T(Tx^{(k-2)} + c) + c \\
+  &= T^2x^{(k-2)} + (T+I)c \\
+  \vdots \\
+  &= T^kx^{(0)} + (T^{k-1}+\dots+T+I)c 
+\end{align*}
+
+Since $\rho(T)<1$, the matrix $T$ is convergent and
+
+\begin{equation*}
+  \lim_{k \to \infty} T^kx^{(0)} = 0
+\end{equation*}
+
+\fproof
+
+HAS NOT BEEN WRITTEN DOWN YET
+
+The \lemma implies that 
+
+\begin{equation*}
+  \lim_{k \to \infty} x^{(k)} = \lim_{k \to \infty} T^kx^{(0)} + \lim_{k \to \infty} \left(\sum_{j=0}^{k-1} T^j \right)c = 0 + (1-T)^{-1}c
+\end{equation*}
+
+$\implies \left\{ x^{(k)} \right\}$ converges to the unique solution of $x=Tx+c$
+
+\ie $(I-T)x = c \implies x = (I-T)^{-1}c$
+
+This allows us to derive some related results on the rates of convergence.
+
+\mathbf{Corollary}: If $||T||<1$ for any natural matrix norm and $c$ is a given
+vector, then the sequence $\left\{ x^{(k)} \right\}_{k=0}^\infty$ defined by
+
+\begin{equation*}
+  x^{(k)} = Tx^{(k-1)} + c
+\end{equation*}
+
+converges for any $x^{(0)} \in \mathbb{R}^n$ to a vector $x \in \mathbb{R}^n$
+and the following error bounds hold:
+
+\begin{enumerate}[label=(\roman*)]
+  \item $||x-x^{(k)}||\leq ||T|^k ||x^{(0)}-x||$
+  \item $||x-x^{(k)}|| \leq \frac{||T||^k}{-||T||}||x^{(1)}-x^{(0)}||$
+\end{enumerate}
+
+Note, however, that $\rho(A) \leq ||A||$ for \uline{any} natural norm. In practice,
+
+\begin{equation*}
+  ||x-x^{(k)}|| \approx \rho(T)^k ||x^{(0)}-x||
+\end{equation*}
+
+so it is desirable to have $\rho(T)$ as small as possible.
+
+Some results for Jacobi's and Gauss-Seidel methods:
+
+\thm If $A$ is strictly diagonally dominant, then for any choice of $x^{(0)}$,
+both the Jacobi and Gauss-Seidel methods give sequences $\left\{ x^{(k)} \right\}_{k=0}^\infty$
+that converge to the unique solution of $Ax=b$.
+
+No general results exist tot tell which of the two methods will converge more 
+quickly, but the following result applies in a variety of examples:
+
+\thm Stein Rosenberge
+
+If $a_{ij} \leq 0$ for each $i\ne j$ and $a_{ii} >0$ for each $i=1,2,\dots,n$, 
+then exactly one of the following holds.
+
+\begin{enumerate}[label=(\alph*)]
+\item $0 \leq \rho(T_g) < \rho(T_j) < 1$
+\end{enumerate}
+
+\section{Successive Over-Relaxation (SOR)}
+
+To define, suppose $\tilde{x}^{(k+1)}$ is the iterate from Gauss-Seidel using 
+$x^{(k)}$ as the initial guess. The $(k+1)^{st}$ iterate of SOR is defined by
+
+\begin{equation*}
+  x^{(k+1)} = \omega \tilde{x} ^{(k)} + (1-\omega) x^{(k)}
+\end{equation*}
+
+where $1<\omega<2$. It can be difficult to select $\omega$ optimally. Indeed, the answer
+to this question is not known for general $n \times n$ linear systems.
+
+However, we do have the following results:
+
+\thm (kahan): If $a_{ii} \ne 0$ for each $i$, then
+
+\begin{equation*}
+  \rho(T_{SOR}) \geq |\omega-1|
+\end{equation*}
+
+$\implies$ SOR can converge only if $0< \omega < 2$
+
+\thm (ostrowski-reich): If $A$ is a positive definite matrix and $0<\omega<2$, then 
+the SOR method converges for any choice of initial approximate vector $x^{(0)}$
+
+\thm. If $A$ is positive definite and tridiagonal, then 
+
+\begin{equation*}
+  \rho(T_g) = \left\[ \rho(T_j) \right\]^2 < 1
+\end{equation*}
+
+and the optimal choice of $\omega$ for the SOR method is 
+
+\begin{equation*}
+  \omega = \frac{2}{1+\sqrt{1-\rho(T_j)^2}}
+\end{equation*}
+
+with this choice of $\omega$, we have \rho(T_{SOR}) = \omega - 1
+
+\end{document}

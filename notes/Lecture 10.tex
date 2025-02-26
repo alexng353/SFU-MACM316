@@ -1,0 +1,200 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\begin{document}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+\setlength{\arraycolsep}{12pt}
+
+\title{MACM 316 Lecture 10}
+\author{Alexander Ng}
+\date{Monday, January 27, 2025}
+
+\maketitle
+
+\section{Speical Types of Matrices}
+
+\noindent
+Where can Gauassian Elimination be performe without row exchanges?
+
+\subsection{Strictly Diagonally Dominant Matrices}
+
+\textbf{Def.} An $n\times n$ matrix $A$ is \uline{strictly diagonally dominant} 
+if 
+
+\begin{equation*}
+  |a_{ii}| > \sum_{j=1; j\ne i}^{n} |a_{ij}| \text{ for all } i=1,\dots,n
+\end{equation*}
+
+\subsubsection*{Example}
+
+\begin{equation*}
+  \begin{bmatrix}
+  3h & h & -h\\
+  4 & 10 & 4\\
+  1 & 1 & -3\\
+  \end{bmatrix}
+\end{equation*}
+
+This matrix is strictly diagonally dominant when $h\ne 0$.
+
+\subsubsection{Thm. 1}
+
+A strictly diagonally dominant matrix $A$ is nonsingular.
+
+\subsubsection{Thm. 2}
+
+Let $A$ be a strictly diagonally dominant matrix. Then Gaussian Elimination
+can be performed on any linear system of the form $Ax=b$ to obtain its 
+unique solution without row or column interchanges, and the computations
+are stable to the growth of roundoff error.
+
+\subsection{Symmetric, Positive Definite Matrices}
+
+\textbf{Def.} A matrix $A$ is \uline{positive definite} if
+
+\begin{equation*}
+  \forall x\ne 0 (x^T A x > 0)
+\end{equation*}
+
+\subsubsection*{Example}
+
+Find all values of $\alpha$ for which the matrix
+
+\begin{equation*}
+  A = 
+  \begin{bmatrix}
+    1 & 0 & -1\\
+    0 & 1 & 1\\
+    -1 & 1 & \alpha\\
+  \end{bmatrix}
+\end{equation*}
+
+is positive definite.
+
+\textbf{Ans.} 
+
+\begin{align*}
+  x^T Ax &= 
+  \begin{bmatrix}
+  x_1 & x_2 & x_3
+  \end{bmatrix}
+  \begin{bmatrix}
+    1 & 0 & -1\\
+    0 & 1 & 1\\
+    -1 & 1 & \alpha\\
+  \end{bmatrix}
+  \begin{bmatrix}
+  x_1 \\ x_2 \\ x_3
+  \end{bmatrix}\\
+         &= x_1^2 + x_2^2 + \alpha x_3^2 - 2x_1x_3 + 2x_2x_3 \\
+         &= (x_1 - x_3)^2 + (x_2 + x_3)^2 + (\alpha - 2) x_3^2 
+\end{align*}
+
+A is positive definite $\iff \alpha > 2$.
+
+Some necessary conditions for an $n\times n$ matrix to be positive definite u
+include:
+
+\begin{enumerate}[label=(\alph*)]
+\item $A$ is nonsingular
+\item $a_{ii} > 0$ for each $i=i...n$ 
+\item ???
+\item $(a_{ij})^2 < a_{ii} a_{jj}$ for each $i\ne j$
+\end{enumerate}
+
+\textbf{HOWEVER:} These are not sufficient conditions for positive definiteness.
+they are necessary but not sufficient.
+
+We would like necessary and sufficient conditions for a matrix to be positive
+definite.
+
+\subsection{Leading Principle Submatrices}
+
+A \uline{leading principle submatrix} of a matrix $A$ is a matrix of the form
+
+\begin{equation*}
+  A_k = \begin{bmatrix}
+    a_{11} & a_{12} & \dots & a_{1n}\\
+    a_{21} & a_{22} & \dots & a_{2n}\\
+   \vdots&  &  & \\
+   a_{k1} & a_{k2} & \dots & a_{kn}\\
+  \end{bmatrix}
+\end{equation*}
+
+for some $1 \leq k \leq n$.
+
+Based on this definition, we have the following theorem:
+
+\subsubsection{Thm. 3}
+
+A symmetrix matrix $A$ is positive definite if and only if each of its leading
+principle submatrices has a positive determinant.
+
+As it turns out, we don't need to carry out row exchanges when Gaussian
+Elimination is used on a symmetric, positive definite matrix.
+
+\subsubsection{Thm. 4}
+
+A symmetric matrix $A$ is positive definite if and only if Gaussian Elimination
+withour row exchanges can be performed on the linear system $Ax=b$ with
+all the pivot elements positive. Moreover, in this case, the computations are
+stable with respect to the growth of roundoff error.
+
+\textbf{Corollary:} The matrix $A$ is symmetric positive definite if and only if
+$A$ can be factored in the form $LDL^T$ where $L$ is lower triangular with $1$'s
+on its diagonal and $D$ is a diagonal matrix with positive diagonal entries.
+
+A modification of the $LU$ factorization algorithm can be made to factor a
+symmetric positive definite matrix into the form
+
+\begin{equation*}
+  A = LDL^T
+\end{equation*}
+
+This $LDL^T$ factorization only requires $\frac{n^3}{6}+n^2 - \frac{7n}{6}$ 
+multiplications/divisions, and $\frac{n^3}{6}-\frac{n}{6}$ additions/subtractions.
+This is only half the number of operations as $LU$ factorization.
+
+A version of this algorithm can also be constructed for matrices that are
+symmetric but not positive definite.
+
+\textbf{Corollary 2:} The matrix $A$ is positive definite if and only if $A$ can
+be factored int he form $LL^T$ where $L$ is lower triangular with nonzero
+diagonal entries. Once again, a modification of the $LU$ factorization algorithm
+can be made. This method, called \uline{Choleski's Algorithm}, factors a
+symmetric positive definite matrix into the form
+
+\begin{equation*}
+  A = LL^T
+\end{equation*}
+
+Choleski's Algorithm only requires $\frac{n^3}{6} + \frac{n^2}{2} - \frac{2n}{3}$
+multiplications/divisions, and $\frac{n^3}{6}-\frac{n}{6}$ additions/subtractions,
+which is even less than the $LDL^T$ factorization. However, for small $n$,
+Choleski's Algorithm may be slower because it requires $n$ square roots to
+be computed.
+
+\subsection{Band Matrices}
+
+Another important class of matrices that arise in a wide variety of applications
+are \uline{band matrices}. A band matrix is a matrix of the form
+ 
+\end{document}

@@ -1,0 +1,117 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\begin{document}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+\setlength{\arraycolsep}{12pt}
+
+\title{MACM 316 Lecture 11 - Chapter 7}
+\author{Alexander Ng}
+\date{Wednesday, January 29, 2025}
+
+\maketitle
+
+\section{Iterative Techniques in Matrix Algebra}
+
+We are interested in solving large linear systems $Ax=b$.
+
+Suppose the matrix $A$ has a high $(>99.9\%)$ sparsity, i.e., most of the
+entries are zeros. We would like to take advantage of this spare structure to
+reduce the amount of computational work required. Unfortunately, Gaussin
+Elimination is often unable to take advantage of the sparse structure. For this
+reason, we consider \uline{iterative techniques}.
+
+\section{Vector Norms}
+
+To estimate how well a particular iterative technique approximates
+the true solution, we will need some measurement of distance. This motivates
+the notion of the vector norm.
+
+\textbf{Def.} A vector norm on $\mathbb{R}^n$ is a function $||\cdot||$ from
+$\mathbb{R}^n \to \mathbb{R}^n $ satisfying the following properties:
+
+\begin{itemize}
+  \item $||x|| \geq 0$ for all $x \in \mathbb{R}^n$
+  \item $||x|| = 0 \iff x = \mathbf{0}$
+  \item $||\alpha x|| = |\alpha| ||x||$ for all $\alpha \in \mathbb{R}$ and
+    $x \in \mathbb{R}^n$
+  \item $||x+y|| \leq ||x|| + ||y|| $ for all $x,y \in \mathbb{R}^n$
+\end{itemize}
+
+\textbf{Def. 2.} The $l_2$ or Euclidean norm of the vector $x$ is given by
+\begin{equation*}
+  ||x||_2 = \left\{ \sum_{i = 1}^{n}  x_i^2 \right\}^{1/2}
+\end{equation*}
+
+This represents the usual notion of distance.
+
+\textbf{Def. 3.} The infinity or max norm of a vector $x$ is given by
+
+\begin{equation*}
+  ||x||_\infty = \max_{i=1}^n |x_i|
+\end{equation*}
+
+\textbf{Def. 4.} If $x,y \in \mathbb{R}^2$, then the $l_2$ distance between
+$x$ and $y$ is given by
+
+\begin{equation*}
+  ||x-y||_2 = \left\{ \sum_{i=1}^{n} (x_i-y_i)^2 \right\}^{1/2}
+.\end{equation*}
+
+and the $l_\infty$ distance between $x$ and $y$ is given by
+
+\begin{equation*}
+  ||x-y||_\infty = \max_{i=1}^n |x_i-y_i|
+.\end{equation*}
+
+\section{Sequences?}
+
+Iterative techniques generate a sequence of vectors.
+
+\textbf{Def.} A sequence $\left\{ x^k \right\}_{k=1}^\infty$ of vectors in
+$\mathbb{R}^n$ is said to converge to $x$ with respect to the norm $||\cdot||$
+if, given any $\epsilon > 0$, there exists an integer $N('\epsilon)$ such that
+
+\begin{equation*}
+  ||x^{(k)} - x|| < \epsilon \text{ for all } k \geq N
+\end{equation*}
+
+*The notation $N('\epsilon)$ is used to emphasize that $N$ is dependent on 
+$\epsilon$, however, $N$ is not a function of $\epsilon$.*
+
+\subsection{Thm.}
+
+The sequence of vectors $\left\{ x^k \right\}$ converges to $x$ in $\mathbb{R}^n $
+with respect to $||\cdot||_\infty$ if and only if 
+$\lim_{k \to \infty} x_i^{(k)} = x_i$. for each $i$.
+
+\subsection{Thm. 2}
+
+For each $x\in \mathbb{R}^n $
+
+\begin{equation*}
+  ||x||_\infty \leq ||x||_2 \leq \sqrt{n} ||x||_\infty
+\end{equation*}
+
+This theorem relates the infinity norm to the Euclidean norm, which is very 
+useful in the context of iterative techniques.
+
+\end{document}

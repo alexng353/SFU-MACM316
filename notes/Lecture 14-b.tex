@@ -1,0 +1,112 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+\newcommand{\ex}{\textbf{ex.}\xspace}
+\newcommand{\Ex}{\textbf{Ex.}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textit{Lemma}\xspace}
+\newcommand{\bproof}{\textit{Proof ($\impliedby$).}\xspace}
+\newcommand{\fproof}{\textit{Proof ($\implies$).}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\begin{document}
+
+\title{MACM 316 Lecture 14b - Chapter 2 Part 1}
+\author{Alexander Ng}
+\date{Wednesday, February 5, 2025}
+
+\maketitle
+
+\section{Solutions of Nonlinear Systems}
+
+The Basic Problem:
+
+Find a root of $x\in\mathbb{R}$ of an equation of the form $f(x)=0$ for a
+given continuous function $f$.
+
+\section{The Bisection Method}
+
+In most cases it is not really possible to solve analytically. We will consider
+iterative methods to approximate the solution. Our first method will be the
+\uline{Bisection Method}. We must start with an interval $[a, b]$ with 
+$f(a)$ and $f(b)$ of opposite signs.
+
+By the intermediate value theorem, there exists a number $c$ in $(a, b)$ such that
+$f(c)=0$.
+
+\thm If $f\in C[a,b]$ and $k$ is any number between $f(a)$ and $f(b)$, then
+there exists a number $c$ in $(a, b)$ such that $f(c)=k$.
+
+Now set $a_1 = a$ and $b_1 = b$ and let $p_1$ be the midpoint of $[a_1, b_1]$.
+
+\begin{enumerate}
+    \item Compute the midpoint:
+    \begin{equation*}
+        p_1 = \frac{1}{2} (a_1 + b_1)
+    \end{equation*}
+    
+    \item If $f(p_1) = 0$, then we are done. Set $p = p_1$.
+    
+    \item If $f(p_1)$ and $f(a_1)$ are of opposite signs, then there must exist 
+          a root $p \in (a_1, p_1)$ such that $f(p) = 0$. Set $a_2 = a_1$ and 
+          $b_2 = p_1$.
+    
+    \item Otherwise, if $f(p_1)$ and $f(b_1)$ are of opposite signs, then there 
+          must exist a root $p \in (p_1, b_1)$ such that $f(p) = 0$. Set 
+          $a_2 = p_1$ and $b_2 = b_1$.
+    
+    \item Reapply the process to the new interval $[a_2, b_2]$.
+    
+    \item Once the stopping criteria are satisfied, set the midpoint of the 
+          interval as the estimate for the root.
+\end{enumerate}
+
+\subsection{Possible Stopping Criteria}
+
+\begin{enumerate}
+  \item $\displaystyle \frac{b_n-a_n}{2} < \text{ TOL}$ \quad\uline{or} \quad
+    $\displaystyle \left| p_n - p_{n-1} \right| < \text{ TOL}$
+    \subitem GOOD: Ensures that the returned root value $p_n$ is within 
+    tolerance of the exact value $p$
+    \subitem GOOD: Easy error analysis
+    \subitem BAD: Does not ensure that $f(p_n)$ is small.
+    \subitem BAD: An absolute rather than relative measure of error.
+  \item $\displaystyle \frac{|p_n - p_{n-1}}{p_n} < \text{ TOL}, p_n \neq 0$
+    \subitem Usually preferred over $(1)$ if nothing is known about $f(\cdot)$ or
+    $p$
+  \item $\left| f(p_n) \right| < \text{ TOL}$
+    \subitem Ensures that $f(p_n)$ is small, but $p_n$ may differ significantly
+    from the true root $p$.
+  \item We can also carry out a fixed number of iterations $N$-- This is closely
+    related to $(1)$
+\end{enumerate}
+
+The best stopping criteria will depend on what is known about $f$ and $p$ and
+on the type of problem. It's often useful to use criteria 2 (relative error test)
+and criteria 4 (fixed number of steps) together.
+
+\end{document}

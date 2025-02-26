@@ -1,0 +1,243 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\begin{document}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+\setlength{\arraycolsep}{12pt}
+
+\title{MACM 316 Lecture 8}
+\author{Alexander Ng}
+\date{January 22, 2025}
+
+\maketitle
+
+\section{LU-Decomposition}
+
+Suppose that we wanted to solve the system
+
+\begin{equation*}
+  Ax = b_k \qquad A \in \mathbb{R}^{n \times n}
+\end{equation*}
+
+for several different $b_k \in \mathbb{R}^n$. 
+
+This type of matrix problem arises frequently in initial value problems. If we
+apply Gaussian Elimination to solve the system, then $O(n^3)$ operations are
+required for each $b_k$. On the other hand, suppose we could factor $A$ into
+the form $A = LU$ where $L$ is lower triangular and $U$ is upper triangular.
+
+Then, we can let $y=Ux\implies Ly = b_k$, and solving for $y$ via forward
+substitution is $O(n^2)$ operations.
+
+Next, we have to solve for $Ux=y$ via backward substitution, which is also 
+$O(n^2)$ operations.
+
+The total number of operations is $O(n^2) + O(n^2) = O(n^2)$, which is much
+better than the $O(n^3)$ operations required for Gaussian Elimination.
+
+Finding $L$ and $U$ is $O(n^3)$ requires $O(n^3) + O(n^3)$ operations
+\textbf{HOWEVER}, by doing this expensive operation once, we can save a lot of
+operations when there are many $b_k$.
+
+\subsection{LU-Factorization}
+
+We will proceed to derive this LU-factorization using Gaussian Elimination.
+
+Example:
+
+\begin{equation*}
+  \begin{bmatrix}
+    2 & -2 & 3\\
+    6 & -7 & 14\\
+    4 & -8 & 39\\
+  \end{bmatrix}
+  \begin{bmatrix}
+    u\\
+    v\\
+    w\\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    1\\
+    5\\
+    14\\
+  \end{bmatrix}
+\end{equation*}
+
+We want to zero out entries below the pivot element $a_{11}$ in the first row.
+So we want to take $E_2-3E_1 \to E_2$. This same effect can be obtained by
+multiplying $A$ by the elementary matrix $E_{21}$.
+
+\begin{equation*}
+  \begin{bmatrix}
+    1 & 0 & 0\\
+    -3 & 1 & 0\\
+    0 & 0 & 1\\
+  \end{bmatrix}
+  \begin{bmatrix}
+    2 & -2 & 3\\
+    6 & -7 & 14\\
+    4 & -8 & 39\\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    2 & -2 & 3\\
+    0 & -1 & 5\\
+    4 & -8 & 30\\
+  \end{bmatrix}
+\end{equation*}
+
+An elementary matrix is equal to the edentity matrix except for one nonzero
+entry off of the main diagonal.
+
+Now we want to zero out the remaining entry below the pivot.
+
+This can be done by taking $E_3-2E_1 \to E_3$ or by left-multiplying $A$ by the
+elementary matrix $E_{31}$.
+
+\begin{equation*}
+  \begin{bmatrix}
+    1 & 0 & 0\\
+    0 & 1 & 0\\
+    -2 & 0 & 1\\
+  \end{bmatrix}
+  \begin{bmatrix}
+    2 & -2 & 3\\
+    0 & -1 & 5\\
+    4 & -8 & 30\\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    2 & -2 & 3\\
+    0 & -1 & 5\\
+    0 & -4 & 24\\
+  \end{bmatrix}
+\end{equation*}
+
+To obtain an upper triangular system, we would finally zero out the remaining
+entry below the pivot in $E_2$, taking $E_3-4E_2 \to E_3$. Or, we can left
+multiply by the elementary matrix $E_{32}$.
+
+\begin{equation*}
+  \begin{bmatrix}
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & -4 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+    2 & -2 & 3 \\
+    0 & -1 & 5 \\
+    0 & -4 & 24
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    2 & -2 & 3 \\
+    0 & -1 & 5 \\
+    0 & 0 & 4
+  \end{bmatrix}
+\end{equation*}
+
+Notice that $E_{32}E_{31}E_{21}A$ is upper triangular.
+
+Set $U=E_{32}E_{31}E_{21}$ and $L=A$.
+
+Now $E_{32}^{-1}E_{31}^{-1}E_{21}^{-1}U=L$.
+
+To find the inverses of elementary matrices, we have to recall their meaning.
+
+For example, $E_{21} = \begin{bmatrix}
+1 & 0 & 0\\
+-3 & 1 & 0\\
+0 & 0 & 1\\
+\end{bmatrix}$ subtracts $3$ times the first row from the second.
+
+The inverse will need to add 3 times the first row to the second.
+
+\begin{equation*}
+  \implies (E_{21})^{-1} = \begin{bmatrix}
+    1 & 0 & 0\\
+    3 & 1 & 0\\
+    0 & 0 & 1\\
+  \end{bmatrix}
+\end{equation*}
+
+Which costs $O(1)$ operations to flip the sign of the single entry.
+
+Furthermore, notice that 
+
+$L \cong E_{21}^{-1}E_{31}^{-1}E_{32}^{-1}$
+
+\begin{align*}
+  &= \begin{bmatrix}
+  1 & 0 & 0\\
+  3 & 1 & 0\\
+  0 & 0 & 1\\
+  \end{bmatrix} \begin{bmatrix}
+  1 & 0 & 0\\
+  0 & 1 & 0\\
+  2 & 0 & 1\\
+  \end{bmatrix} \begin{bmatrix}
+  1 & 0 & 0\\
+  0 & 1 & 0\\
+  0 & 4 & 1\\
+  \end{bmatrix} \\
+  &= \begin{bmatrix}
+  1 & 0 & 0\\
+  3 & 1 & 0\\
+  2 & 4 & 1\\
+  \end{bmatrix}
+\end{align*}
+
+So the matrix multiplication can be performed by putting the nonzero offdiagonal
+elements of the elementary matrices intot he appropriate positions in the matrix
+$L$.
+
+This means that the matrix $L$ is easily constructed during the Gaussian
+Elimination process just by storing the multipliers.
+
+We conclude that
+
+\begin{equation*}
+  \underset{A}{
+    \begin{bmatrix}
+      2 & -2 & 3\\
+      6 & -7 & 14\\
+      4 & -8 & 30\\
+    \end{bmatrix}
+  }
+  =
+  \underset{L}{
+    \begin{bmatrix}
+      1 & 0 & 0\\
+      3 & 1 & 0\\
+      2 & 4 & 1\\
+    \end{bmatrix}
+  }
+  \underset{U}{
+    \begin{bmatrix}
+      2 & -2 & 3\\
+      0 & -1 & 5\\
+      0 & 0 & 4\\
+    \end{bmatrix}
+  }
+\end{equation*}
+
+\end{document}

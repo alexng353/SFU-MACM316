@@ -1,0 +1,14 @@
+{
+  "name": "macm316",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "gen": "bun run gen.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

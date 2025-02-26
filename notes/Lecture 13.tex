@@ -1,0 +1,246 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+\newcommand{\ex}{\textbf{Ex.}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\begin{document}
+
+\title{MACM 316 Lecture 13}
+\author{Alexander Ng}
+\date{Monday, February 3, 2025}
+
+\maketitle
+
+When we use iterative matrix techniques, we want to know when powers of a 
+matrix become small.
+
+\defn We call an $n \times n$ matrix $A$ convergent if 
+
+\begin{equation*}
+  \lim_{k\to\infty} \left(A^k\right)_{ij} = 0, \text{ for all } i,j
+\end{equation*}
+
+\ex Consider $A=\begin{bmatrix}
+\frac{1}{2} & 0\\
+16 & \frac{1}{2}\\
+\end{bmatrix}$
+
+\begin{align*}
+  A^2 &= 
+  \begin{bmatrix}
+    \frac{1}{4} & 0 \\
+    16 & \frac{1}{4}
+  \end{bmatrix} \\
+  A^3 &= 
+  \begin{bmatrix}
+    \frac{1}{8} & 0\\
+    12 & \frac{1}{8}\\
+  \end{bmatrix}\\
+  A^4 &= 
+  \begin{bmatrix}
+    \frac{1}{16} & 0\\
+    8 & \frac{1}{16}\\
+  \end{bmatrix} \\
+  A^k &= 
+  \begin{bmatrix}
+    \frac{1}{2^k} & 0\\
+    P_k & \frac{1}{2^k}\\
+  \end{bmatrix}
+\end{align*}
+
+where $P_k = \begin{cases}
+16 & k=1\\
+\frac{16}{2^{k-1}} + \frac{1}{2}P_{k-1} & k>1
+.\end{cases}$
+
+Since $\lim_{k\to\infty} P_k = 0$, we also know that $\lim_{k\to\infty} P_k = 0$.
+$\therefore A$ is a convergent matrix.
+
+Notice that this convergent matrix has a spectral radius (see Lecture 12 notes
+, page 5) less than 1.
+
+This generalizes:
+\pagebreak
+
+\thm The following statements are equivalent:
+
+\begin{enumerate}
+  \item $A$ is a convergent matrix.
+  \item $\rho(A) < 1$
+  \item $\lim_{n\to\infty} A^n x = 0$ for every $x$
+  \item $\lim_{n\to\infty} \left|\left|A^n\right|\right| = 0$ for all natural
+    norms $||\cdot||$
+\end{enumerate}
+
+Iterative techniques convert the system $Ax=b$ into an equivalent system of
+the form $x=Tx+c$ where $T$ is a fixed matrix and $c$ is a vector. An initialv
+vector $x^{(0)}$ is chosen, and then a sequence of approximate solution vectors
+is generated:
+
+\begin{equation*}
+  x^{(k)} = Tx^{(k-1)} + c
+\end{equation*}
+
+Iterative techniques are rarely used in very small systems 
+(i.e. when $n^3$ is small). In these cases, iterative techniques may be slower 
+since they require several iterations to obtain the desired accuracy.
+
+\uline{\textbf{IDEA:}} It is possible to \enquote{split} the matrix $A:$
+
+\begin{align*}
+  Ax&=b \\
+  \left[M+(A-M\right]x &= b \\
+  Mx &= b+(M-A)x \\ 
+  x &= (I-M^{-1}A)x + M^{-1}b 
+\end{align*}
+
+Iteration becomes 
+
+\begin{equation*}
+  x^{(k+1)} = (I-M^{-1}A)x^{(k)} + M^{-1}b
+\end{equation*}
+
+We set $T\cong I-M^{-1}A$ (the amplification matrix) and $c\cong M^{-1}b$.
+
+\begin{equation*}
+  x^{(k+1)} = Tx^{(k)} + c
+\end{equation*}
+
+How do we choose $M$?
+
+We want:
+
+\begin{enumerate}
+\item $M$ easy to \enquote{invert}
+\item M \enquote{close to $A$} in the sense that $\rho(T)$ is small.
+\end{enumerate}
+
+\ex Let $M=D=\begin{bmatrix}
+  a_{11} & 0 & 0\\
+0 & \ddots & 0\\
+0 & 0 & a_{nn}\\
+\end{bmatrix}$
+
+This gives the \uline{Jacobi Iterative Method}.
+
+In the text's notation,
+
+\begin{equation*}
+  A=D-L-U
+\end{equation*}
+
+Where $D$ is diagonal, $L$ is lower triangular, and $U$ is upper triangular.
+
+\begin{align*}
+  Ax &= b \\
+  (D-L-U)x &= b \\
+  Dx &= (L+U)x + b\\
+  x &= D^{-1}(L+U)x +D^{-1}b \\
+\end{align*}
+
+Which results in the iteration 
+
+\begin{equation*}
+  x^{(k+1}) = D^{-1}(L+U)x^{(k)} + D^{-1}b
+\end{equation*}
+
+Let $T=D^{-1}(L+U)$ and $c=D^{-1}b$.
+
+\begin{equation*}
+  x^{(k+1)} = Tx^{(k)} + c
+\end{equation*}
+
+See example in the notes, there are too many matrices to type out in LaTeX.
+See \enquote{Chapter 7.pdf} page 27 (7-36.7)
+
+% Click: \href{run:./Chapter 7.pdf#page=27}{Chapter 7.pdf} page 27 (7-36.7)
+
+\subsubsection{Comments on Jacobi's Method}
+
+\begin{equation*}
+  x^{(k+1)} = D^{-1}(L+U)x^{(k)} + D^{-1}b
+\end{equation*}
+
+\begin{enumerate}
+  \item The algorithm requirs $a_{ii} \neq 0$ for $i=1,\dots,n$ If one of the 
+    $a_{ii} = 0$, and the system is nonsingular, then a reordering of the 
+    equations can be performed so that no $a_{ii} = 0$.
+  \item To speed convergence, the equations should be arranged such that
+    $|a_{ii}$ is as large as possible.
+  \item A possible stopping criterion is to iterate until
+    $\frac{||x^{(k)}-x^{(k-1)}||}{||x^{(k-1)}||} \leq \epsilon$
+\end{enumerate}
+
+If we write out Jacobi's Method
+
+\begin{equation*}
+  x^{(k+1)} = D^{-1}(L+U)x^{(k)} + D^{-1}b
+\end{equation*}
+
+we find that
+
+\begin{equation*}
+  x_i^{(k+1)} = \frac{\sum_{j=1; j\ne i}^n (-a_{ij}x_j^{(k)}) +b_i}{a_{ii}}
+\end{equation*}
+
+Notice that to compute $x_i^{(k+1)}$, the components $x_i^{(k)}$ are used.
+But, for $i>1$, $x_1^{(k+1}, x_2^{(k+1)}, \dots, x_n^{(k+1)}$ have already
+been computed and are likely better approximations to the actual solutions than
+
+\begin{equation*}
+  x_1^{(k)}, x_2^{(k)}, \dots, x_n^{(k)}
+\end{equation*}
+
+So it seems reasonable to compute with these most recently computed values.
+
+\ie:
+
+\begin{equation*}
+  x_i^{(k+1)} = \frac{-\sum_{j=1}^{i=1}(a_{ij}x_j^{(k+1)} - \sum_{j=i+1}^{n} (a_{ij} x_j^{(k)} +b_i}{a_{ii}}
+\end{equation*}
+
+This is called the Gauss-Seidel iterative technique, and it also has a matrix
+formulation with $M\cong (D-L):$
+
+\begin{align*}
+  Ax &= b \\
+  (D-L-U)x &= b \\
+  (D-L)x &= Ux+b \\
+  x &= (D-L)^{-1}Ux+(D-L)^{-1}b
+\end{align*}
+
+$\implies$ iteration becomes
+
+\begin{equation*}
+  x^{(k+1)} = (D-L)^{-1}Ux^{(k)} + (D-L)^{-1}b
+\end{equation*}
+
+*Notice that $D-L$ is lower triangular. It is invertible $\iff$ each $a_{ii}\ne 0$
+
+\end{document}

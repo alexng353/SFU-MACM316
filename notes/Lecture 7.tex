@@ -1,0 +1,131 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\begin{document}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+\setlength{\arraycolsep}{12pt}
+
+\title{MACM 316 Lecture 7}
+\author{Alexander Ng}
+\date{January 20, 2025}
+
+\maketitle
+
+\section{Scaled Partial Pivoting}
+
+We can improve the accuracy of the partial pivoting algorithm if we scale 
+coefficients before deciding on row exchanges.
+
+The scaling factor is the largest absolute value of any coefficient in the 
+current row. The idea is to select the largest scaled value $a_{ik}/S_i$
+corresponding to elements that are below the pivot.
+
+The extra work to apply the partial pivoting algorithm is some constant
+times $O(n^2)$.
+
+In rare instances, complete pivoting may be needed, which is $O(n^3)$ extra
+work.
+
+\subsection{An excerpt on Time Complexity}
+
+Total cost of partial pivoting is $O(n^3) + O(n^2) = O(n^3)$
+
+Complete pivoting is $O(n^3) + O(n^3) = O(n^3)$
+
+In the end, the dominant term of complete pivoting is $(c_1 + c_2) O(n^3)$, 
+which is technically more than $c_1 O(n^3)$ for partial pivoting, but it is
+the extra work is insignificant compared to the total work of the actual 
+algorithm.
+
+\section{Some Review (Definitions)}
+
+\begin{enumerate}
+\item Two matrices $A$ and $B$ are equal if they have the same size and if each
+  element $a_{ij}$ in $A$ is equal to $b_{ij}$ in $B$.
+\item $A+B$ for two similarly sized matrices $A$ and $B$ is defined as
+  the $n \times n$ matrix whose entries are $(a_{ij} + b_{ij})$ for all 
+  $i = 1..n \text{ and } j = 1..m$.
+\item $\lambda A$ for a scalar $\lambda$ and a matrix $A$ is defined as
+  the matrix whose entries are $\lambda a_{ij}$ for all $i = 1..n \text{ and } 
+  j = 1..m$.
+\end{enumerate}
+
+\section{Determinants}
+
+A very useful concept of linear algebra is the determinant of a matrix. The
+determinant of a matrix $A$ is denoted by $\det(A)$ or $|A|$.
+
+Determinants are important, in part, because of the following theorem:
+
+\subsection{Theorem}
+
+The following statements are equivalent for any $n \times n$ matrix $A$.
+
+\begin{enumerate}
+  \item $\det(A) \neq 0$
+  \item The equatoin $Ax = 0$ has a unique solution $x=0$.
+  \item The system $Ax=b$ has a unique solution for any n-dimensional column
+    vector $b$.
+  \item The matrix $A$ is nonsingular.\\
+    i.e. $A^{-1}$ exists.
+\end{enumerate}
+
+\subsection{Definition of the Determinant}
+
+The definition of the determinant is somewhat involved:
+
+\begin{enumerate}[label=(\alph*)]
+  \item If $A=[a]$, then $\det(A) = a$
+  \item If $A$ is some $n \times n$ matrix, the minor $M_{ij}$ of $A$ is the
+    determinant of the $(n-1) \times (n-1)$ submatrix of $A$ obtained by 
+    removing the $i^{th}$ row and $j^{th}$ column.
+  \item The \uline{cofactor} $A_{ij}$ of $A$ associated with $M_{ij}$ is defined
+    by $A_{ij} = (-1)^{i+j} \det(M_{ij})$.
+  \item The determinant of the $n \times n$ matrix $A$, when $n>1$ is given
+    either by 
+    \subitem $\det(A) = \sum_{j = 0}^{n} {a_{ij} A_{ij}}$ (Row cofactor expansion) or
+    \subitem $\det(A) = \sum_{j = 0}^{n} {a_{ij} A_{ij}}$ (Column cofactor expansion)
+\end{enumerate}
+
+\subsection{Complexity of the Determinant Algorithm}
+
+Assume there are no free zero entries in $A$, and you must compute the 
+fully expanded determinant of $A$.
+
+\subsubsection{Work (in general) for a 4x4 matrix}
+
+\begin{align*}
+&= 4 \times (\text{work to compute } \det(3 \times 3)) \\
+&= 4 \times 3 \times (\text{work to compute } \det(2 \times 2)) \\
+&= 4 \times 3 \times 2 \times (\text{work to compute } \det(1 \times 1)) \\
+&= 4 \times 3 \times 2 \times 1 \\
+&= \boxed{4!}
+\end{align*}
+
+Which implies that the determinant of a $n \times n$ matrix can be computed
+in $O(n!)$ time.
+
+\section{More ways of computing the determinant}
+
+If $A=[a_{ij}]$ is an $n\times n$ matrix that is either upper or lower
+triangular form, then $\det(A) = \prod_{i=1}^n a_{ii}$.
+
+\end{document}
