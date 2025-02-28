@@ -205,3 +205,6 @@ dist
 *.swp
 
 *.out*
+
+# Archives
+*.zip*
