@@ -49,6 +49,7 @@ const balls = `\\documentclass[12pt]{article}
 \\usepackage{ulem}
 \\usepackage{xspace}
 \\usepackage{csquotes}
+\\usepackage{booktabs}
 
 \\DeclareMathOperator{\\dist}{dist}
 \\DeclareMathOperator{\\Nul}{Nul}
@@ -66,6 +67,7 @@ const balls = `\\documentclass[12pt]{article}
 \\newcommand{\\bproof}{\\textit{Proof ($\\impliedby$).}\\xspace}
 \\newcommand{\\fproof}{\\textit{Proof ($\\implies$).}\\xspace}
 \\newcommand{\\bigEps}{\\mathcal{E}}
+\\newcommand{\\soln}{\\textit{Soln.}\\xspace}
 
 \\renewcommand{\\arraystretch}{1.25} % Adjust row spacing
 
@@ -90,7 +92,9 @@ const balls = `\\documentclass[12pt]{article}
 \\end{document}
 `;
 
-const file = Bun.file(`Lecture ${n}.tex`);
+const fileName = `Lecture ${n.toString().padStart(3, "0")}.tex`;
+
+const file = Bun.file(fileName);
 
 if (await file.exists() && !FORCE) {
   console.error(`Lecture ${n}.tex already exists\n\tUse --force to overwrite`);
@@ -99,4 +103,4 @@ if (await file.exists() && !FORCE) {
 
 file.write(balls);
 
-console.log(`Wrote Lecture ${n}.tex`);
+console.log(`Wrote ` + fileName);
