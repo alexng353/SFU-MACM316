@@ -1,0 +1,100 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{csquotes}
+\usepackage{booktabs}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+\newcommand{\ex}{\textbf{ex.}\xspace}
+\newcommand{\Ex}{\textbf{Ex.}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textit{Lemma}\xspace}
+\newcommand{\bproof}{\textit{Proof ($\impliedby$).}\xspace}
+\newcommand{\fproof}{\textit{Proof ($\implies$).}\xspace}
+\newcommand{\bigEps}{\mathcal{E}}
+\newcommand{\soln}{\textit{Soln.}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+}
+
+\newcommand{\ulhref}[2]{\href{#1}{\color{blue}\uline{#2}}}
+
+\begin{document}
+
+\title{MACM 316 Theorems}
+\author{Alexander Ng}
+\date{Wednesday, March 5, 2025}
+
+\maketitle
+
+\thm Let $A$ be an $n \times m$ matrix, $B$ be an $m \times k$ matrix, $C$ be an
+$k \times p$ matrix, $D$ be an $m \times k$ matrix and $\lambda$ a real number.
+
+\begin{enumerate}[label=(\alph*)]
+  \item $A(BC) = (AB)C$ (associativity)
+  \item $A(B+D) = AB + AD$ (distributivity)
+  \item $IB = B$ and $BI = B$ (idempotency)
+  \item $\lambda (AB) = (\lambda A)B = A(\lambda B)$ (scalar associativity)
+\end{enumerate}
+
+\defn An $n \times n$ matrix $A$ is said to be nonsingular (or invertible) if an
+$n \times n$ matrix $A^{-1}$ exists with 
+
+\[
+  A A^{-1} = A^{-1} A = I
+.\]
+
+The matrix $A^{-1}$ is called the inverse of $A$. A singular matrix does not
+have an inverse.
+
+\thm For any nonsingular $n \times n$ matrix $A$
+
+\begin{enumerate}[label=(\alph*)]
+\item $A^{-1}$ is unique
+\item $A^{-1}$ is nonsingular and $(A^{-1})^{-1} = A$
+\item If $B$ is also a nonsingular $n \times n$ matrix, then $(AB)^{-1} =
+  B^{-1}A^{-1}$
+\end{enumerate}
+
+You can find $A^{-1}$ by row reducing the augmented matrix $[A | I]$, which
+looks like this:
+
+\[
+  \left[
+    \begin{array}{ccc|ccc}
+      a_{11} & a_{12} & a_{13} & 1 & 0 & 0 \\
+      a_{21} & a_{22} & a_{23} & 0 & 1 & 0 \\
+      a_{31} & a_{32} & a_{33} & 0 & 0 & 1
+    \end{array} 
+  \right]
+\]
+
+
+\end{document}
