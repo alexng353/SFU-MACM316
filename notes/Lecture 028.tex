@@ -245,15 +245,15 @@ Newton-Cotes formulas.
 
     % Define function
     \draw[thick, red, domain=0:6, samples=100] 
-      plot(\x, {0.05375*\x*\x*\x - 0.520625*\x*\x + 1.4803125*\x - 0.01671875});
+      plot(\x, {0.05375*\x*\x*\x - 0.520625*\x*\x + 1.4803125*\x});
 
     % Draw dotted vertical lines
     \foreach \x in {0.5,1,1.5,2,2.5,4.5,5,5.5} {
-      \draw[thick, dotted, blue] (\x,0) -- (\x,{0.05375*\x*\x*\x - 0.520625*\x*\x + 1.4803125*\x - 0.01671875});
+      \draw[thick, dotted, blue] (\x,0) -- (\x,{0.05375*\x*\x*\x - 0.520625*\x*\x + 1.4803125*\x});
     }
 
     \foreach \x in {0.5, 1.5, 2.5, 4.5, 5.5} {
-      \draw[thick, blue] (\x,0) -- (\x,{0.05375*\x*\x*\x - 0.520625*\x*\x + 1.4803125*\x - 0.01671875});
+      \draw[thick, blue] (\x,0) -- (\x,{0.05375*\x*\x*\x - 0.520625*\x*\x + 1.4803125*\x});
       % \node[below] at (\x,-0.05) {$x_{\x}$};
     }
 
