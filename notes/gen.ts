@@ -2,6 +2,11 @@ import fs from "fs/promises";
 const args = Bun.argv;
 
 const FORCE = args.includes("--force") || args.includes("-f");
+const nameIndex = args.indexOf("--name");
+let name: string | undefined  = undefined;
+if (nameIndex !== -1) {
+  name = args[nameIndex + 1];
+}
 
 if (args.length < 2) {
   console.error("Usage: bun gen <n> | bun gen -n");
