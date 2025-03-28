@@ -1,0 +1,42 @@
+name: Archive Lecture PDFs and Create Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  package-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up dependencies
+        run: sudo apt-get update && sudo apt-get install -y p7zip-full
+
+      - name: Find and package Lecture PDFs
+        run: |
+          mkdir output
+          find . -type f -regex '.*/Lecture.*\.pdf' -print > files.txt
+          cat files.txt | xargs zip output/lectures.zip
+          cat files.txt | xargs tar -czf output/lectures.tar.gz
+          cat files.txt | xargs 7z a output/lectures.7z
+
+      - name: Get current timestamp
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ steps.date.outputs.date }}
+          tag_name: lecture-release-${{ steps.date.outputs.date }}
+          files: |
+            output/lectures.zip
+            output/lectures.tar.gz
+            output/lectures.7z
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
