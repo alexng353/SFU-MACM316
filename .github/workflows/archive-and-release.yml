@@ -35,7 +35,9 @@ jobs:
           # Create 7Z archive
           xargs -0 7z a output/lectures.7z < files.txt
           sha256sum output/lectures.7z > output/lectures.7z.sha256
-          xargs -0 cat < files.txt | sha256sum | tee output/lectures.sha256
+
+          find . -type f -regex '.*Lecture.*\.pdf' -print0 | xargs -0 sha256sum > output/lectures.sha256
+          cat output/lectures.sha256
 
       - name: Get current timestamp
         id: date
