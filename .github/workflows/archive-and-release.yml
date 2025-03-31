@@ -19,10 +19,16 @@ jobs:
       - name: Find and package Lecture PDFs
         run: |
           mkdir output
-          find . -type f -regex '.*/Lecture.*\.pdf' -print > files.txt
-          cat files.txt | xargs zip output/lectures.zip
-          cat files.txt | xargs tar -czf output/lectures.tar.gz
-          cat files.txt | xargs 7z a output/lectures.7z
+          find . -type f -regex '.*Lecture.*\.pdf' -print0 > files.txt
+
+          # Create ZIP archive
+          xargs -0 zip output/lectures.zip < files.txt
+
+          # Create TAR.GZ archive
+          xargs -0 tar -czf output/lectures.tar.gz < files.txt
+
+          # Create 7Z archive
+          xargs -0 7z a output/lectures.7z < files.txt
 
       - name: Get current timestamp
         id: date
