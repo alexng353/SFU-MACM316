@@ -54,6 +54,7 @@ const balls = `\\documentclass[12pt]{article}
 \\usepackage{ulem}
 \\usepackage{xspace}
 \\usepackage{booktabs}
+\\usepackage{physics}
 
 \\ifPDFTeX % ensure generation of machine readable output
 \\input{glyphtounicode}
