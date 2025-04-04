@@ -1,0 +1,223 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{physics}
+
+\ifPDFTeX % ensure generation of machine readable output
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\fi
+
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+\newcommand{\ex}{\textbf{ex.}\xspace}
+\newcommand{\Ex}{\textbf{Ex.}\xspace}
+\newcommand{\Eg}{\textbf{Eg.}\xspace}
+\newcommand{\eg}{\textbf{e.g.}\xspace}
+\newcommand{\Ie}{\textbf{I.e.}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textit{Lemma}\xspace}
+\newcommand{\bproof}{\textit{Proof ($\impliedby$).}\xspace}
+\newcommand{\fproof}{\textit{Proof ($\implies$).}\xspace}
+\newcommand{\bigEps}{\mathcal{E}}
+\newcommand{\soln}{\textit{Soln.}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+}
+
+\newcommand{\ulhref}[2]{\href{#1}{\color{blue}\uline{#2}}}
+
+\begin{document}
+
+\title{MACM 316 Lecture 34}
+\author{Alexander Ng}
+\date{Friday, April 4, 2025}
+
+\maketitle
+
+\section{The Taylor Method of Order $n$}
+If we drop the remainder term, we obtain the \textbf{Taylor Method of Order $n$}.
+\begin{align*}
+  \begin{cases}
+    w_0 = \alpha & \\
+    w_{i+1} = w_i + hT^{(n)}(t_i, w_i) & i = 0, 1, \dots, N-1
+  .\end{cases}
+\end{align*}
+where $T^{(n)}(t_i, w_i) = f(t_i, w_i) + \frac{h}{2}f'(t_i, w_i) + \dots + 
+\frac{h^n}{n!}f^{(n)}(t_i, w_i)$ is the $n^{th}$ Taylor Polynomial of $f$ about
+$t_i$.
+
+Note: \textit{Euler's Method is equivalent to Taylor's Method of Order $1$}.
+
+\subsection{Example: Taylor's Method of Order $2$ (24.1)}
+Use Taylor's Method of order Two to approximate the solution for the IVP 
+\[
+  \begin{cases}
+    y' = te^{3t} - 2y & 0 \leq t \leq 1\\
+    y = 0 & t = 0
+  .\end{cases}
+.\]
+with $h=0.5$.
+
+\soln The first approximation is 
+\begin{align*}
+  w_1 &= w_0 + h(t_0e^{3t_0}-2w+0) + \frac{h^2}{2}(t_0 e^{3t_0} + 4w_0) \\
+      &= 0 + 0.5(0-0) + \frac{(0.5)^2}{2}(0+1+0) \\ 
+      &= 0.125 \\
+\end{align*}
+and the second is 
+\begin{align*}
+  w_2 &= w_1 + h \left( t_1 e^{3t_1 - 2w_1} + \frac{h^2}{2} f\left(t_1, e^{3t_1} + e^{3t_1} + f(w_1)\right) \right) \\
+      &= 0.125 + 0.5 \left( 0.5 e^{1.5} - 2(0.125) \right) \\
+      &\quad + \frac{(0.5)^2}{2} \left( 0.5 e^{1.5} + e^{1.5} + 4(0.125) \right) \\
+      &= 2.02323897
+\end{align*}
+
+\subsection{Intermediate Point Methods (24.2)}
+If we want to determine an intermediate point (\eg for some
+$t\in(t_{i-1},t_i)$), then \textbf{Cubic Hermite Interpolation} based on
+$(y(t_{i-1}), y'(t_{i-1}), y(t_i), y'(t_i))$ is a particularly natural choice
+for a Taylor Method of degree $\leq 4$. Such an interpolation has the advantages
+that it can be constructed locally and that $y'(t) = f(t,y(t))$ is given.
+
+To interpolate results from very high order Taylor Methods $(n>4)$, we will need
+higher order oscillating polynomials to preserve the overall accuracy of the
+results.
+
+\subsection{Error Analysis fo Taylor's Method (24.3)}
+The local truncation error for Taylor's Method of Order $n$ is easily derivced:
+\begin{align*}
+  y_{i+1} - y_i - h f\pqty{t_i, y_i} 
+    &- \frac{h^2}{2} f'\pqty{t_i, y_i} 
+    - \cdots 
+    - \frac{h^n}{n!} f^{(n-1)}\pqty{t_i, y_i} \\
+    \text{gratuitous cancellations yield}\quad &= \frac{h^{n+1}}{(n+1)!} f^{(n)}\pqty{\xi_i, y\pqty{\xi_i}} \\
+  \text{where} \quad y_i &\equiv y\pqty{t_i}
+\end{align*}
+Thus the local truncation error is
+\begin{align*}
+  \tau_{i+1}(h) &= \frac{y_{i+1} - y_i}{h} - f\pqty{t_i, y_i} - \frac{h}{2} f'\pqty{t_i, y_i} - \cdots - \frac{h^n}{n!} f^{(n-1)}\pqty{t_i, y_i} \\
+                &= \frac{h^n}{(n+1)!} f^{(n)}\pqty{\xi_i, y\pqty{\xi_i}} \\
+\end{align*}
+{
+  Thus, if
+  $y \in C^{(n+1)}\bqty{a, b}$
+
+  \hangindent=0.5in
+  $\implies y^{(n+1)}(t) = f^{(n)}\pqty{t, y(t)}$ is bounded
+
+  and $\tau_i = \order{h^n}$ for each $i = 1, 2, \dots, N.$
+  \hangafter=0
+}
+
+\section{Runge-Kutta Methods (24.4)}
+Taylor Methods are seldom used in practice because they require hte computation
+and evaluation of the derivatives of $f(t,y)$. These evaluations can be
+complicated and expensive.
+
+Runge-Kutta Methods have the high local truncation error of the Taylor Methods
+but do not need compute and evaluate the derivatives of $f(t,y)$. To give some
+idea of how Runge-Kutta methods are developed, we will now show the derivation
+of a simple second-order method. Here, the increment of $w$ is a weighted
+average of two estimates of the increment which we will call $k_1$ and $k_2$.
+\[
+\begin{cases}
+  & w_{n+1} = w_n + ak_1 + bk_2 \\
+  & k_1 = hf(t_n, w_n) \\
+  & k_2 = hf(t_n + \alpha h, w_n + \beta k_1)
+.\end{cases}
+\label{eq:rk2}
+\]
+we can think of $k_1$ and $k_2$ as estimates of the change in $y$ when $t$
+advances by $h$ because they are the product of the change in $t$ and a value
+for the slope of the curve.
+
+Runge-Kutta methods often use the simple Euler estimate as the first eestimate
+of $\delta y$. Now our problem si to devise a scheme by choosing hte four
+parameters $a, b, \alpha, \beta$. We do so by making the local truncation error
+of (\ref{eq:rk2}).
+
+We re-write (\ref{eq:rk2}) as
+\[
+  w_{n+1} = w_n + ahf(t_n, w_n) + bhf(t_n+\alpha h, w_n+\beta h + f(t_n, w_n))
+.\]
+The local truncation error is then
+\[
+  \tau_{n+1}(h) = \frac{y_{n+1}-y_n}{n} - af(t_n,y_n) - bf(t_n+\alpha h, y_n +
+  \beta hf(t_n, y_n))
+.\]
+Applying a Taylor Series of degree $2$:
+\[
+  y_{n+1} = y_n + h f(t_n, y_n) + \frac{h^2}{2} 
+  \underbrace{f'(t_n, y_n)}_{\mathclap{f_t(t_n, y_n) + f_y(t_n, y_n) \cdot f(t_n, y_n)}} 
+  + \order{h^3}.
+\]
+
+\begin{align*}
+& f(t_n + \alpha h, y_n + \beta h f(t_n,y_n))  \\
+&= f(t_n, y_n) + f_t(t_n,y_n) \alpha h + f_y(t_n, y_n) f(t_n,y_n) \beta h + 
+\order{h^2} \\
+\end{align*}
+
+\begin{align*}
+  \therefore \tau_{n+1} (h) &= (1-a-b) f(t_n,y_n) \\
+                            &+ h(\frac{1}{2} -\alpha b) f_t(t_n,y_n) \\
+                            &+ h(\frac{1}{2} - \beta b) f_y(t_n,y_n) f(t_n,y_n)
+\end{align*}
+
+Thus the local truncation error will be $\order{h^2}$ provided 
+\begin{align*}
+a+b &= 1 \\
+\alpha b &= \frac{1}{2} \\
+\beta b &= \frac{1}{2}
+\end{align*}
+but there is not enough flexibility to obtain a third order method. (Proof is
+left as an exercise.)
+
+\subsection{Examples of Runge-Kutta Methods (24.7)}
+\begin{equation*}
+  \boxed{\begin{cases}
+     & a = 0\\
+     & b=1\\
+     & \alpha = \frac{1}{2}\\
+     & \beta = \frac{1}{2}
+    \end{cases}
+    \implies 
+    \begin{cases}
+      w_0 = y(t_0) \\
+      w_{n+1} = w_n + h f(t_n + \frac{h}{2}, w_n + \frac{h}{2}f(t_n, w_n)) 
+  \end{cases}}
+\end{equation*}
+
+\end{document}

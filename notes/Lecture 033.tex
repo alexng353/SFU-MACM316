@@ -202,11 +202,24 @@ where $y(t) \in C^{(n+1)} [a,b]$
 
 One approach is to expand the solution in terms of its $n^{th}$ Taylor
 Polynomial about $t_i$.
-\[
-math
-.\]
+\begin{align*}
+	y(t_{i+1}) &= y(t_i) + h y'(t_i) + \frac{h^2}{2} y''(t_i) + \cdots + \frac{h^n}{n!} y^{(n)}(t_i) + R \\
+		   &= y(t_i) + h f\pqty{t_i, y(t_i)} + \frac{h^2}{2} f'\pqty{t_i, y(t_i)} + \cdots + \frac{h^n}{n!} f^{(n-1)}\pqty{t_i, y(t_i)} + R \\
+  \text{where} \quad R &= \frac{h^{n+1}}{(n+1)!} y^{(n+1)}\pqty{\xi_i}
+\end{align*}
 
 \section{The Taylor Method of Order $n$}
 If we drop the remainder term, we obtain the \textbf{Taylor Method of Order $n$}.
+\begin{align*}
+  \begin{cases}
+    w_0 = \alpha & \\
+    w_{i+1} = w_i + hT^{(n)}(t_i, w_i) & i = 0, 1, \dots, N-1
+  .\end{cases}
+\end{align*}
+where $T^{(n)}(t_i, w_i) = f(t_i, w_i) + \frac{h}{2}f'(t_i, w_i) + \dots + 
+\frac{h^n}{n!}f^{(n)}(t_i, w_i)$ is the $n^{th}$ Taylor Polynomial of $f$ about
+$t_i$.
+
+Note: \textit{Euler's Method is equivalent to Taylor's Method of Order $1$}.
 
 \end{document}
