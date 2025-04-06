@@ -1,0 +1,314 @@
+\documentclass[9pt,letterpaper]{article}
+
+\usepackage[margin=0.1in]{geometry}  % 0" margins on letter paper
+\usepackage{multicol}              % multiple columns
+\usepackage{amsmath,amssymb}       % math symbols if needed
+\usepackage{enumitem}              % to adjust bullet indentation
+\pagestyle{empty}                  % no page numbers
+
+% Reduce bullet indentation
+\setlist[itemize]{leftmargin=*, labelsep=.5em}
+
+% Adjust column spacing if needed (currently 0.25in)
+\setlength{\columnsep}{0.25in}
+
+\begin{document}
+\begin{multicols*}{3}
+
+  \noindent \textbf{\large Things to Remember}
+  \begin{itemize}
+    \item $a_{ij}$ is the $i$th row and $j$th column of $A$.
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Floating-Point \& Errors}
+  \begin{itemize}
+    \item \textbf{Representation (IEEE 754):} Real numbers are discretized; rounding to nearest representable value.
+    \item \textbf{Rounding vs.\ Chopping:} Rounding picks the nearest representable number; chopping just truncates bits.
+    \item \textbf{Catastrophic Cancellation:} Occurs when subtracting nearly equal numbers, causing large relative error.
+    \item \textbf{Condition Number ($\kappa$):} Measures sensitivity of output to small changes in input.
+    \item \textbf{Stability:} An algorithm is stable if small input perturbations only cause proportionally small output changes.
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Direct Methods for Linear Systems}
+  \begin{itemize}
+    \item \textbf{Gaussian Elimination:} $O(n^3)$ operations. Pivoting (partial or complete) avoids large roundoff from tiny pivots.
+    \item \textbf{LU Factorization:} $A=LU$. Do forward/back substitution for multiple RHS vectors. For SPD matrices, use Cholesky ($A=LL^\top$).
+    \item \textbf{Pivoting:} \textit{Partial pivoting} swaps rows to pick a large pivot; \textit{complete pivoting} can swap rows/columns for further stability.
+    \item \textbf{Band/Tridiagonal Matrices:} Exploit structure to reduce computational cost.
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Iterative Methods for $Ax=b$}
+  \begin{itemize}
+    \item \textbf{Jacobi:} 
+      $
+      x_i^{(k+1)} 
+      = \frac{b_i - \sum_{j\neq i} a_{ij}\,x_j^{(k)}}{a_{ii}}, 
+      \quad \text{for each } i.
+      $
+      Uses old values in each iteration.
+    \item \textbf{Gauss-Seidel:} Similar formula but uses updated values immediately in iteration. Often converges faster.
+    \item \textbf{SOR (Successive Over-Relaxation):} 
+      $x^{(k+1)} = x^{(k)} + \omega(\text{Gauss-Seidel update})$ with $1<\omega<2$ for faster convergence if well-chosen.
+    \item \textbf{Convergence Criterion:} Typically $\rho(T) < 1$, where $T$ is the iteration matrix. 
+    \item \textbf{Diagonally Dominant / SPD:} Guarantee convergence for Jacobi/Gauss-Seidel.
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Nonlinear Equations (Root Finding)}
+  \begin{itemize}
+    \item \textbf{Bisection Method:} Requires a sign change over $[a,b]$. Repeatedly halve interval. Guaranteed convergence (linear).
+    \item \textbf{Fixed-Point Iteration:} $x_{k+1}=g(x_k)$. Converges if $|g'(p)|<1$. Check iteration function carefully.
+    \item \textbf{Newton's Method:} 
+      $
+      x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)},
+      $
+      Quadratic convergence near root if $f'(p)\neq0$. Needs derivative $f'$.
+    \item \textbf{Secant Method:} Derivative is approximated by $\frac{f(x_k)-f(x_{k-1})}{x_k - x_{k-1}}$. Superlinear convergence.
+    \item \textbf{Regula Falsi (False Position):} Combines bracketing with secant-like updates, maintaining bracket.
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Polynomial Interpolation}
+  \begin{itemize}
+    \item \textbf{Lagrange Form:} 
+      $ 
+      P_n(x) = \sum_{j=0}^n f(x_j)\,L_j(x), 
+      \quad 
+      L_j(x) = \prod_{\substack{0\le m \le n m\neq j}} \frac{x - x_m}{x_j - x_m}.
+      $ 
+    \item \textbf{Divided Differences (Newton Form):} Build polynomial incrementally. Good for reusing previous calculations if new points are added.
+    \item \textbf{Error Term:} 
+      $f(x)-P_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{j=0}^n (x-x_j).$
+    \item \textbf{Hermite Interpolation:} Matches both $f$ and $f'$ at nodes (more conditions).
+    \item \textbf{Cubic Splines:} Piecewise cubics ensuring $S(x_i)=f_i$, continuous first/second derivatives at interior nodes. Boundary conditions: natural ($S''(x_0)=S''(x_n)=0$) or clamped ($S'(x_0)$, $S'(x_n)$ given).
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Numerical Differentiation}
+  \begin{itemize}
+    \item \textbf{Forward Diff:} 
+      $
+      f'(x)\approx \frac{f(x+h) - f(x)}{h}, 
+      \;\; \mathcal{O}(h).
+      $
+    \item \textbf{Centered Diff:} 
+      $
+      f'(x)\approx \frac{f(x+\tfrac{h}{2}) - f(x-\tfrac{h}{2})}{h}, 
+      \;\; \mathcal{O}(h^2).
+      $
+    \item \textbf{Second Derivative:} 
+      $
+      f''(x)\approx \frac{f(x+h)-2f(x)+f(x-h)}{h^2}, 
+      \;\; \mathcal{O}(h^2).
+      $
+    \item \textbf{Richardson Extrapolation:} Combine approximations with different $h$ to cancel leading error terms and boost accuracy.
+    \item \textbf{Roundoff vs.\ Truncation:} Extremely small $h$ $\Rightarrow$ roundoff error. Large $h$ $\Rightarrow$ truncation error.
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Numerical Integration}
+  \begin{itemize}
+    \item \textbf{Trapezoid Rule (Basic):} 
+      $
+      \int_a^b f(x)\,dx \approx \frac{b-a}{2}\bigl(f(a)+f(b)\bigr).
+      $
+      Composite version: partition $[a,b]$ into $n$ subintervals, sum trapezoids. Error $\mathcal{O}(h^2)$ for composite.
+    \item \textbf{Simpson's Rule:} Fits parabolas through triples of points. Composite Simpson has error $\mathcal{O}(h^4)$.
+    \item \textbf{Newton-Cotes Family:} General equally spaced formulas (e.g.\ Simpson, 3/8 rule). Degree of precision is higher if $n$ is even.
+    \item \textbf{Romberg Integration:} Trapezoid + Richardson extrapolation $\Rightarrow$ improved order systematically.
+    \item \textbf{Adaptive Quadrature:} Subdivide intervals where function changes rapidly, ensuring error remains below tolerance.
+    \item \textbf{Gaussian Quadrature:} Chooses nodes/weights (Legendre polynomials) to get exact results up to degree $2n-1$ with $n$ points.
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Initial Value Problems (ODEs)}
+  \begin{itemize}
+    \item \textbf{Existence \& Uniqueness:} If $f(t,y)$ is continuous in $t$ and Lipschitz in $y$, then the IVP $y'(t)=f(t,y)$, $y(t_0)=y_0$ has a unique solution.
+    \item \textbf{Euler's Method:} 
+      $
+      w_{k+1} = w_k + h\,f(t_k, w_k), 
+      \quad \text{local error }\mathcal{O}(h^2), \text{ global }\mathcal{O}(h).
+      $
+    \item \textbf{Taylor Methods:} Use derivatives of $f$ up to $n$th order; local error $\mathcal{O}(h^{n+1})$, but can be cumbersome to compute derivatives.
+    \item \textbf{Runge-Kutta Methods (RK2, RK4, etc.):} Achieve higher order without symbolic derivatives. 
+      E.g.\ RK4 has local error $\mathcal{O}(h^5)$, global $\mathcal{O}(h^4)$.
+    \item \textbf{Stability in ODE Solvers:} Step size must be sufficiently small for stable integration, especially for stiff problems.
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Quick Error/Order Reference}
+  \begin{itemize}
+    \item \textbf{Linear Systems:} 
+      \begin{itemize}
+        \item Gauss Elim: $O(n^3)$ ops
+        \item Jacobi/G-S: converge if $\rho(T)<1$
+      \end{itemize}
+    \item \textbf{Root Finding:} 
+      \begin{itemize}
+        \item Bisection: linear
+        \item Newton: quadratic
+        \item Secant: superlinear ($\approx1.618$)
+      \end{itemize}
+    \item \textbf{Interpolation Error:} $\displaystyle f(x)-P_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}\prod (x-x_j)$
+    \item \textbf{Num. Differentiation:} 
+      \begin{itemize}
+        \item Forward diff: $\mathcal{O}(h)$
+        \item Center diff: $\mathcal{O}(h^2)$
+      \end{itemize}
+    \item \textbf{Num. Integration:} 
+      \begin{itemize}
+        \item Trapezoid (composite): $\mathcal{O}(h^2)$
+        \item Simpson (composite): $\mathcal{O}(h^4)$
+        \item Romberg: $\mathcal{O}(h^{2k})$ with extrapolation
+      \end{itemize}
+    \item \textbf{ODE Solvers:} 
+      \begin{itemize}
+        \item Euler: local $\mathcal{O}(h^2)$, global $\mathcal{O}(h)$
+        \item RK4: local $\mathcal{O}(h^5)$, global $\mathcal{O}(h^4)$
+      \end{itemize}
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Special Types of Matrices \& Convergence Behavior}
+  \begin{itemize}
+    \item \textbf{Diagonal Matrix:} Only non-zero entries are on the main diagonal. Easily invertible; iterative methods converge trivially.
+
+    \item \textbf{Triangular Matrix:}
+      \begin{itemize}
+        \item \textit{Upper/Lower Triangular:} All entries below/above diagonal are zero.
+        \item Solvable via forward/backward substitution in $O(n^2)$ time.
+      \end{itemize}
+
+    \item \textbf{Symmetric Matrix:} $A = A^\top$. Diagonalizable with real eigenvalues.
+
+    \item \textbf{Positive Definite Matrix (SPD):}
+      \begin{itemize}
+        \item $x^\top A x > 0$ for all $x \neq 0$.
+        \item All eigenvalues are positive.
+        \item Allows Cholesky factorization: $A = LL^\top$.
+        \item Gauss-Seidel and Conjugate Gradient methods converge when $A$ is SPD.
+      \end{itemize}
+
+    \item \textbf{Diagonally Dominant Matrix:}
+      \[
+        |a_{ii}| \ge \sum_{j\ne i} |a_{ij}| \quad \text{for all } i.
+      \]
+      \begin{itemize}
+        \item \textit{Strictly diagonally dominant:} $>$ instead of $\ge$.
+        \item Guarantees convergence of Jacobi, Gauss-Seidel, and SOR methods.
+      \end{itemize}
+
+    \item \textbf{Band Matrix:}
+      \begin{itemize}
+        \item Nonzero entries confined to a diagonal band (e.g., tridiagonal).
+        \item Efficient to store and solve: $O(nb^2)$ where $b$ is bandwidth.
+      \end{itemize}
+
+    \item \textbf{Sparse Matrix:}
+      \begin{itemize}
+        \item Majority of entries are zero.
+        \item Exploit sparsity for efficient storage and faster matrix-vector products.
+      \end{itemize}
+
+    \item \textbf{Ill-Conditioned Matrix:}
+      \begin{itemize}
+        \item Has large condition number $\kappa(A)$.
+        \item Small perturbations in input lead to large errors in output.
+        \item May cause instability in numerical methods (especially direct solvers).
+      \end{itemize}
+
+    \item \textbf{Normal Matrix:} $A^\top A = AA^\top$. Includes symmetric and orthogonal matrices.
+
+    \item \textbf{Convergence Summary for Iterative Methods:}
+      \begin{itemize}
+        \item \textbf{Jacobi/Gauss-Seidel:} Converge if $A$ is SPD or strictly diagonally dominant.
+        \item \textbf{SOR:} Converges if $A$ is SPD and $0 < \omega < 2$.
+        \item \textbf{Spectral Radius Criterion:} Iteration matrix $T$ satisfies $\rho(T) < 1$ for convergence.
+      \end{itemize}
+  \end{itemize}
+
+  \noindent
+  \textbf{\large Determinants and Eigenvalues}
+  \begin{itemize}
+    \item \textbf{Determinant (Definition):}
+      \begin{itemize}
+        \item Scalar value associated with a square matrix.
+        \item Denoted $\det(A)$ or $|A|$.
+        \item Indicates volume scaling factor of linear transformation and invertibility of matrix.
+        \item $\det(\mathbb{R}^{2\times 2}) = \det \begin{bmatrix}
+            a & b\\
+            c & d\\
+          \end{bmatrix} = ad - bc$
+      \end{itemize}
+
+    \item \textbf{Properties of Determinants:}
+      \begin{itemize}
+        \item $\det(I) = 1$
+        \item $\det(AB) = \det(A)\det(B)$
+        \item $\det(A^\top) = \det(A)$
+        \item $\det(A^{-1}) = \frac{1}{\det(A)}$ if $A$ is invertible
+        \item Row swaps change sign of determinant.
+        \item Adding a multiple of one row to another does not change determinant.
+        \item If $A$ has a row or column of zeros $\Rightarrow \det(A) = 0$
+      \end{itemize}
+
+    \item \textbf{Cofactor Expansion (Laplace Expansion):}
+      \begin{itemize}
+        \item Expand determinant along any row or column:
+          \[
+            \det(A) = \sum_{j=1}^n a_{ij}(-1)^{i+j} \det(M_{ij}) 
+          \]
+          where $M_{ij}$ is the minor of $A$ (matrix formed by deleting row $i$ and column $j$).
+        \item Computationally expensive for large matrices (use LU for efficiency).
+      \end{itemize}
+
+    \item \textbf{Triangular Matrix Determinant:}
+      \[
+        \det(A) = \prod_{i=1}^n a_{ii} \quad \text{if } A \text{ is upper or lower triangular}.
+      \]
+
+    \item \textbf{Eigenvalues and Eigenvectors:}
+      \begin{itemize}
+        \item For square matrix $A$, if $Ax = \lambda x$, then:
+          \begin{itemize}
+            \item $\lambda$ is an \textbf{eigenvalue}
+            \item $x$ is a corresponding \textbf{eigenvector}
+          \end{itemize}
+        \item To find eigenvalues:
+          \[
+            \det(A - \lambda I) = 0
+          \]
+          This is the characteristic polynomial.
+        \item Each eigenvalue has one or more associated eigenvectors, found by solving:
+          \[
+            (A - \lambda I)x = 0
+          \]
+      \end{itemize}
+
+    \item \textbf{Properties of Eigenvalues:}
+      \begin{itemize}
+        \item Sum of eigenvalues = $\operatorname{tr}(A)$
+        \item Product of eigenvalues = $\det(A)$
+        \item Eigenvalues of $A^\top = A$
+        \item If $A$ is symmetric: all eigenvalues are real; eigenvectors are orthogonal.
+        \item If $A$ is invertible: no eigenvalue equals 0.
+      \end{itemize}
+
+    \item \textbf{Diagonalization:}
+      \begin{itemize}
+        \item $A = PDP^{-1}$ if $A$ has $n$ linearly independent eigenvectors.
+        \item $D$ is diagonal matrix of eigenvalues; $P$ contains eigenvectors as columns.
+      \end{itemize}
+
+    \item \textbf{Spectral Radius:}
+      \[
+        \rho(A) = \max_i |\lambda_i|
+      \]
+      Determines convergence behavior of many iterative methods.
+  \end{itemize}
+
+\end{multicols*}
+\end{document}
