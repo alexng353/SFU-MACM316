@@ -73,16 +73,19 @@ const balls = `\\documentclass[12pt]{article}
 
 \\setlength{\\arraycolsep}{12pt}
 
-\\newcommand{\\defn}{\\textbf{Def.}\\xspace}
-\\newcommand{\\thm}{\\textbf{Thm.}\\xspace}
-\\newcommand{\\ex}{\\textbf{ex.}\\xspace}
+\\newcommand{\\Eg}{\\textbf{Eg.}\\xspace}
 \\newcommand{\\Ex}{\\textbf{Ex.}\\xspace}
+\\newcommand{\\Ie}{\\textbf{I.e.}\\xspace}
+\\newcommand{\\bigEps}{\\mathcal{E}}
+\\newcommand{\\bproof}{\\textit{Proof ($\\impliedby$).}\\xspace}
+\\newcommand{\\defn}{\\textbf{Def.}\\xspace}
+\\newcommand{\\eg}{\\textbf{e.g.}\\xspace}
+\\newcommand{\\ex}{\\textbf{ex.}\\xspace}
+\\newcommand{\\fproof}{\\textit{Proof ($\\implies$).}\\xspace}
 \\newcommand{\\ie}{\\textbf{i.e.}\\xspace}
 \\newcommand{\\lemma}{\\textit{Lemma}\\xspace}
-\\newcommand{\\bproof}{\\textit{Proof ($\\impliedby$).}\\xspace}
-\\newcommand{\\fproof}{\\textit{Proof ($\\implies$).}\\xspace}
-\\newcommand{\\bigEps}{\\mathcal{E}}
 \\newcommand{\\soln}{\\textit{Soln.}\\xspace}
+\\newcommand{\\thm}{\\textbf{Thm.}\\xspace}
 
 \\renewcommand{\\arraystretch}{1.25} % Adjust row spacing
 

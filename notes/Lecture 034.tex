@@ -142,7 +142,7 @@ Thus the local truncation error is
 }
 
 \section{Runge-Kutta Methods (24.4)}
-Taylor Methods are seldom used in practice because they require hte computation
+Taylor Methods are seldom used in practice because they require the computation
 and evaluation of the derivatives of $f(t,y)$. These evaluations can be
 complicated and expensive.
 
@@ -163,7 +163,7 @@ we can think of $k_1$ and $k_2$ as estimates of the change in $y$ when $t$
 advances by $h$ because they are the product of the change in $t$ and a value
 for the slope of the curve.
 
-Runge-Kutta methods often use the simple Euler estimate as the first eestimate
+Runge-Kutta methods often use the simple Euler estimate as the first estimate
 of $\delta y$. Now our problem si to devise a scheme by choosing hte four
 parameters $a, b, \alpha, \beta$. We do so by making the local truncation error
 of (\ref{eq:rk2}).
@@ -206,6 +206,7 @@ but there is not enough flexibility to obtain a third order method. (Proof is
 left as an exercise.)
 
 \subsection{Examples of Runge-Kutta Methods (24.7)}
+\subsubsection{The Midpoint Method}
 \begin{equation*}
   \boxed{\begin{cases}
      & a = 0\\
@@ -219,5 +220,35 @@ left as an exercise.)
       w_{n+1} = w_n + h f(t_n + \frac{h}{2}, w_n + \frac{h}{2}f(t_n, w_n)) 
   \end{cases}}
 \end{equation*}
+\subsubsection{The Modified Euler Method}
+\begin{equation*}
+  \boxed{\begin{cases}
+      a = \frac{1}{2} \\
+      b = \frac{1}{2} \\
+      \alpha = 1 \\
+      \beta = 1
+    \end{cases}
+    \implies 
+    \begin{cases}
+      w_0 = y(t_0) \\
+      w_{n+1} = w_n + \frac{h}{2} \bqty{f(t_n,w_n)+f\pqty{t_{n+1}w_n+hf(t_nw_n)}}
+  \end{cases}}
+.\end{equation*}
+
+\subsubsection{Heun's Method}
+\begin{equation*}
+  \boxed{\begin{cases}
+      a = \frac{1}{4} \\
+      b = \frac{3}{4} \\
+      \alpha = \frac{2}{3} \\
+      \beta = \frac{2}{3}
+    \end{cases}
+    \implies 
+    \begin{cases}
+      w_0 = y(t_0) \\
+      w_{n+1} = w_n + \frac{h}{4} \bqty{f(t_n,w_n)+3f\pqty{t_n+\frac{2}{3}h,
+      w_n+\frac{2}{3}hf(t_nw_n)}}
+  \end{cases}}
+.\end{equation*}
 
 \end{document}
