@@ -6,30 +6,33 @@ const nameIndex = args.indexOf("--name");
 let name: string | undefined  = undefined;
 if (nameIndex !== -1) {
   name = args[nameIndex + 1];
-}
-
-if (args.length < 2) {
-  console.error("Usage: bun gen <n> | bun gen -n");
-  process.exit(1);
-}
-
-const arg1 = args.at(-1);
-
-let n: number;
-if (arg1 === "next" || arg1 === "-n") {
-  const dir = await fs.readdir(".");
-  const files = dir.filter((b) => b.match(/^Lecture \d+\.tex$/));
-
-  files.sort((a, b) => Number.parseInt(a.split(" ")[1]) - Number.parseInt(b.split(" ")[1]));
-  n = Number.parseInt(files.at(-1)?.split(" ")[1]!) + 1;
 } else {
-  n = Number.parseInt(arg1 ?? "NaN");
+  if (args.length < 2) {
+    console.error("Usage: bun gen <n> | bun gen -n");
+    process.exit(1);
+  }
+
+  const arg1 = args.at(-1);
+
+  let n: number;
+  if (arg1 === "next" || arg1 === "-n") {
+    const dir = await fs.readdir(".");
+    const files = dir.filter((b) => b.match(/^Lecture \d+\.tex$/));
+
+    files.sort((a, b) => Number.parseInt(a.split(" ")[1]) - Number.parseInt(b.split(" ")[1]));
+    n = Number.parseInt(files.at(-1)?.split(" ")[1]!) + 1;
+  } else {
+    n = Number.parseInt(arg1 ?? "NaN");
+  }
+
+  if (Number.isNaN(n)) {
+    console.error("n must be a number");
+    process.exit(1);
+  }
+  
+  name = `Lecture ${n.toString().padStart(3, "0")}`;
 }
 
-if (Number.isNaN(n)) {
-  console.error("n must be a number");
-  process.exit(1);
-}
 
 const date = new Date().toLocaleDateString("en-US", {
   weekday: "long",
@@ -100,7 +103,7 @@ const balls = `\\documentclass[12pt]{article}
 
 \\begin{document}
 
-\\title{MACM 316 Lecture ${n}}
+\\title{MACM 316 ${name}}
 \\author{Alexander Ng}
 \\date{${date}}
 
@@ -109,12 +112,12 @@ const balls = `\\documentclass[12pt]{article}
 \\end{document}
 `;
 
-const fileName = `Lecture ${n.toString().padStart(3, "0")}.tex`;
+const fileName = `${name}.tex`;
 
 const file = Bun.file(fileName);
 
 if (await file.exists() && !FORCE) {
-  console.error(`Lecture ${n}.tex already exists\n\tUse --force to overwrite`);
+  console.error(`${fileName} already exists.\n\tUse --force to overwrite`);
   process.exit(1);
 }
 

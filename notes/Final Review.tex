@@ -1,0 +1,104 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{physics}
+
+\ifPDFTeX % ensure generation of machine readable output
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\fi
+
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\Eg}{\textbf{Eg.}\xspace}
+\newcommand{\Ex}{\textbf{Ex.}\xspace}
+\newcommand{\Ie}{\textbf{I.e.}\xspace}
+\newcommand{\bigEps}{\mathcal{E}}
+\newcommand{\bproof}{\textit{Proof ($\impliedby$).}\xspace}
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\eg}{\textbf{e.g.}\xspace}
+\newcommand{\ex}{\textbf{ex.}\xspace}
+\newcommand{\fproof}{\textit{Proof ($\implies$).}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textit{Lemma}\xspace}
+\newcommand{\soln}{\textit{Soln.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+}
+
+\newcommand{\ulhref}[2]{\href{#1}{\color{blue}\uline{#2}}}
+
+\begin{document}
+
+\title{MACM 316 Final Review}
+\author{Alexander Ng}
+\date{Monday, April 7, 2025}
+
+\maketitle
+
+\section{Example 1}
+The following sequence converge to 0 of order $\alpha$. What is $\alpha$?
+Identify any examples with sublinear convergence. Justify your answers using the
+definitions
+\begin{enumerate}[label=(\alph*)]
+  \item $p_n = n^{-e}$
+  \item $p_n = e^{-n}$
+  \item $p_n=e^{-(e^n)}$
+\end{enumerate}
+
+\subsection{a)}
+Conjecture $\alpha = 1$
+
+\begin{align*}
+  \lim_{n \to \infty} \frac{\abs{p_{n+1}-0}}{\abs{p_n-0}} &= \lim_{n\to\infty}
+  \frac{(n+1)^{-e}}{n^{-e}} \\
+                                                          &=
+                                                          \lim_{n-?\infty}\bqty{1+\frac{1}{n}}^{-e} \\
+                                                          &= 1 
+\end{align*}
+
+$\therefore \alpha = 1$. This is less than linear (sublinear) because $\lambda =
+1$
+
+\subsection{c)}
+
+\begin{align*}
+  \lim_{n\to\infty} \frac{\abs{p_{n+1}-0}}{\abs{p_n-0}} 
+  &= \lim_{n\to\infty}
+  \frac{e^{-(e^{n+1})}}{(e^{-(e^n)})^\alpha} \\
+  &= \lim_{n\to\infty}\frac{e^{-e^n\cdot e}}{e^{-e^n\cdot \alpha}} \\
+  &= 1 \text{ if } \alpha = e 
+\end{align*}
+
+
+\end{document}
