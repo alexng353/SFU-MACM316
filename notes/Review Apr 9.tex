@@ -1,0 +1,255 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{physics}
+
+\ifPDFTeX % ensure generation of machine readable output
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\fi
+
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\Eg}{\textbf{Eg.}\xspace}
+\newcommand{\Ex}{\textbf{Ex.}\xspace}
+\newcommand{\Ie}{\textbf{I.e.}\xspace}
+\newcommand{\bigEps}{\mathcal{E}}
+\newcommand{\bproof}{\textit{Proof ($\impliedby$).}\xspace}
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\eg}{\textbf{e.g.}\xspace}
+\newcommand{\ex}{\textbf{ex.}\xspace}
+\newcommand{\fproof}{\textit{Proof ($\implies$).}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textit{Lemma}\xspace}
+\newcommand{\soln}{\textit{Soln.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+}
+
+\newcommand{\ulhref}[2]{\href{#1}{\color{blue}\uline{#2}}}
+
+\begin{document}
+
+\title{MACM 316 Review Apr 9}
+\author{Alexander Ng}
+\date{Wednesday, April 9, 2025}
+
+\maketitle
+
+\section{Problem 1}
+Let $P(x)$ be the Lagrange interpolating polynomial for the function $f(x)$
+and i missed the rest oops
+
+\begin{align*}
+  f(x) &= x^4 \\
+  f'(x) &= 4x^3 \\
+  f''(x) &= 12x^2 \\
+  f^{(3)}(x) &= 24x
+\end{align*}
+
+*Write down the error form on your cheat sheet.*
+
+\section{Problem 2}
+
+Suppose $x_j = j$ for $j=0,1,2,3,4$, and $P_{0,1,2,3,4}(2) = a$, $P_{0,1,3,4}(2)
+= b$ and $P_{1,3,4}(2) = c$. Find $P_{1,2}(2)$. If there is not enough data to
+complete the question, or the data contains inconsistencies, explain why.
+
+\soln This is the hard way:
+\[
+  \left.\underbrace{P_{0,1,2,3,4}(2)}_{a}\right|_{x=2} = 
+    \left.
+      \frac{
+        (x-x_0)P_{1,2,3,4}(x) - (x-x_2) 
+        \underbrace{
+          P_{0,1,3,4}(x)
+        }_{b}
+      }{x_2-x_0}
+      \right|_{x=2}
+.\]
+Using this information, we can theoretically find $P_{1,2,3,4}(2)$.
+\textbf{However,} we can save ourselves lots of work by using the fact that we
+already know that one of the points the interpolating polynomial passes through
+is $x=2$.
+\[
+  P_{1,2}(2) = f(2)
+.\]
+
+\[
+  P_{0,1,2,3,4}(2) = f(2) = a
+.\]
+
+\[
+  \therefore P_{1,2}(2) = f(2) = a
+.\]
+\textbf{***The Lagrange Interpolating Polynomial for $f$ over the point $a$,
+evaluated at $x=a$ is $P_{a}(a) = f(a)$.}
+
+\section{Problem 3}
+
+Suppose $f(x) = a+2x+3x^2+4x^3+5x^4$ and $x_i = i+1, i=0,1,2,3,4$. What is the
+fourth divided difference $f\bqty{x_0, x_1, x_2, x_3, x_4}$?
+
+The straightforward way (the hard way) to solve this problem is to setup the
+divided difference table and evaluate them at each point until you find the
+solution to the problem (which makes $\order{n^2}$ time complexity). However,
+we can do a much better job.
+
+\textbf{*Include Divided Difference formula on cheat sheet.} 
+
+\soln If we do Lagrange interpolation of degree 4 on a degree 4 polynomial, we
+will get $P = f$. \ie the best fourth degree interpolating polynomial for a
+fourth degree polynomial is itself. Thus, the coefficient of $x^4 ( = 5)$ for
+$P$ will be the same as the one for $f$.
+
+The form of the Newton divided difference form of $f$ (section 3.4 pls review me)
+
+\begin{align*}
+  a_0 &+ a_1\pqty{x-x_0} + a_2\pqty{x-x_0}\pqty{x-x_1} \\
+      &+ a_3\pqty{x-x_0}\pqty{x-x_1}\pqty{x-x_2}\pqty{x-x_3} \\
+      &+ a_4\pqty{x-x_0}\pqty{x-x_1}\pqty{x-x_2}\pqty{x-x_3}\pqty{x-x_4}
+\end{align*}
+
+In this formula, $a_i$ are the coefficients to the interpolating polynomial
+found using divided differences. Thus, $a_4 = f\bqty{x_0, x_1, x_2, x_3, x_4} =$
+the coefficient of $x^4$ in $f$. Even if the polynomial is written differently,
+the divided difference will still be the same (there are infinite ways to write
+the same unique polynomial).
+
+\section{Problem 4}
+
+A natural cubic spline $S$ on $[1,3]$ is defined by
+\[
+  S = \begin{cases}
+    S_0(x) = 1+a(x-1)+b(x-1)^3 & \text{if } 1\leq x< 2\\
+    S_1(x) = 1+2(x-2)+c(x-2)^2 + d(x-2)^3 & \text{if } 2\leq x\leq 3
+  \end{cases}
+.\]
+Find $a,b,c,d$.
+\begin{align*}
+  &S_0(2) = S_1(2) \\
+  &1+a+b = 1 \implies a+b=0 \\
+  &S_0'(2) = S_1'(2) \\
+  &a+3b = 2 \implies \begin{cases}
+  b = 1 \\
+  a = -1 
+  .\end{cases} \\
+  &S_0''(2) = S_1''(2) \\
+  &6b  = 2c \implies c = 3 \\
+  &S''(3) = 0 \quad \text{endpoint condition S' = 0} \\
+  &\implies d = -1
+\end{align*}
+Basically, every problem on the exam is going to be about the
+\textbf{properties} of the different methods we learned in class.
+
+*What on earth are splines? Check Lecture 23 notes.*
+
+\section{Problem 5}
+
+Derive an $\order{h^2}$ three-point formula to approximate $f'(x_0)$ that uses
+$f(x_0), f(x_0+h), f(x_0+3h)$.
+
+\soln Put a polynomial through your data points. Differentiate the polyomial.
+That's your $\order{h^2}$ approximation. *Learn how to put a polynomial through
+data points.*
+
+\begin{align*}
+  x_0 &= x_0 \\
+  x_1 &= x_0 + h \\
+  x_2 &= x_0 + 3h 
+\end{align*}
+
+\begin{align*}
+  P_2(x) &= L_0(x) f_0 + L_1(x) f_1 + L_2(x) f_2 \\
+         &= \frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)} f_0 \\
+         &\quad + \frac{(x-x_0)(x-x_2)}{(x_1-x_0)(x_1-x_2)} f_1 \\
+         &\quad + \frac{(x-x_0)(x-x_1)}{(x_2-x_0)(x_2-x_1)} f_2
+\end{align*}
+
+If it has zeroes at $x_1$ and $x_2$, then it must have the factors $x-x_1$ and
+$x-x_2$.
+
+\begin{align*}
+  \left.P_2'(x)\right|_{x=x_0} &= \frac{(-h)+(-3h)}{(-h)(-3h)}f_0 
+    + \frac{-3h}{h(-2h)}f_1 
+    + \frac{-h}{(3h)(2h)}f_2
+\end{align*}
+
+\section{Problem 6}
+
+Find the constants $c_0, c_1$ and $x_1$ so that the quadature formula 
+\[
+  \int_{-1}^{2} f(x) \, dx = c_0 f(0) + c_1 f(x_1)
+.\]
+has the highest possible degree of precision.
+
+\[
+f=1: \int_{-1}^{2} 1 \, dx = c_0 1 + c_1 1
+.\]
+
+\[
+  f=x: \int_{-1}^{2} x \, dx = \left.\frac{1}{2}x^2\right|_{-1}^2 = c_1 x_1
+.\]
+
+\[
+f=x^2: \int_{-1}^{2} x^2 \, dx = \left.\frac{1}{3}x^3\right|_{-1}^2 =
+.\]
+
+I didn't catch the rest of this problem.
+
+\section{Problem 7}
+Suppose $N(h)$ is an approximation to $M$ for every $h>0$ and that
+\[
+  M=N(h) + K_1h + K_2h^2 + \dots
+.\]
+for some constants $K_1, K_2, \dots$. Use the values $N(h)$ and $N(\frac{h}{4})$
+to produce an $\order{h^2}$ approximation to $M$.
+
+\begin{equation}
+  M = N(h) + K_1h + K_2h^2 + \dots
+  \label{eq:M_h}
+.\end{equation}
+\begin{equation}
+  M = N(\frac{h}{4}) + K_1\frac{h}{4} + K_2\frac{h^2}{4} + \dots
+  \label{eq:M_h_over_4}
+.\end{equation}
+
+We solve for 4 $\times$ \eqref{eq:M_h_over_4} $-$ \eqref{eq:M_h} to get
+
+\[
+  M = \boxed{\frac{4N(\frac{h}{4}) - N(h)}{3}} + \order{h^2}
+.\]
+
+Good luck to everyone on the final exam.
+
+\end{document}
