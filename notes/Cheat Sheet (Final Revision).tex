@@ -1,0 +1,390 @@
+\documentclass[8pt, letterpaper]{extarticle}
+\usepackage[margin=0.1in]{geometry}  % 0" margins on letter paper
+\usepackage{multicol}              % multiple columns
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{physics}
+\usepackage{enumitem}              % to adjust bullet indentation
+\usepackage{changepage}
+\pagestyle{empty}                  % no page numbers
+
+
+\usepackage{titlesec}
+\usepackage[normalem]{ulem} % for underline that works in headings
+
+\ifPDFTeX % ensure generation of machine readable output
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\fi
+
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+\setlength{\parindent}{0pt}
+
+\newcommand{\Eg}{\textbf{Eg.}\xspace}
+\newcommand{\Ex}{\textbf{Ex.}\xspace}
+\newcommand{\Ie}{\textbf{I.e.}\xspace}
+\newcommand{\bigEps}{\mathcal{E}}
+\newcommand{\bproof}{\textit{Proof ($\impliedby$).}\xspace}
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\eg}{\textbf{e.g.}\xspace}
+\newcommand{\ex}{\textbf{ex.}\xspace}
+\newcommand{\fproof}{\textit{Proof ($\implies$).}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textit{Lemma}\xspace}
+\newcommand{\soln}{\textit{Soln.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+}
+
+\newcommand{\ulhref}[2]{\href{#1}{\color{blue}\uline{#2}}}
+
+% Redefine \section
+\titleformat{\section}
+  {\normalfont\bfseries\normalsize} % formatting
+  {} % label
+  {0pt} % separation between label and title
+  {\underline} % before code (underline the title)
+\titlespacing*{\section}{0pt}{*1}{*0.5} % {left}{before}{after}
+
+% Redefine \subsection
+\titleformat{\subsection}
+  {\normalfont\bfseries\normalsize} % formatting
+  {} % label
+  {0pt} % separation
+  {} % no underline
+\titlespacing*{\subsection}{0pt}{*0.8}{*0.3}
+
+% Redefine \subsection
+\titleformat{\subsubsection}
+  {\normalfont\bfseries\small} % formatting
+  {} % label
+  {1em} % separation
+  {} % no underline
+\titlespacing*{\subsubsection}{0pt}{*0.8}{*0.3}
+
+
+\setlist[itemize]{leftmargin=*, labelsep=.2em, parsep=0pt,
+itemsep=0.2\baselineskip, partopsep=0pt, topsep=0pt}
+\setlist[enumerate]{leftmargin=*, labelsep=.2em, parsep=0pt,
+itemsep=0.2\baselineskip, partopsep=0pt, topsep=0pt}
+\setlength{\columnsep}{0.25in}
+\begin{document}
+
+\title{MACM 316 Cheat Sheet (Final Revision)}
+\author{Alexander Ng}
+\date{Thursday, April 10, 2025}
+
+% \maketitle
+
+\begin{multicols*}{3}
+  \section{Things to Remember}
+  \begin{itemize}
+    \item $a_{ij}$ is the $i$th row and $j$th column of $A$.
+      % maybe remove the thing on decimal floating point
+    \item $\pm 0.d_1d_2\dots d_k \times 10^n$ is the decimal floating point 
+      representation of a number.
+    \item Chopping is cheaper than rounding.
+  \end{itemize}
+
+  \subsection{Error}
+  \begin{itemize} % consider making this a table
+    \item Error: $p - \hat{p}$
+    \item Abs. Err: $\abs{p - \hat{p}}$
+    \item Rel. Err: $\frac{\abs{p - \hat{p}}}{p}$ (for accuracy)
+  \end{itemize}
+
+  \subsection{Significant Digits}
+  An aprxmtn $\hat p$ has $t$ significant digits if:
+  $\displaystyle \frac{\abs{p-\hat p}}{\abs{p}} \leq 5 \times 10^{-t}$
+
+  \subsection{Catastrophic Cancellation (Roundoff)}
+  When subtracting nearly equal numbers, the relative error is large, and you
+  lose a lot of significant digits (and accuracy).
+
+  \subsection{How to Reduce Errors}
+  \begin{itemize}
+    \item Reformat the formula to avoid roundoff
+    \item Reduce num. of ops (avoid rounding)
+      \begin{itemize}
+        \item Nested Arithmetic: Rewrite polynomials to reduce operations
+          \newline
+          $x^3 - 6.1x^2 + 3.2x \to \pqty{\pqty{x-6.1}x + 3.2}x$
+      \end{itemize}
+  \end{itemize}
+
+  \section{Algorithms and Convergence}
+  \begin{itemize}
+    \item Stable $\to$ errors grow linearly
+    \item Unstable $\to$ errors grow exponentially
+  \end{itemize}
+
+  \subsection{Rate of Convergence}
+  \begin{itemize}
+    \item For sequences, if $\alpha_n \to \alpha$ and $\abs{\alpha_n - \alpha}
+      \leq k \beta_n, \quad \beta_n \to 0$ then $\alpha_n$ is $\order{\beta_n}$
+    \item For functions, if $\lim_{h \to 0} f(h) = L$ and $\abs{f(h)} \leq kh^p$
+      then $f(h) = L + \order{h^p}$
+  \end{itemize}
+
+  \subsection{Taylor Series}
+  $\displaystyle f(x) = \sum_{n=0}^\infty \frac{f^{(n)}(a)}{n!}(x-a)^n$\newline
+  $e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \dotsb$\newline
+  $\sin x = x - \frac{x^3}{3!} + \frac{x^5}{5!}\qquad\cos x = 1 - \frac{x^2}{2!} +
+  \frac{x^4}{4!}$\newline
+  $\ln (1+x) = x - \frac{x^2}{2} + \frac{x^3}{3} + \dotsb$ \newline % |x| < 1
+  $(1+x)^{-p} = 1-px+\frac{p(p+1)x^2}{2} -\frac{p(p+1)(p+2)x^3}{3!}$ % |x| < 1
+  \textbf{The Error Term} is the $(n+1)^{th}$ term.
+
+  \section{Root Finding}
+  \begin{itemize}
+  \item Find $p$ such that $f(p) = 0$.
+  \end{itemize}
+
+  \subsection{Generic Stopping Criterion}
+  \begin{enumerate}
+    \item $\frac{\abs{p_n-p_{n-1}}}{\abs{p_n}} \leq \bigEps; p_n \neq 0:$
+      relative error
+    \item $\abs{f(p_n)|} \leq \bigEps$
+      \begin{itemize}
+        \item Ensures small $f(p_n)$
+        \item $p_n$ may differ significantly from $p$
+      \end{itemize}
+    \item Have a fixed number of iterations
+    \item (bisection) 
+      $\frac{b_n-a_n}{2} \leq \bigEps$ \textbf{or} $\abs{p_n-p_{n-1}} <\bigEps$
+      \begin{itemize}
+        \item Ensures $p_n$ is within $\bigEps$ of  $p$
+        \item Does not ensure small $f(p_n)$
+      \end{itemize}
+  \end{enumerate}
+
+  \subsection{Bisection Method:}
+
+  \begin{itemize}
+    \item \textbf{Conditions:} $f(x) \in C[a,b];$ \newline
+      $f(a)$ and $f(b)$ have opposite signs.
+    \item \textbf{Midpoint:} $x = \frac{a+b}{2}$
+    \item \textbf{Procedure:} Binary search for the root.
+    \item \textbf{Error:} Guaranteed quadratic convergence 
+    \item \textbf{Error Formula:} $\frac{b-a}{2^n}$
+  \end{itemize}
+
+  \subsection{Newton's Method}
+  \begin{itemize}
+    \item Faster than bisection, quadratic. We follow the tangent line at $p_{n-1}$ to its
+      $x-$intercept.
+    \item Requires $f'(p)$ to exist.
+    \item Requires $f''(p)$ for quadratic convergence.
+      \begin{enumerate}
+        \item Start with initial guess $p_0$ and $p_1$
+        \item $\displaystyle p_n = p_{n-1} -
+          \frac{f(p_{n-1})\pqty{p_{n-1}-p_{n-2}}}{f'(p_{n-1})f(p_{n-2})}$
+      \end{enumerate}
+  \end{itemize}
+
+  \subsection{Secant Method}
+  \begin{itemize}
+    \item Does not require $f'(p)$ to exist.
+    \item Faster than Bisection, order $\phi \approx 1.618$
+      \begin{enumerate}
+      \item Start with initial guess $p_0$ and $p_1$
+      \item $\displaystyle p_n = p_{n-1} -
+        \frac{f(p_{n-1})\pqty{p_{n-1}p_{n-2}}}{f(p_{n-1})f(p_{n-2})}$
+      \end{enumerate}
+  \end{itemize}
+
+  \subsection{False Position Method}
+  \begin{itemize}
+    \item Linear or sublinear guaranteed convergence.
+    \item Convergence can stall if the function has poor behaviour near the root.
+      \begin{enumerate}
+        \item Start with initial guess $p_0$ and $p_1$
+        \item $\displaystyle p_n = p_{n-1} f(p_{n-1}) \cdot \frac{p_{n-1}-p_{n-2}}{f(p_{n-1})-f(p_{n-2})}$
+      \end{enumerate}
+  \end{itemize}
+
+  \section{Fixed Points}
+  \begin{enumerate}
+    \item Start with initial guess $p_0$
+    \item Generate a sequence $p_n = g(p_{n-1})$
+    \item Stop when $\abs{p_n - p_{n-1}} < \bigEps$
+  \end{enumerate}
+  \begin{itemize}
+    \item A fixed point of $f$ is a point $p$ such that $f(p) = p$.
+    \item Converges if:
+      \begin{enumerate}
+        \item $g:[a,b] \to [a,b]$ is continuous
+        \item $\forall x \in [a,b]: \abs{g'(x)} \leq k < 1 $
+        \item $f(x) = 0$ can be rewritten as $g(x) = x$
+      \end{enumerate}
+    \item \textbf{Error}: $\order{q^n}$, for some $q$, faster when $q$ is small
+  \end{itemize}
+
+  \section{Norms}
+
+  \subsection{Vector Norms}
+  \begin{itemize}
+    \item $l_1 : \norm{x}_1 = \sum x_i$
+    \item $l_2 : \norm{x}_2 = \sqrt{x_1^2 + \dotsb + x_n^2}$ (Euclidean)
+    \item $l_\infty : \norm{x}_\infty = \max{\{|x_1|, \dotsb, |x_n|\}}$
+      ($\infty$) 
+  \end{itemize}
+
+  \subsubsection{Properties}
+  \begin{itemize}
+    \item Scalability: $\norm{\alpha x} = \abs{\alpha} \norm{x}$
+    \item Triangle Inequality: $\norm{x+y} \leq \norm{x} + \norm{y}$
+  \end{itemize}
+
+  \subsection{Vector Distances}
+  \begin{itemize}
+    \item $l_\alpha$ distance: $\norm{x-y}_\alpha$
+  \end{itemize}
+
+  \subsection{Matrix Norms}
+  \begin{itemize}
+    \item The Natural Norm $\norm{\cdot}_*$ for $A, B \in \mathbb{R}^{n \times n};
+      \alpha \in \mathbb{R}$ is defined as a function that satisfies:
+      \begin{enumerate}
+        \item $\norm{A} \geq 0$
+        \item $\norm{A} = 0 \iff A = 0$
+        \item $\norm{\alpha A} = \abs{\alpha} \norm{A}$
+        \item $\norm{A + B} \leq \norm{A} + \norm{B}$
+      \end{enumerate}
+    \item \defn $\norm{A}_* = \underset{\|x\| = 1}{\max} \norm{Ax}_*$ where
+      $\norm{Ax}$ is any vector norm.
+    \item $l_\infty : \norm{A}_\infty = \underset{1 \leq i \leq n}{\max}
+      \sum_{j=1}^{n} \abs{a_{ij}}$ (row sum)
+  \end{itemize}
+  \subsubsection{Special Properties}
+  \begin{enumerate}
+    \item For any natural norm $\norm{\cdot}_\alpha:\rho(A) \leq \norm{A}_\alpha$
+    \item For $l_2:\norm{A}_2 = \sqrt{\rho(A^TA)}$
+  \end{enumerate}
+
+  \section{Vector Sequence Convergence}
+  \begin{itemize}
+    \item $\Bqty{x^{(k)}}$ converges to $x$ for any small $\bigEps > 0$
+      eventually every $x^{(k)}$ is within $\bigEps$ of $x$
+  \end{itemize}
+
+  \section{Eigenvalues and Eigenvectors}
+  \textbf{E.value ($\lambda$)}: Scalar s.t. $A\vec{x} = \lambda \vec{x}$ \\
+  \textbf{E.vector ($\vec{x}$)}: Nonzero vector only scaled by $A$
+  \textbf{Spectral Radius}: $\rho(A) = \max \{\abs{\lambda_i}\}$
+  \subsubsection{Properties}
+  \begin{enumerate}
+    \item $\det(A-\lambda I) = 0 \iff \lambda$ is an eigenvalue. Solve the
+      characteristic polynomial for $\lambda$.
+    \item $\forall \lambda \bqty{(A-\lambda I)\vec{x} = 0 \iff \vec x \text{ is an
+      eigenvector}}$
+    \item If $\rho A < 1$, $A$ is \uline{convergent} $\implies 
+      \underset{k\to\infty}{\lim} A^k = 0$
+  \end{enumerate}
+
+  \section{Linear Systems - Pivoting Strategies}
+  \textit{If the pivot is small, large errors can occur. Pivoting helps maintain numerical stability.}
+
+  \subsection{Partial Pivoting}
+  Choose the largest element in the \textbf{current column} (below or at the pivot) to avoid dividing by a small number.
+  \begin{enumerate}
+    \item For $k = 1 \dots n-1$:
+      \begin{itemize}
+        \item Find $r = \underset{k \leq i \leq n}{\arg\max} \Bqty{|a_{ik}|}$
+        \item If $r \neq k$, swap rows: $E_k \leftrightarrow E_r$
+        \item Continue Gaussian Elimination as usual
+      \end{itemize}
+  \end{enumerate}
+
+  \subsection{Scaled Partial Pivoting}
+  Handles rows with vastly different magnitudes by normalizing.
+  \begin{enumerate}
+    \item For each row $i = 1 \dots n$, compute the scale factor: $s_i = \max_j \abs{a_{ij}}$
+    \item For pivot column $k$, choose the row $r$ such that $\frac{\abs{a_{rk}}}{s_r}$ is maximal for $r \geq k$
+    \item If $r \neq k$, swap rows: $E_k \leftrightarrow E_r$
+    \item Proceed with Gaussian Elimination
+  \end{enumerate}
+
+  \subsection{Full Pivoting}
+  Most stable but most expensive. Swap both rows and columns.
+  \begin{enumerate}
+    \item At step $k$, find the largest element $|a_{ij}|$ in the submatrix $A_{k:n,k:n}$
+    \item Swap row $k$ with row $i$, and column $k$ with column $j$
+    \item Update row and column permutations
+    \item Continue Gaussian Elimination
+  \end{enumerate}
+
+  \section{Linear Algebra}
+  \begin{itemize}
+    \item To multiply $A \cdot B$, dot-product the rows of $A$ by the columns of $B$.
+    \item $A A^{-1} = A^{-1} A = I$
+    \item To find $A^{-1}$, row reduce the aug. matrix $[A | I]$.
+    \item $A^T$ is $A$ flipped over the main diagonal.
+  \end{itemize}
+
+  \subsection{Determinant}
+  \begin{itemize}
+    \item $\det(A) \neq 0 \implies \begin{cases}
+        A^{-1} & \text{exists} \\
+        Ax = b & \text{has a unique solution}
+      \end{cases}$
+    \item \textbf{Cofactor Expansion (Laplace Expansion)}:  
+      For an $n \times n$ matrix $A = [a_{ij}]$, the determinant is given by:
+      \[
+        \det(A) = \sum_{j=1}^{n} a_{ij} C_{ij} \quad \text{(row expansion on row $i$)}
+      \]
+      or
+      \[
+        \det(A) = \sum_{i=1}^{n} a_{ij} C_{ij} \quad \text{(column expansion on column $j$)}
+      \]
+      where $C_{ij} = (-1)^{i+j} \det(M_{ij})$ is the cofactor, and $M_{ij}$ is the $(n-1) \times (n-1)$ minor formed by deleting the $i$-th row and $j$-th column of $A$.
+  \end{itemize}
+
+  \section{Matrix Factorization}
+  \subsection{LU Decomposition}
+  \subsubsection{Row Swaps}
+  \section{Special Matrices}
+  \subsection{Permutation Matrices}
+  \subsection{Singular}
+  \subsection{Banded Matrices}
+  \subsection{Tridiagonal Matrices}
+  \subsection{Diagonally Dominant Matrices}
+  \subsection{Positive Definite Matrices} % include that dumbass problem from MT2025
+  % \subsection{}
+
+  \section{Iterative Methods for Linear Systems}
+  \subsection{Jacobi Method}
+  \subsection{Gauss-Seidel Method}
+
+\end{multicols*}
+
+\end{document}
