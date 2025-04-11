@@ -358,15 +358,9 @@ itemsep=0.2\baselineskip, partopsep=0pt, topsep=0pt}
         Ax = b & \text{has a unique solution}
       \end{cases}$
     \item \textbf{Cofactor Expansion (Laplace Expansion)}:  
-      For an $n \times n$ matrix $A = [a_{ij}]$, the determinant is given by:
-      \[
-        \det(A) = \sum_{j=1}^{n} a_{ij} C_{ij} \quad \text{(row expansion on row $i$)}
-      \]
-      or
-      \[
-        \det(A) = \sum_{i=1}^{n} a_{ij} C_{ij} \quad \text{(column expansion on column $j$)}
-      \]
-      where $C_{ij} = (-1)^{i+j} \det(M_{ij})$ is the cofactor, and $M_{ij}$ is the $(n-1) \times (n-1)$ minor formed by deleting the $i$-th row and $j$-th column of $A$.
+      $\det(A) = \sum_{j=1}^{n} a_{ij} (-1)^{i+j} \det(A_{ij})$
+
+      
   \end{itemize}
 
   \section{Matrix Factorization}
