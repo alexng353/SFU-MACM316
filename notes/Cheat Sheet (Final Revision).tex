@@ -141,6 +141,15 @@ itemsep=0.2\baselineskip, partopsep=0pt, topsep=0pt}
       \end{itemize}
   \end{itemize}
 
+  \subsubsection{Alternative Quadratic Formula}
+  \begin{equation*}
+  x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} = \frac{-2c}{b \mp \sqrt{b^2 - 4ac}}  
+  .\end{equation*}
+  \tiny *mind the signs*
+
+  \normalsize
+  use the alt. form when $\abs{-b}$ is close to $+ \sqrt{b^2 - 4ac}$
+
   \section{Algorithms and Convergence}
   \begin{itemize}
     \item Stable $\to$ errors grow linearly
@@ -466,6 +475,131 @@ itemsep=0.2\baselineskip, partopsep=0pt, topsep=0pt}
     \item Also converges under \textbf{strict} diagonal dominance or SPD.
   \end{itemize}
 
+  \section{Numerical Interpolation}
+
+  \subsection{Lagrange Interpolation}
+  Constructs a polynomial $P(x)$ of degree $\leq n$ through points $(x_0, y_0), \dots, (x_n, y_n)$:
+  \begin{align*}
+    P(x) &= \sum_{j=0}^n y_j L_j(x) \\
+    L_j(x) &= \prod_{\substack{0 \le i \le n \\ i \ne j}} \frac{x - x_i}{x_j - x_i}
+  \end{align*}
+  
+  \textbf{Error:} If $f \in C^{n+1}[a, b]$, then
+  \begin{align*}
+    f(x) &= P(x) + \frac{f^{(n+1)}(\xi)}{(n+1)!} \prod_{i=0}^n (x - x_i)\\ 
+    &\quad \text{for some } \xi \in [a, b]
+  \end{align*}
+  
+  \subsection{Newton's Divided Differences}
+  Efficient and updatable polynomial form:
+  \begin{align*}
+    P(x) &= f[x_0] + f[x_0,x_1](x - x_0) + \dots \\
+         &+ f[x_0,\dots,x_n](x - x_0)\dots(x - x_{n-1})
+  \end{align*}
+  
+  Recursive definition:
+  \begin{itemize}
+  \item zeroth: $f[x_0] = f(x_0)$
+  \item first: $f[x_0,x_1] = \frac{f(x_1) - f(x_0)}{x_1 - x_0}$
+  \item $k$th: 
+    $f[x_i, \dots, x_{i+k}] &= \frac{f[x_{i+1}, \dots, x_{i+k}] - f[x_i, \dots,
+    x_{i+k-1}]}{x_{i+k} - x_i}$
+
+    % $f[x_0,\dots,x_k] = \frac{f(x_{k+1},\dots,x_k) - f(x_0,\dots,x_{k-1})}{x_k - x_0}$
+  \end{itemize}
+
+
+  % \begin{align*}
+  %   f[x_i,x_{i+1}] &= \frac{f[x_{i+1}] - f[x_i]}{x_{i+1} - x_i} \\
+  % \end{align*}
+  
+
+  \subsection{Neville's Method}
+  Recursive algorithm to evaluate $P(x)$ at a point:
+  \[
+    P_{i,j}(x) = \frac{(x - x_i) P_{i+1,j}(x) - (x - x_j) P_{i,j-1}(x)}{x_j - x_i}
+  \]
+  Returns $P(x)$ only — not the polynomial form.
+
+  \subsection{Hermite Interpolation}
+  Matches both values and derivatives:
+  - Duplicate nodes in divided difference table.
+  - Derivative at a node: $f[x_i, x_i] = f'(x_i)$.
+
+  \subsection{Cubic Spline Interpolation}
+  Piecewise cubic $S_i(x)$ defined on $[x_i, x_{i+1}]$:
+  \begin{itemize}
+    \item $S(x)$, $S'(x)$, and $S''(x)$ are continuous.
+    \item \textbf{Natural spline:} $S''(x_0) = S''(x_n) = 0$.
+    \item Solve a tridiagonal linear system for coefficients.
+  \end{itemize}
+
+  \subsection{Parametric Curves}
+  For 2D/3D data: interpolate $x(t)$, $y(t)$, $z(t)$ independently.
+  Used in animation and CAD. Preserves geometric continuity.
+
+  \section{Numerical Integration}
+
+  \subsection{Trapezoidal Rule}
+  \begin{itemize}
+    \item Approximates $f(x)$ with a linear polynomial over $[a,b]$:
+      \[
+        \int_a^b f(x)\,dx \approx \frac{h}{2} \qty[f(x_0) + f(x_1)]
+      \]
+    \item Composite version over $n$ subintervals ($h = \frac{b-a}{n}$):
+      \[
+        \int_a^b f(x)\,dx \approx \frac{h}{2} \qty[f(x_0) + 2 \sum_{j=1}^{n-1} f(x_j) + f(x_n)]
+      \]
+    \item Error: $-\frac{(b-a)^3}{12n^2}f^{(2)}(\xi)$ for some $\xi \in [a,b]$
+  \end{itemize}
+
+  \subsection{Simpson's Rule}
+  \begin{itemize}
+    \item Approximates $f(x)$ with a quadratic polynomial:
+      \[
+        \int_{x_0}^{x_2} f(x)\,dx \approx \frac{h}{3} \qty[f(x_0) + 4f(x_1) + f(x_2)]
+      \]
+    \item Composite version (even $n$):
+      \[
+        \int_a^b f(x)\,dx \approx \frac{h}{3} \qty[
+        f(x_0) +
+        2\sum_{j=1}^{n/2 - 1} f(x_{2j}) +
+        4\sum_{j=1}^{n/2} f(x_{2j - 1}) +
+        f(x_n)
+        ]
+      \]
+    \item Error: $-\frac{(b-a)^5}{180n^4}f^{(4)}(\xi)$ for some $\xi \in [a,b]$
+  \end{itemize}
+
+  \section{ODE Initial Value Problems}
+
+  \subsection{Euler's Method}
+  \begin{align*}
+    w_{n+1} &= w_n + h f(t_n, w_n) \\
+    \text{Error: } & O(h)
+  \end{align*}
+
+  \subsection{Modified Euler Method (Heun's)}
+  \begin{align*}
+    w_{n+1} &= w_n + \frac{h}{2} \qty[f(t_n, w_n) + f(t_{n+1}, w_n + h f(t_n, w_n))] \\
+    \text{Error: } & O(h^2)
+  \end{align*}
+
+  \subsection{Midpoint Method}
+  \begin{align*}
+    w_{n+1} &= w_n + h f\qty(t_n + \frac{h}{2}, w_n + \frac{h}{2} f(t_n, w_n)) \\
+    \text{Error: } & O(h^2)
+  \end{align*}
+
+  \subsection{Runge-Kutta Method (RK4)}
+  \begin{align*}
+    k_1 &= h f(t_n, w_n) \\
+    k_2 &= h f\qty(t_n + \frac{h}{2}, w_n + \frac{k_1}{2}) \\
+    k_3 &= h f\qty(t_n + \frac{h}{2}, w_n + \frac{k_2}{2}) \\
+    k_4 &= h f(t_n + h, w_n + k_3) \\
+    w_{n+1} &= w_n + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4) \\
+    \text{Error: } & O(h^4)
+  \end{align*}
 \end{multicols*}
 
 \end{document}
