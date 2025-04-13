@@ -123,7 +123,7 @@ itemsep=0.2\baselineskip, partopsep=0pt, topsep=0pt}
   \end{itemize}
 
   \subsection{Significant Digits}
-  An aprxmtn $\hat p$ has $t$ significant digits if:
+  An approximation $\hat p$ has $t$ significant digits if: \newline
   $\displaystyle \frac{\abs{p-\hat p}}{\abs{p}} \leq 5 \times 10^{-t}$
 
   \subsection{Catastrophic Cancellation (Roundoff)}
@@ -222,15 +222,16 @@ itemsep=0.2\baselineskip, partopsep=0pt, topsep=0pt}
       \end{enumerate}
   \end{itemize}
 
-  \subsection{False Position Method}
-  \begin{itemize}
-    \item Linear or sublinear guaranteed convergence.
-    \item Convergence can stall if the function has poor behaviour near the root.
-      \begin{enumerate}
-        \item Start with initial guess $p_0$ and $p_1$
-        \item $\displaystyle p_n = p_{n-1} f(p_{n-1}) \cdot \frac{p_{n-1}-p_{n-2}}{f(p_{n-1})-f(p_{n-2})}$
-      \end{enumerate}
-  \end{itemize}
+  % not tested
+  % \subsection{False Position Method}
+  % \begin{itemize}
+  %   \item Linear or sublinear guaranteed convergence.
+  %   \item Convergence can stall if the function has poor behaviour near the root.
+  %     \begin{enumerate}
+  %       \item Start with initial guess $p_0$ and $p_1$
+  %       \item $\displaystyle p_n = p_{n-1} f(p_{n-1}) \cdot \frac{p_{n-1}-p_{n-2}}{f(p_{n-1})-f(p_{n-2})}$
+  %     \end{enumerate}
+  % \end{itemize}
 
   \section{Fixed Points}
   \begin{enumerate}
@@ -365,19 +366,105 @@ itemsep=0.2\baselineskip, partopsep=0pt, topsep=0pt}
 
   \section{Matrix Factorization}
   \subsection{LU Decomposition}
-  \subsubsection{Row Swaps}
+  If Gaussian elimination can be performed without row exchanges:
+  $A = LU$,
+  where $ L $ is lower triangular with unit diagonal entries and $ U $ is upper triangular.
+
+  To solve $ Ax = b $:
+  \begin{enumerate}
+    \item Solve $ Ly = b $ via forward substitution.
+    \item Solve $ Ux = y $ via backward substitution.
+  \end{enumerate}
+  \textbf{Cost:} $ O(n^3) $ for factorization, $ O(n^2) $ per solve.
+
+  \textbf{Row Swaps}:
+  If row swaps are needed, introduce a permutation matrix 
+  $P:PA = LU \Rightarrow A = P^{-1}LU$,
+  Then solve: $ LUx = Pb $
+
   \section{Special Matrices}
   \subsection{Permutation Matrices}
+  \begin{itemize}
+    \item Formed by permuting rows of $I_n$, So there is exactly one entry of 1
+      per row and column.
+    \item $P^{-1} = P^\top$
+    \item $PA$ permutes rows of $A$.
+  \end{itemize}
+
   \subsection{Singular}
+  \begin{itemize}
+    \item A matrix $A$ is singular if $\det(A) = 0$.
+    \item Not invertible; $ Ax = b $ has either no solution or infinitely many.
+  \end{itemize}
+
   \subsection{Banded Matrices}
+  \begin{itemize}
+    \item Nonzero entries confined to a diagonal band.
+    \item If $|i - j| > w \Rightarrow a_{ij} = 0$, bandwidth = $w$.
+    \item Common in finite difference methods and sparse linear systems.
+  \end{itemize}
+
   \subsection{Tridiagonal Matrices}
-  \subsection{Diagonally Dominant Matrices}
-  \subsection{Positive Definite Matrices} % include that dumbass problem from MT2025
-  % \subsection{}
+  \begin{itemize}
+    \item Banded matrix with $w=1$ (main $\pm 1$ diagonals).
+    \item Nonzero entries only on the main diagonal and the first sub/super
+      diagonals.
+    % \item Efficiently solvable using Thomas algorithm in $O(n)$.
+  \end{itemize}
+
+  \subsection{Diagonally Dominant (DD / SDD)}
+  \begin{itemize}
+    \item $ A $ is strictly diagonally dominant if: \newline
+      $\displaystyle|a_{ii}| > \sum_{j \ne i} |a_{ij}| \quad \forall i$
+    \item $A$ is weakly diagonally dominant of $\abs{a_{ii}} \boldsymbol{\geq} ...$
+    \item Guarantees LU factorization without row swaps.
+    \item Guaranteed convergence of Jacobi and G-S.
+  \end{itemize}
+
+  \subsection{Symmetric Positive Definite (SPD)}
+  \begin{itemize}
+    \item $ A $ is positive definite if
+      $\forall x \ne 0 : x^T A x > 0$
+    \item All eigenvalues are positive.
+    \item All leading principal minors are positive. $\forall k\det(A_{1:k, 1:k}) > 0$
+    \item Cholesky factorization: $A = LL^T$ lets us solve $Ax=b$ in $O(n^2)$
+      time.
+    \item Also: $A = LDL^T$
+  \end{itemize}
 
   \section{Iterative Methods for Linear Systems}
-  \subsection{Jacobi Method}
-  \subsection{Gauss-Seidel Method}
+
+  \subsection{Convergent Matrix Theorem}
+  The following statements are equivalent:
+  \begin{enumerate}[label=(\roman*)]
+    \item $A$ is convergent
+    \item $\rho(A) < 1$ (nec + suf for Jacobi and G-S)
+    \item $\forall x: \lim_{n \to \infty} A^nx = 0$
+    \item $\forall \alpha: \lim_{n\to\infty} \norm{A^n}_\alpha = 0$
+  \end{enumerate}
+
+  \subsection{Jacobi Method $A = D + L + U$}
+  \[
+    x^{(k+1)} = \underbrace{D^{-1}(L+U)}_{T_J}x^{(k)} 
+    + \underbrace{D^{-1}b}_{C_J}
+  \]
+  \begin{itemize}
+      % $x^{(k+1)} = D^{-1}(b - (L + U)x^{(k)})$ 
+    \item Requires $a_{ii} \ne 0$. Always permute so $a_{ii}$ big.
+    \item Uses previous iteration values for all components.
+    \item Converges if $A$ \textbf{strictly} diagonally dominant or SPD.
+  \end{itemize}
+
+  \subsection{Gauss-Seidel Method $A = D + L + U$}
+  \[
+    x^{(k+1)} = \underbrace{(D + L)^{-1}U}_{T_{GS}}x^{(k)} 
+    + \underbrace{(D + L)^{-1}Lb}_{C_{GS}}
+  \]
+  \begin{itemize}
+    \item Iteration uses most recent updates:
+    \item Often converges faster than Jacobi.
+    \item Also converges under \textbf{strict} diagonal dominance or SPD.
+  \end{itemize}
 
 \end{multicols*}
 
