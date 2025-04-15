@@ -66,66 +66,58 @@ Check out the following resources for more information:
 
 We often want to work with the real number system, which consists of all 
 integers, rational and irrational numbers
-
 \begin{equation*}
   2, \sqrt{2}, e, \pi, 10^6, \text{ etc.} 
 \end{equation*}
-
 Because we have a finite space limitation for numbers, 
 \textbf{not all numbers can be represented exactly.} This can cause problems
 with arithmetic.
 
-We typically use the decimal (base 10) system, e.g.
+\subsection{Bases}
 
+We typically use the decimal (base 10) system, e.g.
 \begin{equation*}
   427.325 = 4 \times 10^2 + 2 \times 10^1 + 7 \times 10^{0} + 3 \times 10^{-1}+\dots
 \end{equation*}
-
-When we work with a computer, we use the binary (base 2) system, e.g.
+However, when we work with a computer, we use the binary (base 2) system, e.g.
 
 \begin{equation*}
   (1001.11101)_2 = 1\times 2^3 + 0\times 2^2 + 0\times 2 + 1\times 2^0 + 1\times 2^{-1} + 1\times 2^{-2} + 1\times 2^{-3} +\dots
 \end{equation*}
 
-\section{Error}
+\section{Base Conversion and Error}
 
-Notice that conversion from base-10 to base-2 can lead to errors. It is 
-impossible to represent some finite decimal fractions in binary.
+Because it is impossible to represent some finite decimal fractions in binary,
+we will (definitely) encounter \textbf{error} when converting from base-10 to base-2.
+
+% Notice that conversion from base-10 to base-2 can lead to errors. It is 
+% impossible to represent some finite decimal fractions in binary.
 
 \subsection{Example}
 
 Assume $\frac{1}{10} = (0.a_1 \dots a_n)_2$ where $a_i \in \{0, 1\}$.
 
 To convert, we can multiply by 2:
-
 \begin{equation*}
   \frac{2}{10} = 0.2 = (a_1 . a_2 a_3 \dots)_2
 \end{equation*}
-
 We take the integer part of both sides:
-
 \begin{align*}
   0.2 &= a_1.a_2 a_3 \dots \\
   0 &= a_1
 \end{align*}
-
 Now, we know that $a_1 = 0$. We can continue this process to get the next
 digit:
-
 \begin{align*}
   \frac{4}{10} = 0.4 &= a_2.a_3 a_4 \dots \\
   \implies a_2 &= 0 \\
 \end{align*}
-
 Again:
-
 \begin{align*}
   \frac{8}{10} = 0.8 &= a_3.a_4 a_5 \dots \\
   \implies a_3 &= 0 \\
 \end{align*}
-
 Once more:
-
 \begin{align*}
   \frac{16}{10} = 1.6 &= a_4.a_5 a_6 \dots \\
   \implies a_4 &= 1 \\
