@@ -87,27 +87,25 @@ where the remainder term $R_n(x)$ satisfies:
 for some $c \in (x_0, x)$. The approximation is most accurate when $x$ is 
 close to $x_0$.
 
-\section{Example: Third-Order Taylor Polynomial for $\sin(x)$}
+\subsection{Example: Third-Order Taylor Polynomial}
 
 Find $P_3(x)$ for $f(x) = \sin(x)$ centered at $x_0 = 0$.
-
 \begin{align*}
     P_3(x) &= f(0) + f'(0)(x - 0) + \frac{f''(0)}{2!} (x - 0)^2 + 
              \frac{f'''(0)}{3!} (x - 0)^3 \\
            &= x - \frac{x^3}{6}.
 \end{align*}
 
-\subsection{Error Analysis}
-
+\subsubsection{Error Analysis}
 The remainder term for $n = 3$ is:
 \begin{equation*}
     R_3(x) = \frac{f^{(4)}(c)}{4!} x^4.
 \end{equation*}
-Since $f^{(4)}(x) = \sin(x)$, we have:
+substituting $f^{(4)}(x) = \sin(x)$,
 \begin{equation*}
     R_3(x) = \frac{\sin(c)}{24} x^4.
 \end{equation*}
-For $x = 0.1$:
+and finally, taking $x = 0.1$:
 \begin{equation*}
     |R_3(0.1)| \leq \frac{|\sin(0.1)|}{24} (0.1)^4 < 4.2 \times 10^{-7}.
 \end{equation*}

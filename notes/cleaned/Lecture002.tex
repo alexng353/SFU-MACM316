@@ -2,7 +2,8 @@
 
 \section{Floating Point Decimal Normalization}
 
-Can we write all real numbers in normalized scientific notation?
+Can we write all real numbers in normalized scientific notation? Well, the short
+answer is yes.
 \begin{align*}
     732.5051 &\rightarrow +0.7325051 \times 10^{+3} \\
     -0.005612 &\rightarrow -0.5612 \times 10^{-2}
@@ -11,51 +12,74 @@ For $x \in \mathbb{R}$, we can express it as:
 \begin{equation*}
     x = \pm r \times 10^{\pm n}, \quad \text{where } \frac{1}{10} \leq r \leq 1.
 \end{equation*}
-
 In binary, we write:
 \begin{equation*}
-    x = \pm q \times 2^{\pm m}, \quad \text{where } \frac{1}{2} \leq q < 1.
+  e x = \pm q \times 2^{\pm m}, \quad \text{where } \frac{1}{2} \leq q < 1.
 \end{equation*}
 Here, $q$ is the mantissa and $m$ is the integer exponent.
 
-We limit $r$ and $q$ so that when $k < 1/\text{BASE}$, we can shift the decimal 
+Let $b$ be the base.
+We limit $r$ and $q$ so that when $k < 1/b$, we can shift the decimal 
 place and normalize the number further. When we have $1.x$, we rewrite it 
-as $0.x \times \text{base}^1$.
+as $0.x \times b^1$.
 
-\section{Rounding or Chopping (Sources of Error)}
-
+\section{What if we have too many digits?}
+\subsection{Rounding}
+% \section{Rounding and Chopping}
+ % (Sources of Error)
 Given $x = 0.a_1 a_2 \dots a_n a_{n+1} \dots a_m$ using $m$ digits, rounding 
 to $n$ places follows:
 \begin{itemize}
     \item If $0 \leq a_{n+1} < 5$, then $x = 0.a_1 a_2 \dots a_n$.
     \item If $5 \leq a_{n+1} \leq 9$, then $x = 0.a_1 a_2 \dots (a_n + 1)$.
 \end{itemize}
+As you will see in the following example, this definition of rounding is
+different from the way we traditionally round numbers. We only consider the
+magnitude of the smallest significant digit, not the sign, so that when you
+round a number and its additive inverse, they will still cancel out.
 
-\textbf{Example:}
+\subsubsection{Example}
 \begin{align*}
     \text{round}(0.125) &= 0.13, \\
     \text{round}(-0.125) &= -0.13.
 \end{align*}
 
-Instead of rounding, truncation follows:
-\begin{equation*}
-    x = 0.a_1 a_2 \dots a_n.
-\end{equation*}
+\subsection{Chopping (Truncation)}
+Compared to rounding, truncation/chopping to $n$ decimal places follows:
+\begin{align*}
+  x &= 0.a_1 a_2 \dots a_na_{n+1} \dots a_m, \\
+  \text{chop}_n(x) &= 0.a_1 a_2 \dots a_n.
+\end{align*}
 
 Truncation introduces larger errors but is computationally cheaper than 
-rounding.
+rounding. In general, we prefer rounding because of the higher accuracy, because
+the computational cost is generally considered negligible.
 
 \section{Error}
 
+\subsection{Definition}
+
 We define:
 \begin{itemize}
-    \item Absolute error: $|p - p^*|$.
-    \item Relative error: $\frac{|p - p^*|}{|p|}$.
+  \item Actual error: $p - \hat{p}$.
+    \item Absolute error: $\abs{p - \hat{p}}$.
+    \item Relative error: $\frac{\abs{p - \hat{p}}}{\abs{p}}$.
 \end{itemize}
+\tiny Note that the notes use $p$ and $p^*$ but I will use them interchangeable with
+$p$ and $\hat{p}$.
+
+\normalsize
 Absolute error is used when magnitude matters, particularly for small values. 
 Relative error is preferred when values differ in scale.
 
-\textbf{Example:}
+\subsection{Significant Digits}
+An approximation $\hat p$ has $t$ significant digits if
+
+\begin{equation*}
+  \frac{\abs{p-\hat p}}{\abs{p}} \leq 5 \times 10^{-t}
+\end{equation*}
+
+\subsection{Example}
 \begin{align*}
     \text{Exact: } & 0.1, \quad \text{Approximate: } 0.099, \\
     \text{Relative Error: } & \frac{|0.1 - 0.099|}{0.1} = 0.01.
@@ -86,7 +110,7 @@ machine follow:
 \end{equation*}
 Each step introduces an error.
 
-\textbf{Example:}
+\subsection{Example}
 \begin{align*}
     p &= 0.54617, \quad q = 0.54601, \\
     r &= p - q = 0.00016.
@@ -102,23 +126,22 @@ Relative error:
 \end{equation*}
 A high relative error results when subtracting close numbers.
 
-\section{Minimizing Error}
+\section{Roundoff Error} % continued into Lecture 003
 
 Consider computing $f(x) = \frac{1 - \cos x}{x^2}$ for $\bar{x} = 1.2 \times 10^{-5}$.
-
 With 10-digit rounding:
 \begin{align*}
     c &= \fl(\cos \bar{x}) = 0.9999999999, \\
     1 - c &= 0.0000000001.
 \end{align*}
 This results in a large error.
-
-Using $\cos x = 1 - 2\sin^2(x/2)$:
+Instead, if we use an alternative formula, such as $\cos x = 1 - 2\sin^2(x/2)$:
 \begin{equation*}
     f(x) = \frac{1}{2} \left( \frac{\sin(x/2)}{x/2} \right)^2.
 \end{equation*}
-This provides a more accurate computation.
+We obtain a more accurate computation.
 
 \textbf{Conclusion:} Avoid subtracting close numbers. Use alternative 
-representations like Taylor series or trigonometric identities.
+representations like Taylor series, trigonometric identities or rationalized 
+approximations.
 

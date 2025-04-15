@@ -1,15 +1,3 @@
-\section{Preface}
-
-Many real-world problems stem from numerical analysis, particularly poor 
-execution. Rounding errors, insufficient representation problems, and other 
-such problems represent the significant impact of computation in the real world.
-
-Check out the following resources for more information:
-\begin{enumerate}
-  \item \ulhref{https://www-users.cse.umn.edu/~arnold/disasters/}{https://www-users.cse.umn.edu/~arnold/disasters/}
-  \item \ulhref{https://web.ma.utexas.edu/users/arbogast/misc/disasters.html}{https://web.ma.utexas.edu/users/arbogast/misc/disasters.html}
-\end{enumerate}
-
 \section{Computer Arithmetic}
 
 We often want to work with the real number system, which consists of all 
@@ -104,27 +92,25 @@ represent $\frac{1}{10}$ in finite-representation binary.
 \section{Hypothetical Storage Scheme (32-bit)}
 
 We will use a hypothetical decimal computer since the concept is identical.
-
-(By the way, this is almost exactly identical to IEEE-754 floating point
+(By the way, this is almost exactly identical to 
+\ulhref{https://en.wikipedia.org/wiki/IEEE_754}{IEEE-754} floating point
 representation, except that we are using a decimal representation instead of
 binary.)
 
 Suppose we have the decimal number $423.7$. Since we always want to represent
-numbers in \textbf{proper scientific notation}, we normalize the mantissa.
-
+numbers in proper scientific notation, we normalize the
+\textbf{mantissa}.
 We write our number as follows:
 
 \begin{equation*}
-  423.7 = +0.4237 \times 10^{+3}
+  423.7 = +\underbrace{0.4237}_{\text{mantissa}} \times 10^{+3}
 \end{equation*}
-
-Notice how the $+$ is relevant since we are going to explicitly represent the
-sign of the number.
-
-We call the bits following from the decimal point ($4273$) the \textbf{mantissa}.
+Notice the $+$ is relevant because we require an explicit representation of the
+sign of the number. We call the bits following from the decimal point ($4273$) 
+the \textbf{mantissa}.
 We include 1 bit for the sign, which is $1$ for positive numbers, 1 bit for the
 exponent sign, 7 bits for the exponent, and the remaining 23 bits for the
-mantissa. (See diagram below)
+mantissa.
 
 \begin{figure}[h]
   \centering
@@ -132,25 +118,43 @@ mantissa. (See diagram below)
   \caption{Hypothetical Storage Scheme (32-bit)}
 \end{figure}
 
-Because our storage format is finite, one of the biggest problems we will 
-encounter is \textbf{bit overflow}. The maximum magnitude of our exponent 
-(in binary) is \textbf{127}, so our number can only range from $2^{-127}$ to
-$2^{+127}$. Because our mantissa only has 23 bits of precision, the precision
-will decrease as our numbers get larger because we use exponentiation to 
-represent the actual number.
+\subsection{Problems with Floating Point}
+\noindent
+\begin{minipage}{\textwidth}
+Because our storage format is finite, the biggest problems we will encounter
+are:
+\begin{enumerate}
+  \item \textbf{bit overflow}: the maximum magnitude of our exponent (in binary)
+    is \textbf{127}, so our number can only range from $2^{-127}$ to $2^{+127}$.
+  \item \textbf{rounding error}: because our mantissa only has 23 bits of 
+    precision, the precision will decrease as our numbers get larger because we 
+    use exponentiation to represent the actual number.
+\end{enumerate}
+\end{minipage}
 
-\Ex:
+% Because our storage format is finite, one of the biggest problems we will 
+% encounter is \textbf{bit overflow}. The maximum magnitude of our exponent 
+% (in binary) is \textbf{127}, so our number can only range from $2^{-127}$ to
+% $2^{+127}$. Because our mantissa only has 23 bits of precision, the precision
+% will decrease as our numbers get larger because we use exponentiation to 
+% represent the actual number.
+
+\subsubsection{Error Example}
+
 Consider the number $2^{25} = 33,554,432$. This number can be represented 
 exactly in binary. However, the number $2^{25}+1 = 33,554,433$ cannot be
-represented exactly, since it can't fit in 23 bits.
+represented exactly, since it can't fit within the 23 bits of precision available.
 
-All numbers from $2^{25}-1$ through $2^{25}+2$ are represented with the same
-mantissa in binary. Only when you reach $2^{25}+3$ does the mantissa change.
+From this, we find that all numbers (including fractions) from $2^{25}-1$ 
+through $2^{25}+2$ are represented with the same mantissa in binary. Only when 
+you reach $2^{25}+3$ does the mantissa change.
 
-Another fun note is that within IEEE-754 floating point representation, the
+\subsubsection{Remarks}
+
+Within IEEE-754-style floating point representation, the
 number of representable values within a given exponent is the same, regardless
 of the exponent. This may seem obvious, but it's interesting nonetheless. This
-fact comes from the fact that the number of bits in the mantissa is fixed, and
-the number of representable values is exactly $2\times 2^{23} = 2^{24}$, since each
+comes from the fact that the number of bits in the mantissa is fixed. The
+number of representable values is exactly $2\times 2^{23} = 2^{24}$, since each
 positive value has a negative counterpart.
 

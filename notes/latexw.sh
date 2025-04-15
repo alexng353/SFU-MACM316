@@ -23,5 +23,7 @@ then
   return 1
 fi
 
-ls -G "$1" | entr -r latexmk -quiet -pdf "$1"
+# ls -G "$1" | entr -r latexmk -quiet -pdf "$1"
 
+WATCH_FILES=$(ls -1 cleaned/*.tex "$1" 2>/dev/null)
+echo "$WATCH_FILES" | entr -r latexmk -quiet -pdf "$1"
