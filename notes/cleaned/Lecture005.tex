@@ -1,35 +1,3 @@
-\renewcommand{\arraystretch}{1.25} % Adjust row spacing
-\setlength{\arraycolsep}{12pt} 
-
-\section{Review}
-
-Why did we expand around $h_0 = 0$?
-
-\quad Because we want to know what happens with $h_0$, choosing $0$ as our 
-expansion point makes sense. The Taylor series approximation is more accurate 
-the closer you are to your expansion point.
-
-% As $h \to 0$, the Taylor series approximation converges to the function.
-
-\section{Another Example}
-
-Find the rate of convergence of the following $h\to 0$.
-
-\begin{equation*}
-  \lim_{h \to 0} \cos h + \frac{1}{2} h^2 = 1
-\end{equation*}
-
-$\alpha = 1$
-
-$\alpha_h = cos h + \frac{1}{2} h^2$
-
-\begin{align*}
-  \alpha_h - \alpha &= cos h + \frac{1}{2} h^2 - 1\\
-  &= 1-\frac{h^2}{2!}+\frac{h^4}{4!} + O(h^6) + \frac{1}{2}h^2 - 1 \\
-  &= \frac{h^4}{4!} + O(h^6) \\
-  = O(h^4)
-\end{align*}
-
 \section{Chapter 6 - Direct methods for solving linear systems}
 
 \subsubsection*{Preface}

@@ -72,10 +72,9 @@
 \date{Monday, April 14, 2025}
 
 \maketitle
+\include{sections/foreword}
 \tableofcontents
 \clearpage
-
-\include{sections/foreword}
 
 \chapter{An Introduction to Numerical Analysis}
 Many real-world problems stem from numerical analysis, particularly poor 
@@ -92,29 +91,98 @@ Check out the following resources for more information:
 \include{cleaned/Lecture002}
 \include{cleaned/Lecture003}
 \include{cleaned/Lecture004}
+% TODO: put this in it's own section
+\section{Review}
+
+Why did we expand around $h_0 = 0$?
+
+\quad Because we want to know what happens with $h_0$, choosing $0$ as our 
+expansion point makes sense. The Taylor series approximation is more accurate 
+the closer you are to your expansion point.
+
+% As $h \to 0$, the Taylor series approximation converges to the function.
+
+\section{Another Example}
+
+Find the rate of convergence of the following $h\to 0$.
+
+\begin{equation*}
+  \lim_{h \to 0} \cos h + \frac{1}{2} h^2 = 1
+\end{equation*}
+
+$\alpha = 1$
+
+$\alpha_h = cos h + \frac{1}{2} h^2$
+
+\begin{align*}
+  \alpha_h - \alpha &= cos h + \frac{1}{2} h^2 - 1\\
+  &= 1-\frac{h^2}{2!}+\frac{h^4}{4!} + O(h^6) + \frac{1}{2}h^2 - 1 \\
+  &= \frac{h^4}{4!} + O(h^6) \\
+  = O(h^4)
+\end{align*}
+
+\chapter{Direct Methods for Solving Linear Systems}
+Chapter 6 of the textbook.
 
 \include{cleaned/Lecture005}
 \include{cleaned/Lecture006}
 \include{cleaned/Lecture007}
 \include{cleaned/Lecture008}
 \include{cleaned/Lecture009}
+
+\chapter{Iterative Techniques in Matrix Algebra}
+Chapter 7 of the textbook.
+
+We are interested in solving large linear systems $Ax = b$. We can use certain
+properties of $A$, such as $A$ being sparse (\ie having a high percentage of
+zeroes), to reduce the amount of computational work required to solve the
+system. Unfortunately, the classic Gaussian Elimination does not include any
+computational optimizations that can take advantage of most of the special
+properties we are interested in. For this reason, we will be considering
+\uline{iterative techniques}.
+
 \include{cleaned/Lecture010}
 \include{cleaned/Lecture011-a}
 \include{cleaned/Lecture011-b}
 \include{cleaned/Lecture012}
-\include{cleaned/Lecture013}
-\include{cleaned/Lecture014-b}
+\include{cleaned/Lecture013} % chapter 2 supposed to start here
 \include{cleaned/Lecture014}
+
+\chapter{Solutions of Nonlinear Equations} 
+Chapter 2 of the text.
+
+We are interested in finding a root $x \in \mathbb{R}$ of an equation of the
+form $f(x) = 0$ for a given continuous function $f$. In most cases, it is
+impossible to solve this type of problem analytically, so we will consider
+iterative methods to approximate the solution.
+
+% we need a section on the intermediate value theorem to preface this chapter
+% (probably)
+
+\include{cleaned/Lecture014-b}
 \include{cleaned/Lecture015}
 \include{cleaned/Lecture016}
 \include{cleaned/Lecture017}
 \include{cleaned/Lecture018}
-\include{cleaned/Lecture019}
+
+\include{cleaned/Lecture019} % chapter 3 supposed to start here
+
+\chapter{Approximation and Interpolation}
+Chapter 3 of the textbook.
+
+This is the section about splines! You are going to love splines.
+
 \include{cleaned/Lecture020}
 \include{cleaned/Lecture021}
 \include{cleaned/Lecture022}
 \include{cleaned/Lecture023}
 \include{cleaned/Lecture024}
+
+\chapter{Numerical Differentiation}
+Chapter 4 of the textbook. This section is also about Numerical Integration,
+Richardson's Extrapolation, Romberg Integration, Adaptive Quadrature and
+Gaussian Quadrature.
+
 \include{cleaned/Lecture025}
 \include{cleaned/Lecture026}
 \include{cleaned/Lecture027}

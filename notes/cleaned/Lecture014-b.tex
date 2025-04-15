@@ -1,15 +1,16 @@
-\section{Solutions of Nonlinear Systems}
-
-The Basic Problem:
-
-Find a root of $x\in\mathbb{R}$ of an equation of the form $f(x)=0$ for a
-given continuous function $f$.
+% \section{Solutions of Nonlinear Systems}
+%
+% The Basic Problem:
+%
+% Find a root of $x\in\mathbb{R}$ of an equation of the form $f(x)=0$ for a
+% given continuous function $f$.
 
 \section{The Bisection Method}
 
-In most cases it is not really possible to solve analytically. We will consider
-iterative methods to approximate the solution. Our first method will be the
-\uline{Bisection Method}. We must start with an interval $[a, b]$ with 
+% In most cases it is not really possible to solve analytically. We will consider
+% iterative methods to approximate the solution. Our first method will be the
+% \uline{Bisection Method}. 
+We must start with an interval $[a, b]$ with 
 $f(a)$ and $f(b)$ of opposite signs.
 
 By the intermediate value theorem, there exists a number $c$ in $(a, b)$ such that
@@ -44,6 +45,9 @@ Now set $a_1 = a$ and $b_1 = b$ and let $p_1$ be the midpoint of $[a_1, b_1]$.
 
 \subsection{Possible Stopping Criteria}
 
+\tiny Every stopping criterion given here (except the first) are good stopping
+criteria for other methods as well.
+\normalsize
 \begin{enumerate}
   \item $\displaystyle \frac{b_n-a_n}{2} < \text{ TOL}$ \quad\uline{or} \quad
     $\displaystyle \left| p_n - p_{n-1} \right| < \text{ TOL}$
