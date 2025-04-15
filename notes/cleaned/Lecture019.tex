@@ -1,0 +1,314 @@
+% \section{Continued from Lecture 18}
+
+Newton's Method can only be applied to simple zeros of a function.
+Identification fo the multiplicity of a zero is often made easier by the two
+following theorems.
+
+\thm 2.10
+
+$f\in C'[a,b]$ has a simple zero at $p$ in $(a,b)$ if and only if $f(p) = 0$
+but $f'(p) \neq 0$.
+
+\thm 2.11
+
+The function $f\in C^m[a,b]$ has a zero of multiplicity $m$ at $p$ if and only
+if 
+
+\[
+  0 = f(p) = f'(p) = f''(p) = \dots = f^{(m-1)}(p)
+.\]
+
+but $f^{(m)}(p) \neq 0$.
+
+We want to obtain quadratic convergence with Newton's Method for multiple roots.
+
+One approach is to define a new function
+
+\[
+  \mu(x) = f\frac{(x)}{f'(x)}
+.\]
+
+We assume $p$ is a zero of multiplicity $m$ and $f(x) = (x-p)^m q(x)$ where
+$q(p) \neq 0$. Then,
+
+\begin{align*}
+  \mu(x) &= \frac{(x-p)^m}{m(x-p)^{m-1} q(x) + q'(x)(x-p)^m} \\
+  &= \frac{(x-p)q(x)}{mq(x) + q'(x) (x-p)}  \\
+  &= (x-p) \frac{q(x)}{mq(x)+q'(x-p)} \\
+  q(p) \neq 0 \quad\text{therefore, } &\mu(p) \text{ has a simple root at } x=p
+\end{align*}
+
+so $\mu(p) = 0$, but $\displaystyle \frac{q(p)}{mq(p) + q'(p)(p-p)} = \frac{1}{m} \neq 0$.
+and $p$ is a zero of multiplicity $1$ of $\mu(x)$.
+
+\textbf{Good:}
+\begin{itemize}
+  \item Quadratic convergence for all roots
+\end{itemize}
+
+\textbf{Bad:}
+\begin{itemize}
+  \item Need $f''$
+  \item $\mu$ is more expensive to work with
+  \item $\mu$ might give more roundoff error
+\end{itemize}
+
+We return to finding the roots of
+
+\[
+p^3 - p^3 - p + 1 = 0
+.\]
+
+Apply:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c c c}
+        \toprule
+         & Newton's Method & Modified Newton's Method \\
+        \midrule
+        $p_0$ & 1.1 & 1.1 \\
+        $p_1$ & 1.05116... & 0.997735... \\
+        $p_2$ & 1.02589... & 0.999999... \\
+        $p_3$ & 1.01303... &  \\
+        $p_4$ & 1.00653... &  \\
+        $p_5$ & 1.00327... &  \\
+        \bottomrule
+    \end{tabular}
+    % \caption{Comparison of Newton's Method and Modified Newton's Method}
+    % \label{tab:newton_methods}
+\end{table}
+
+This table shows that Newton's Method has linear convergence, and the Modified
+Newton's Method has quadratic convergence.
+
+\section{Congervence Speed and Acceleration}
+
+Suppose that we are given a linearly convergent sequence, and that we want to
+speed up the convergence. We want to analyze the behaviour of the error and use
+this knowledge to greatly reduce the error. 
+
+For example, we saw last day that the iterator method with 
+
+\begin{align*}
+  p_{n+1} &= g(p_n) \\
+  \text{and } g(x) &= \frac{1}{2}\sqrt{10-x^3}
+\end{align*}
+
+gives only linear convergence and the limit $p=1.3652$
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c c}
+        \toprule
+        Iteration & $p - p_n$ \\
+        \midrule
+        $p - p_0$ & $-0.13476\ldots$ \\
+        $p - p_1$ & $+0.07827\ldots$ \\
+        $p - p_2$ & $-0.03710\ldots$ \\
+        $p - p_3$ & $+0.01977\ldots$ \\
+        $p - p_4$ & $-0.00994\ldots$ \\
+        \bottomrule
+    \end{tabular}
+    % \caption{Error progression in iterations}
+    % \label{tab:error_progression}
+\end{table}
+
+Notice that the \uline{ratio} of the errors is fairly constant- we can use this
+idea to accelerate the convergence of the method.
+
+Suppose $\displaystyle \frac{p_{n+1}-p}{p_n-p} \approx \frac{p_{n+2}-p}{p_{n+1}-p}$
+
+\[
+  \therefore p \approx \frac{p_n p_{n+1} - p_{n+1}^2}{p_{n+2}-2p_{n+1}+p_n}
+.\]
+
+or,
+
+\[
+  p \approx p_n - \frac{p_{n+1}^2 - 2p_n p_{n+1} + p_n^2}{p_{n+2}-2p_{n+1}+p_n}
+.\]
+
+which is derived by adding and subtracting $p_n$ to the right hand side.
+
+The corresponding sequence
+
+\[
+  \hat{p}_{n+1} = p_n - \left[ \frac{p_{n+1}^2-2p_np_{n+1}+p_n^2}{p_{n+2}-2p_{n+1}+p_n} \right]
+.\]
+
+is known as Aitken's Method.
+
+\pagebreak
+Applying Aitken's method to our previous sequence,
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c c | c c}
+        \toprule
+        \multicolumn{2}{c|}{Fixed Point Iteration} & \multicolumn{2}{c}{Aitken's Method} \\
+        \midrule
+        Iteration & $p - p_n$ & Iteration & $\hat{p} - p_n$ \\
+        \midrule
+        $p - p_0$ & $-0.13476\ldots$ & $\hat{p} - p_0$ & $0.00090088$ \\
+        $p - p_1$ & $+0.07827\ldots$ & $\hat{p} - p_1$ & $0.00023088$ \\
+        $p - p_2$ & $-0.03731\ldots$ & $\hat{p} - p_2$ & $0.00006107$ \\
+        $p - p_3$ & $+0.01977\ldots$ & $\hat{p} - p_3$ & $0.00001592$ \\
+        $p - p_4$ & $-0.00994\ldots$ & $\hat{p} - p_4$ & $0.00000418$ \\
+        \bottomrule
+    \end{tabular}
+    % \caption{Error progression in Fixed Point Iteration and Aitken's Method}
+    % \label{tab:fixed_aitken}
+\end{table}
+
+we notice that Aitken's Method is much faster.
+It can be shown that the following theorem holds:
+
+\section{Theorem (2.13 of Text)}
+
+Suppose that $\{ p_n \}$ is a sequence that converges linearly to the limit $p$
+and that for all sufficiently large values of $n$ we have $(p_n-p)(p_{n+1}-p) > 0$.
+
+Then the sequence $\{ \hat{p}_{n=0}^\infty \}$ converges faster than $\{ p_n \}_{n=0}^\infty$.
+to $p$ in the sense that $\displaystyle \lim_{n\to\infty} \frac{\hat{p}_n - p}{p_n-p} = 0$
+
+The theorem does not apply to alternating sequences, but as we saw from our 
+example it is often very useful even there for accelerating convergence.
+
+Finally, we remark that this method is often written using difference operations 
+to simplify the notation.
+
+... sorry i missed a bunch here
+
+\section{Zeros of Polynomials}
+
+We want to compute the zeros (roots) of polynomials. A polynomial of degree $n$
+has the form
+
+\[
+  P(x) = a_nx^n + a_{n-1}x^{n-1} + \dots + a_1x+a_0
+.\]
+
+where $a_i , i=0,\dots,n$ are constants and $a_n \neq 0$.
+
+\subsection{Fundamental Theorem of Algebra}
+
+If \( P \) is a polynomial of degree \( n \geq 1 \), then \( P(x) \) has at least one (possibly complex) root.
+
+\subsubsection*{Corollary:}
+If \( P(x) \) is a polynomial of degree \( n \geq 1 \), then there exist unique constants \( x_1, x_2, \dots, x_k \) (possibly complex), and positive integers \( m_1, m_2, \dots, m_k \) such that
+
+\[
+  \sum_{i=1}^{k} m_i = n
+\]
+
+and 
+
+\[
+  P(x) = a_n (x - x_1)^{m_1} (x - x_2)^{m_2} \dots (x - x_k)^{m_k}.
+\]
+
+\subsubsection*{Corollary:}
+Let \( P \) and \( Q \) be polynomials of degree at most \( n \). If \( x_1, x_2, \dots, x_{n+1} \) with \( n+1 > n \) are distinct numbers with 
+
+\[
+  P(x_i) = Q(x_i) \quad \text{for } i = 1,2, \dots, n+1,
+\]
+
+then 
+
+\[
+  P(x) = Q(x) \quad \text{for all } x.
+\]
+
+We want to use Newton's Method to locate the approximate roots of $P$. It will
+be necessary to evaluate $P$ and its derivative at specified values. We now 
+direct our attention to efficient methods for this task. The idea is to use 
+nesting to evaluate an arbitrary $n^{th}$ degree polynomial using only
+
+\[
+  n \text{ multiplications and } n \text{ additions}
+.\]
+
+For illustration, consider $n=4$. To evaluate 
+$P(x) = a_4x^4 + a_3x^3 + a_2x^2 + a_1x+a_0$, we write:
+
+\[
+  P(x) = \left(\left(\left(\left(a_4x+a_3\right)x+a_2\right)x+a_1\right)x+a_0
+.\]
+
+Algorithmically,
+
+\begin{enumerate}
+  \item set $b_4 = a_4$
+  \item set $b_3 = b_4x + a_3$
+  \item set $b_2 = b_3x + a_2$
+  \item set $b_1 = b_2x + a_1$
+  \item set $b_0 = b_1x + a_0$
+\end{enumerate}
+
+Now $b_0$ gives the value $P(x)$.
+
+For general polynomials of degree $n:$
+
+\begin{align*}
+  b_n &= a_n \\
+  b_k &= a_k+b_{k+1}x \qquad\qquad 0 \leq k \leq n-1 \\
+  \text{and } b_0 &= P(x) \\
+\end{align*}
+
+we also want $P'(x)$. Differentiate each of the steps listed above, keeping in
+mind that $b_i$ is a function of $x$. We get:
+
+\begin{align*}
+  b_n ' &= 0 \\
+  b_k' &= b_{k+1}'x + b_{k+1} \\
+  \text{and } b_0' &= P'(x) \\
+\end{align*}
+
+Relabel: $c_{n+1} = b_n'$. Then an efficient method for computing $P'(x)$ is
+
+\begin{align*}
+  c_n &= a_n \\
+  c_k &=  c_{k+1}x + b_{k} \\
+  \text{and then } c_1 &= P'(x) \\
+\end{align*}
+
+This is called Horner's Method for evaluating a polynomial.
+
+\section{Horner's Method}
+
+Honer's Method has another useful property. 
+
+Consider $P(x)$
+
+\begin{align*}
+    &= a_n x^n + a_{n-1} x^{n-1} + \dots + a_1 x + a_0 \\
+    &= b_n x^n + (b_{n-1} - b_n x_0) x^{n-1} + \dots + (b_1 - b_2 x_0) x + (b_0 - b_1 x_0) \\
+    &= (b_n x^{n-1} + b_{n-1} x^{n-2} + \dots + b_2 x + b_1) x \\
+    &\qquad - (b_n x^{n-1} + b_{n-1} x^{n-2} + \dots + b_2 x + b_1) x_0 \\
+    &\qquad + b_0 \\
+    &= (b_n x^{n-1} + b_{n-1} x^{n-2} + \dots + b_2 x + b_1) (x - x_0) + b_0
+\end{align*}
+
+This property is useful because it gives us a way to find the next approximate
+zero after we have found our first zeros.
+
+\ie If $x_0$ is a root $P(x_0) = b_0 = 0\implies Q(x) (x-x_0) = P(x)$
+
+so we can find the next root by examining roots of $Q(x)$.
+
+Suppose we want additional roots of $P$. If $x_0$ is an approximate root of $P$,
+
+\[
+  P(x) \approx Q(x) (x-x_0) 
+.\]
+
+and the next step is toa pply Newton's Method to 
+
+\[
+  \displaystyle Q(X) = \frac{P(x)}{(x-x_0)}
+.\]
+
+this process is called deflation.
+

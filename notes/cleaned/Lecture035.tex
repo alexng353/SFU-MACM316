@@ -1,0 +1,36 @@
+\section{Higher order Runge-Kutta Methods (24.8)}
+Third order Runge-Kutta methods are not commonly used. However, fourth order
+Runge-Kutta methods are widely used and derived in a similar fashion. Greater
+complexity results from having to compare terms through $h^4$ and this gives a
+set of 11 equations in 13 unknowns. The set of equations can be solved with 2
+unknowns being chosen arbitrarily. 
+
+The most commonly used set of values leads to the following algorithm:
+\begin{align*}
+  w_{n+1} &= w_n+\frac{1}{6}\bqty{k_1+2k_2+2k_3+k_4} \\
+  k_1 &= hf(t_n, w_n) \\
+  k_2 &= hf\bqty{t_n+\frac{1}{2}h, w_n + \frac{1}{2}k_1} \\
+  k_3 &= hf\bqty{t_n+\frac{1}{2}h, w_n + \frac{1}{2}k_2} \\
+  k_4 &= hf\bqty{t_n+h, w_n + k_3}
+\end{align*}
+
+The main computational effort in applying Runge-Kutta methods is the evaluation
+of $f$. In the second order methods, the local truncation error is $\order{h^2}$
+and the cost is two functional evaluations per step. The Runge-Kutta method of
+order four requires four evaluations per step and the local truncation error is
+$\order{h^4}$.
+
+We may wonder about higher order formulas\dots
+
+\subsection{Error Analysis of Higher Order Runge-Kutta Methods (24.9)}
+Butcher has shown that the following relationship holds:
+
+\begin{tabular}{c|ccccccc}
+  evaluations & $2$ & $3$ & $4$ & $5\leq n\leq7$ & $8\leq n\leq9$ & $10\leq n$\\
+  Best LTE & $O(h^2)$ & $O(h^3)$ & $O(h^4)$ & $O(h^{n-1})$ &
+  $O(h^{n-2})$ &$O(h^{n-3})$
+\end{tabular}
+
+This indicates why methods of order $\leq 5$ are often used rather than higher
+order methods with a larger step size.
+

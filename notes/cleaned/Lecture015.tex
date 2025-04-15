@@ -1,0 +1,148 @@
+\subsection*{Bisection Method Example}
+
+He starts with an example on the bisection method. I will provide one later on.
+
+Lowkey I missed notes from page 5.7 to 5.10 but I'll add them later. (page 5 of
+chapter 2 part 1 notes)
+
+\section{Fixed Point Iteration}
+
+We wish to find the roots of an equation $f(p) = 0$. We will be focusing on
+methods that \uline{iterate} to find the root:
+
+\[ p_{n+1} = g(p_n) \]
+
+We start by considering the fixed point problem.
+
+\defn A fixed point $p$ is the value of $p$ such that $g(p) = p$.
+
+We can form a fixed pt. problem from a root finding problem.
+
+\[ f(p) = 0 \]
+
+Find a fixed point problem.
+
+e.g. set $g(x) = f(x) + x$
+
+$g(p) = f(p) + p$
+
+$p = g(p)$
+
+there are many choices of $g$
+
+Try $g(x) = f^3(x) + x$
+
+Notice that fixed point problems and root finding problems are equivalent. (???)
+
+\subsection{Example}
+
+We are given $g(p) = p$. Formulate a root finding problem.
+
+\[ f(x) = g(x) - x \]
+
+Now we have $f(p) = 0$. We now have a root finding problem.
+
+\[ f(p) = 0 \implies g(p) = p \]
+
+\ie $f$ has a root $p$ implies $g$ has a fixed point $p$.
+
+\[
+g(p) = p \implies f(p) = 0
+.\]
+
+\ie $g$ has a fixed point $p$ implies $f$ has a root $p$.
+
+
+There are many possible choices for $g$: 
+\uline{example} $g(x) -x = \left( f(x) \right)^3$
+
+Our ultimate goal is to find functions with fixed points.
+
+\section{Theorems}
+
+\textbf{Existence and Uniqueness}
+
+$\star$If $g\in C[a,b]$ and $g(x) \in [a, b]$ for all $x\in [a, b]$ then $g(x)$ has a
+fixed point in $[a, b]$.
+
+$\star\star$ Suppose, in addition, that $g'(x)$ exists on $(a, b)$ and that a
+positive constant $k<1$ exists with 
+
+\[
+|g'(x)| \leq k < 1 \text{ for all } x \in (a, b)
+.\]
+
+then the fixed point in $[a, b]$ is unique
+
+\proof($\star$): Existence
+
+If $g(a) = a$ or $g(b) = b$ then $g$ has a fixed point at an 
+endpoint.
+
+Suppose not, then it must be true that $g(a) > a$ and $g(b) < b$.
+
+Define $h(x) = g(x) - x$. Then $h$ is continuous on $[a, b]$ (adding two
+continuous functions yields a continuous function) and
+
+\[
+h(a) = g(a) -a > 0 \text{ and } h(b) = g(b) - b < 0
+.\]
+
+The \textbf{IVT} implies that there exists a $p \in (a, b)$ for which $h(p) = 0$
+
+This $g(p) - p = 0 \implies p$ is a fixed point of $g$
+
+\proof($\star\star$): Uniqueness
+
+Suppose, in addition,
+
+\[
+\forall x \in (a,b), |g'(x)| \leq k < 1
+.\]
+
+and that $p$ and $q$ are both fixed points in $[a, b]$ with $p \ne q$.
+
+By the \textbf{MVT}, a number $c$ eixsts between $p$ and $q$ such that
+
+\[
+\frac{g(p) - g(q)}{p-q} = g'(c)
+.\]
+
+then 
+
+\begin{align*}
+  |p-q| &= |g(p) - g(q)| \\
+  &= |g'(c)||p-q| \\
+  &\leq k|p-q| \\
+  &< |p-q|  \\
+\end{align*}
+
+Which is a contradiction
+
+This contradiction must come from the assumption that $p \ne q$
+
+$\therefore p = q$ and the fixed point is unique.
+
+We want to approximate the fixed point of a function $g$.
+
+\textbf{IDEA}
+
+\begin{itemize}
+\item choose an initial approximation $p_0$
+\item generate a squence $\displaystyle \left\{ p_n \right\}_{n=0}^\infty$
+  such that $p_n = g(p_{n-1}); n \geq 1$
+\end{itemize}
+
+\uline{If} the sequence converges to $p$ and $g$ is continuous;
+
+\begin{align*}
+  p &\equiv \lim_{n\to\infty} p_n \\
+  &= \lim_{n\to\infty} g(p_{n-1}) \\
+  &=  g(\lim_{n\to\infty} p_{n-1}) \\
+  &= g(p) \\
+\end{align*}
+
+This gives the \uline{Fixed Point Algorithm}:
+
+*See next notes package*
+

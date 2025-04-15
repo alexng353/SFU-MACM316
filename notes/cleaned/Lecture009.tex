@@ -1,0 +1,95 @@
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+\setlength{\arraycolsep}{12pt}
+
+\section{LU Decomposition (contd.)}
+
+THM: If Gaussian elimination can be performed without row exchanges, then the
+matrix $A$ has a unique $LU$ factorization where $L$ is lower triangular and
+with all diagonal entries equal to $1$ and $U$ is an upper triangular matrix.
+
+Once the matrix factorization is complete, the solution to
+
+\begin{equation*}
+  LUx = b
+\end{equation*}
+
+is found by first setting 
+
+\begin{equation*}
+  y=Ux
+\end{equation*}
+
+then determining the vector $y$ from $Ly=b$ using forward substitution. The
+variable $x$ is found from $Ux=y$ using backward substitution.
+
+Notice: in the theorem, \textbf{we need to be able to perform Gaussian
+Elimination without row exchanges}. This means that we can't use row
+exchanges to solve the system.
+
+\section{Matrix Factorization}
+
+If $A$ is any nonsingular matrix, $Ax=b$ can be solved by Gaussian Elimination
+with the possibility of row exchanges. If we can find the row interchanges
+required to solve the system by Gaussian Elimination, then we can re-arrange
+the equations in an order that would ensure that no row interchanges are
+required.
+
+$\implies$ There is a rearrangement of the equations that permits Gaussian
+Elimination without row exchanges.
+
+But WHY does the rearrangement of the equations break LU decomposition?
+
+\section{Permutation Matrix}
+
+An $n\times n$ permutation matrix $P$ is obtained by rearranging the rows of
+the identity matrix. This gives a matrix with precisely one nonzero entry in
+each row and column. The nonzero entries are all $1$'s.
+
+On the other hand, multiplying $A$ on the right by $P$ will exchange the
+second and third \textbf{columns} of $A$.
+
+We will be using the following two properties of permutation matrices:
+
+\begin{enumerate}
+  \item If $K_1,...,K_n$ is a permutation of the integers $1,...,n$, and the
+    permutation matrix $P=[p_{ij}]$ is defined by 
+
+    \qquad $p_{ij}=\begin{cases}
+      1 & i=K_j\\
+      0 & \text{otherwise}
+    \end{cases}$
+
+    Then, $PA$ permutes the rows of $A$ according to (BIGASS MATRIX MISSING HERE)
+    data from chapter6-part2.pdf page 3.
+  \item If $P$ is a permutation matrix, then $P^{-1}$ exists and $P^{-1}=P^T$
+\end{enumerate}
+
+Now our approach will be to left multiply the system
+
+\begin{equation*}
+  Ax=b
+\end{equation*}
+
+by the appropriate permutiation matrix $P_1$ so that the system
+
+\begin{equation*}
+  (PA)x=Pb
+\end{equation*}
+
+can be solved without row exchanges. Then $PA$ can be factorized into
+
+\begin{equation*}
+  PA=LU
+\end{equation*}
+
+This tells us that
+
+\begin{align*}
+  P^{-1}LUx &= b \\
+  LUx &= Pb
+\end{align*}
+
+which can be solved rapidly for $x$.
+
+
+

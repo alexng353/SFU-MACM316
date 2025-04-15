@@ -1,0 +1,255 @@
+\section*{Lecture Outline}
+\begin{enumerate}
+\item 
+\end{enumerate}
+
+\section{Error Behavior of Simpson's Rule (19.12)}
+
+It is important to understand the stability property of \textbf{Composite
+Newton-Cotes} integration techniques.
+
+Assume $f(x_i)$ is approximated by $\tilde{f}(x_i)$:
+
+\begin{equation*}
+  f(x_i) = \tilde{f} (x_i) + e_i \qquad 0 \leq i \leq n
+.\end{equation*}
+
+\noindent
+where $e_i$ is the roundoff associated with using $\tilde{f}$ to approximate
+$f$. Then, the accumulated roundoff error in the Composite Simpson's Rule is
+
+\begin{align*}
+  |e(h)| &= \left|\frac{h}{3} \left[
+    e_0 + 2 \sum_{j=1}^{\frac{n}{2}-1} e_{2j} + 4 \sum_{j=1}^{\frac{n}{2}}
+    e_{2j-1} + e_n
+  \right]\right| \\
+         & \leq \frac{h}{3} \left[
+           |e_0| + 2 \sum_{j=1}^{\frac{n}{2}-1} |e_{2j}| + 4 \sum_{j=1}^{\frac{n}{2}}
+           |e_{2j-1}| + |e_n|
+         \right]
+\end{align*}
+
+We have a triangle inequality. Assume all $e_j$ are bounded by $\bigEps$.
+
+\begin{equation*}
+  h = \frac{(b-a)}{n}
+\end{equation*}
+
+
+\begin{align*}
+  |e(h)| & \leq \frac{h}{3} \left[
+    \bigEps + 2(\frac{n}{2} -1)\bigEps + 4 \frac{n}{2} \bigEps + \bigEps
+  \right] \\
+         &= \frac{h}{3} 3n \bigEps \\
+         &= nh \bigEps \\
+         &= (b-a) \bigEps \\
+\end{align*}
+
+Which is indepentent of $h$ which implies the procedure is stable as $h\to 0$
+
+\section{Romberg Integration}
+\label{sec:romberg_integration}
+An interesting point concerning the composite Trapezoid Rule:
+
+If $f= \in C^2[a,b]$ then there exists a $\mu \in [a,b]$ such that 
+
+\begin{align*}
+  \int_{a}^{b} f(x) \, dx &= \frac{h}{2} \left[
+    f(a) + 2 \sum_{j=1}^{h-1} f(x_j) + f(b)
+  \right] - \frac{b-a}{12}h^2 f''(\mu) \\
+                          &\text{where } h = \frac{b-1}{n} \\
+                          &\text{and } x_j = a + jh
+\end{align*}
+
+Thus the error for the composite Trapezoid Rule is $O(h^2)$. In fact we can be
+more precise. An application of the Euler-MacLaurin summation formula shows that
+for sufficiently smooth $f$,
+
+\begin{align*}
+  \text{error} \quad&\quad= c_1 h^2 + c_2 h^4 + \dots + c_m h^{2m} + O(h^{2m+2}) \\
+  \text{where}\quad &c_k = \text{const} \times \left(
+    f^{(2k-1)}(b) - f^{(2k-1)}(a)
+  \right)
+\end{align*}
+
+This shows us that the Composite Trapezoid Rule is extremely accurate for smooth
+periodic functions, provided $h$ is small enough.
+
+*Note: The error expansion contains only even powers of $h$, so eliminating the 
+leading error term improves the accuracy by two additional orders of $h$.
+
+Notice that we know the form of the error, so we can obtain higher order
+accuracy by using Richardson Extrapolation. (To give Romberg Integration)
+
+\subsection{Richardson Extrapolation to obtain Romberg Integration}
+\label{sec:richardson_extrapolation_to_obtain_romberg_integration}
+
+We will carry out Composite Trapezoid Rule approximations with 
+
+\[
+  m_1 = 1, m_2 = 2, m_3 = 4, \dots, m_n = 2^{n-1} \text{ intervals.} 
+.\]
+
+The values of the step sizes $h_k$ corresponding to $m_k$ are 
+
+\[
+  h_k = \frac{(b-1)}{m_k} = \frac{(b-1)}{2^{k-1}}
+.\]
+
+With this notation, the Composite Trapezoid Rule becomes
+
+\begin{equation*}
+  \int_{a}^{b} f(x) \, dx = \frac{h_k}{2} \left[
+    f(a) + 2\left(
+      \sum_{i=1}^{2^{k-1}-1} f(a+ih_k) 
+      \right)
+      - \frac{(b-a)}{12} h^2_k f''(\mu_k)
+  \right]
+.\end{equation*}
+
+where $\mu_k \in (a,b)$
+
+Let $R_{k,1}$ be the approximation to the integral using $m_k=2^{k-1}$
+intervals.
+
+\ie 
+
+\begin{align*}
+  R_{1,1} &=  \frac{h_1}{2}\left[
+    f(a)+f(b)
+  \right] = \frac{(b-1)}{2}
+  \left[
+    f(a)+f(b)
+  \right]
+\end{align*}
+
+\begin{align*}
+  R_{2,1} &= \frac{h_2}{2} \left[
+    f(a)+f(b)+2f(a+h_2)
+  \right] \\
+          &= \frac{(b-a)}{4} \left[
+            f(a)+f(b)+2f(a+\frac{b-1}{2})
+          \right] \\
+          &= \frac{1}{2} \left[
+            R_{1,1} + h_1f(a+h_2)
+          \right]
+\end{align*}
+
+notice that when $h$ is halved, all the old points at which the function was
+evaluated appear in the new computation- we can avoid repeating the evaluations.
+
+\begin{equation*}
+  R_{3,1} = \frac{1}{2} \left\{
+    R_{2,1} + h_2 \left[
+      f(a+h_3) + f(a+3h_3)
+    \right]
+  \right\}
+.\end{equation*} 
+
+\[
+\vdots
+\]
+
+\begin{equation*}
+  R_{k,1} = \frac{1}{2} \left\{
+    R_{k-1,1} + h_{k-1} \left[
+      \sum_{i=1}^{2^{k-2}} f(a+(2i-1)h_k)
+    \right]
+  \right\}
+.\end{equation*}
+
+We can apply this equation to perform the first step of Romberg Integration for
+
+\begin{equation*}
+  \int_{0}^{1} e^{-x} \, dx = 1-e^{-1} \approx 0.63212
+.\end{equation*}
+
+\begin{align*}
+R_{1,1} &= \frac{(1-0)}{2} [e^{-0} + e^{-1}] \approx 0.68394 \\
+R_{2,1} &= \frac{1}{2}\left[R_{1,1} + \frac{(1-0)}{2}e^{-(0+\frac{1}{2})}
+\right] = 0.64523 \\
+R_{3,1} &= 0.65341 \\
+R_{4,1} &= 0.63294 \\
+\end{align*}
+
+We can obtain a faster convergence using Richardson Extrapolation:
+
+Notice that:
+
+\begin{align*}
+\int_a^b f(x)\,dx - R_{h,1} 
+&= \sum_{i=1}^{m} c_i h^{{2i}} + O(h^{2m+2}) \\
+&= c_1 h^2 + \sum_{i=2}^{m} c_i h^{2i} + O(h^{2m+2})
+\end{align*}
+
+\begin{align*}
+\int_a^b f(x)\,dx - R_{h/2,1} 
+&= \sum_{i=1}^{m} c_i h_{h/2}^{2i} + O(h^{2m+2}) \\
+&= \frac{c_1 h^2}{4} + \sum_{i=2}^{m} \left(\frac{c_i h^{2i}}{4^i}\right) + O(h^{2m+2})
+\end{align*}
+
+Subtracting the first from 4 times the second gives an $O(h_k^4)$ formula:
+
+\begin{align*}
+  \int_a^b f(x)\,dx - R_{h,2} 
+&= \sum_{i=2}^{m} \frac{c_i}{3} \left( \left( \frac{h^{{2i}}}{4^i} \right) -
+h^{2i} \right) + O(h^{2m+2}) \\
+  \text{where} \quad R_{h,2} &= \frac{R_{h,1} + R_{h/2,1} - R_{h,1}}{3}
+\end{align*}
+
+Of course, this procedure can be repeated to eliminate the $O(h_k^4)$ term from
+the error. Continuing in this manner, we have an $O(h_k^{2j})$ approximation
+formula defined by 
+
+\begin{equation*}
+  R_{kj} = R_{k, j-1} + \frac{R_{k,j-1} - R_{k-1, j-1}}{4^{j-1}-1}
+.\end{equation*}
+
+\Ex Use Romberg Integration to approximate 
+
+\[
+  \int_{0}^{1} e^{-x} \, dx
+.\]
+
+to $5$ significant digits.
+
+\begin{tabular}{c|ccccc}
+      & $R_{h,1}$ & $R_{h,2}$ & $R_{h,3}$ & $R_{h,4}$ & $R_{h,5}$ \\
+\hline
+  $R_{1,j}$ & .6839397 &          &          &        &            \\
+  $R_{2,j}$ & .6452352 & .6723337 &          &        &            \\
+  $R_{3,j}$ & .6354094 & .6321312 & .6321209 &        &            \\
+  $R_{4,j}$ & .6329434 & .6321214 & .6321206 & .6321206 &          \\
+  $R_{5,j}$ & .6323263 & .6321206 & .6321206 & .6321206 & .6321206 \\
+\end{tabular}
+
+A typical stopping criterion is that both
+
+\[
+  |R_{n-1, n-1} - R_{n,n} \text{ and } |R_{n-2,n-2} - R_{n,n}| < \bigEps
+.\]
+
+for some error tolerance $\bigEps$.
+
+Note that we may not observe the expected convergence acceleration if
+
+\begin{itemize}
+  \item The integrand $f$ is not sufficiently smooth. We need $f\in
+    C^{2k+2}[a,b]$ to generate the $k^{th}$ row of the table.
+  \item The coefficients $c_1, c_2, \dots$ are very small. This happens for
+    periodic functions if the interval of integration is an integer multiple of
+    the period or for functions with extremely small derivatives at the
+    endpoints of the interval of integration.
+\end{itemize}
+
+\section{Adaptive Quadrature}
+
+Composative quadrature rules necessitate the use of equally spaced points. This
+does not take into account that some portions of the curve may have large
+functional variations that require more attention than other portions of the
+curve. It is useful to introduce a method that adjusts the step size to be
+smaller over portions of the curve where a larger functional variation occurs.
+Thi technique is called adaptive quadrature. We will now discuss an adaptive
+based on Simpson's Rule. The other composite procedures can be modified in a
+similar manner.
+

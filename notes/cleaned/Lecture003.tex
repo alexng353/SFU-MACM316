@@ -1,0 +1,114 @@
+\section{Reducing Roundoff Error}
+
+One way to reduce roundoff error is to minimize the number of floating-point 
+operations.
+
+\subsection{Polynomial Evaluation Using Nested Multiplication}
+
+Consider evaluating the polynomial:
+\begin{equation*}
+    f(z) = 1.01z^4 - 4.62z^3 - 3.11z^2 + 12.2z - 1.99.
+\end{equation*}
+We can rewrite this expression using nested multiplication:
+\begin{align*}
+    f(z) &= (1.01z^3 - 4.62z^2 - 3.11z + 12.2)z - 1.99 \\
+         &= ((1.01z^2 - 4.62z - 3.11)z + 12.2)z - 1.99 \\
+         &= \dots
+\end{align*}
+By factoring out $z$ as much as possible, we reduce the total number of 
+floating-point operations, minimizing error accumulation.
+
+\section{Cancellation Errors}
+
+\subsection{Quadratic Formula and Cancellation Errors}
+
+Consider solving the quadratic equation:
+\begin{equation*}
+    ax^2 + bx + c = 0.
+\end{equation*}
+Using the quadratic formula:
+\begin{align*}
+    x_1 &= \frac{-b + \sqrt{b^2 - 4ac}}{2a}, \\
+    x_2 &= \frac{-b - \sqrt{b^2 - 4ac}}{2a}.
+\end{align*}
+
+Suppose $b = 600$, $a = c = 1$. The issue arises because $-b$ is close in 
+magnitude to $+\sqrt{b^2 - 4ac}$, causing significant cancellation error in 
+$x_1$.
+
+\subsection{Reformulating to Reduce Cancellation}
+
+We rationalize the numerator:
+\begin{equation*}
+    x_1 = \frac{(-b + \sqrt{b^2 - 4ac})}{2a} \times 
+          \frac{(-b - \sqrt{b^2 - 4ac})}{(-b - \sqrt{b^2 - 4ac})}.
+\end{equation*}
+
+This simplifies to:
+\begin{equation*}
+    x_1 = \frac{b^2 - (b^2 - 4ac)}{2a(-b - \sqrt{b^2 - 4ac})}.
+\end{equation*}
+Now, the cancellation error is eliminated. If $b = -600$, the same issue 
+occurs with $x_2$, and we apply the same rationalization technique.
+
+\section{Review of Taylor Series}
+
+Taylor’s theorem is fundamental for numerical approximations.
+
+\subsection{Definition of Taylor Series}
+
+Given a function $f(x)$ that is sufficiently smooth on $[a, b]$, we can 
+approximate $f(x)$ with a Taylor polynomial $P_n(x)$:
+\begin{equation*}
+    P_n(x) = f(x_0) + f'(x_0)(x - x_0) + \frac{f''(x_0)}{2!} (x - x_0)^2 + 
+             \dots + \frac{f^{(n)}(x_0)}{n!} (x - x_0)^n.
+\end{equation*}
+
+Here, $x_0, x \in [a, b]$.
+
+\subsection{Conditions for Taylor Series Expansion}
+
+For $f(x)$ to have a valid Taylor series expansion:
+\begin{itemize}
+    \item $f \in C^n[a, b]$ (i.e., $f$, $f'$, $f''$, ..., $f^n$ must be continuous).
+    \item $f^{(n+1)}$ must exist on $[a, b]$.
+\end{itemize}
+
+\subsection{Error in Taylor Approximation}
+
+The error in Taylor series approximation is given by:
+\begin{equation*}
+    f(x) = P_n(x) + R_n(x),
+\end{equation*}
+where the remainder term $R_n(x)$ satisfies:
+\begin{equation*}
+    R_n(x) = \frac{f^{(n+1)}(c)}{(n+1)!} (x - x_0)^{n+1},
+\end{equation*}
+for some $c \in (x_0, x)$. The approximation is most accurate when $x$ is 
+close to $x_0$.
+
+\section{Example: Third-Order Taylor Polynomial for $\sin(x)$}
+
+Find $P_3(x)$ for $f(x) = \sin(x)$ centered at $x_0 = 0$.
+
+\begin{align*}
+    P_3(x) &= f(0) + f'(0)(x - 0) + \frac{f''(0)}{2!} (x - 0)^2 + 
+             \frac{f'''(0)}{3!} (x - 0)^3 \\
+           &= x - \frac{x^3}{6}.
+\end{align*}
+
+\subsection{Error Analysis}
+
+The remainder term for $n = 3$ is:
+\begin{equation*}
+    R_3(x) = \frac{f^{(4)}(c)}{4!} x^4.
+\end{equation*}
+Since $f^{(4)}(x) = \sin(x)$, we have:
+\begin{equation*}
+    R_3(x) = \frac{\sin(c)}{24} x^4.
+\end{equation*}
+For $x = 0.1$:
+\begin{equation*}
+    |R_3(0.1)| \leq \frac{|\sin(0.1)|}{24} (0.1)^4 < 4.2 \times 10^{-7}.
+\end{equation*}
+This shows the high accuracy of the Taylor series approximation.

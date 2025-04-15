@@ -1,0 +1,244 @@
+\section*{Lecture Outline}
+
+\begin{enumerate}
+\item Starts with a review of the previous lecture, including:
+  \begin{enumerate}[label=(\alph*)]
+  \item Interpolation with two points (Trapezoidal Rule)
+  \item Interpolation with three points (Simpson's Rule)
+  \end{enumerate}
+\item The \textbf{error analysis} of numerical integration methods.
+  \textbf{(\ref{sec:error_analysis})}.
+  \begin{enumerate}[label=(\alph*)]
+  \item Simpson's Rule, despite using a quadratic approximation, can integrate
+    up to a cubic. (Integrating a quadratic gives a cubic, and the method
+    specifically finds a nice cancellation that allows higher order
+    approximations)
+  \item Definition of the degree of accuracy \ref{sec:degree_of_accuracy}
+  \end{enumerate}
+\item It turns out that Simpson's Rule and the Trapezoidal Rule are not the only
+  methods of numerical integration. In fact, there are infinitely many methods
+  of numerical Integration: The \textbf{Newton-Cotes Formulas
+  (\ref{sec:newton_cotes_formulas})}.
+  \begin{enumerate}[label=(\alph*)]
+  \item Even-degree Newton-Cotes formulas are more accurate than odd.
+  \item The formulas are \textbf{exact} if the degree of accuracy
+    is greater than or equal to the degree of the function it is approximating.
+  \item The Newton-Cotes formulas are \textbf{closed} if the endpoints of the
+    interval are included as nodes. The formulas are \textbf{open
+    (\ref{sec:open_newton_cotes_formulas})} if the nodes are all contained in
+    the open interval $(a,b)$.
+  \end{enumerate}
+\item Finally, we discuss the \textbf{composite numerical integration
+  (\ref{sec:composite_numerical_integration})} method. This method uses
+  Newton-Cotes formulas to approximate the integral of a function over an
+  interval.
+\end{enumerate}
+
+\section{Error Analysis of Numerical Integration Methods}
+\label{sec:error_analysis}
+
+\begin{center}
+  \begin{tabular}{c|c|c}
+    $f(x)$ & Simpson's & Trapezoidal \\ 
+    \hline
+    $x$ & 0 & 0 \\
+    $x^3$ & nonzero & 0
+  \end{tabular}
+\end{center}
+
+Simpson's Rule can integrate up to a cubic, even though the function used to
+approximate the integral is a quadratic.  This is because in Simpson's Rule,
+the quadratic approximation is integrated and there is a cancellation that
+occurs, which allows the quadratic approximation to be used to approximate
+the integral.
+
+\subsection{Degree of Accuracy}
+\label{sec:degree_of_accuracy}
+
+\defn The \textbf{degree of accuracy} or precision of a quadratic formula is the largest
+positive integer $n$ such that the formula is exact for $x^k$ when $k=0,1,\dots,n$.
+
+\begin{center}
+  \begin{tabular}{c|c}
+    & Degree of Accuracy \\ \hline
+    Trapezoid Rule & 1 \\
+    Simpson's Rule & 3 \\
+  \end{tabular}
+\end{center}
+
+\section{Newton-Cotes Formulas}
+\label{sec:newton_cotes_formulas}
+
+The Trapezoid and Simpson's Rules are examples of \textbf{Newton-Cotes
+Formulas}. The $(n+1)$-point \uline{closed} Newton-Cotes formula uses nodes $x_i
+= x_0+ih$ for $i=0,1,\dots,n$ where 
+
+\begin{align*}
+  x_0 &= a, \\
+  x_n &= b, \\
+  h &= \frac{b-a}{n}
+\end{align*}
+
+\noindent
+Then,
+
+\begin{align*}
+  \int_{a}^{b} f(x) \, dx \approx \int_{a}^{b} P_n(x) \, dx 
+  &= \int_{a}^{b} \sum_{i=0}^{n} h_i(x)f(x_i) \, dx \\
+  &= \sum_{i = 0}^{n} \int_{a}^{b} L_i(x)f(x_i) \, dx \\
+  &= \sum_{i = 0}^{n} a_i f(x_i)
+\end{align*}
+
+where $\displaystyle a_i = \int_{a}^{b} L_i(x) \, dx$
+
+The formula is closed because the endpoints of the interval are included as
+nodes. An error analysis of the Newton-Cotes formulas gives an interesting
+result:
+
+\thm Suppose that $\displaystyle \sum_{i = 0}^{n} a_if(x_i)$ denotes the $n+1$
+point closed Newton-Cotes formula with $x_0=a, x_n=b$ and $h = \frac{b-a}{n}$.
+If $n$ is even and $f\in C^{n+2}[a,b]$ then there exists $\xi \in (a,b)$ with 
+
+\[
+\int_{a}^{b} f(x) \, dx = \sum_{i = 0}^{n} a_if(x_i) +
+\frac{h^{n+3}f^{(n+2)}(\xi)}{(n+2)!} \int_{0}^{n} t^2(t-1)\dots (t-n) \, dt
+.\]
+
+If $n$ is odd and $f\in C^{n+1}[a,b]$ then there exists $\xi \in (a,b)$ with
+
+\[
+  \int_{a}^{b} f(x) \, dx = \sum_{i = 0}^{n} a_if(x_i) +
+  \frac{h^{n+2}f^{n+1}(\xi)}{(n+1)!} \int_{0}^{n} t(t-1)\dots(t-n) \, dt
+.\]
+
+Notice that the degree of precision is $n+1$ and the error is $O(h^{n+3})$ if
+$n$ is even. If $n$ is odd then the degree of precision is only $n$ and hte
+error is only $O(h^{n+2})$.
+
+\begin{center}
+  \begin{tabular}{c|l c}
+    $n$ & \textbf{Name} & \textbf{Error Term} \\
+    \hline
+    1 & Trapezoid Rule & $-\frac{h^3}{12} f''(\xi)$ \\
+    2 & Simpson's Rule & $-\frac{h^5}{90} f^{(4)}(\xi)$ \\
+    3 & Simpson's Three-Eighths Rule & $-\frac{3h^5}{80} f^{(4)}(\xi)$ \\
+    4 & & $-\frac{h^7}{945} f^{(6)}(\xi)$ \\
+  \end{tabular}
+\end{center}
+
+\subsection{Open Newton-Cotes Formulas}
+\label{sec:open_newton_cotes_formulas}
+There are also \uline{open} Newton-Cotes formulas. here,
+
+\begin{align*}
+x_i &= x_0+ih \qquad i = 0,1,\dots,n \\
+x_0 &= a+h \\
+h = \frac{b-a}{n+2}
+\end{align*}
+
+Then the open Newton-Cotes formulas are given by
+
+\begin{equation}
+  \int_{a}^{b} f(x) \, dx \approx \sum_{i = 0}^{n} a_if(x_i) 
+.\end{equation}
+
+where $\displaystyle a_i = \int_{a}^{b} L_i(x) \, dx$
+
+Note that $x_0 = a+h$ and $x_n = b-h$. The formulas are \uline{open} because the
+nodes are all contained in the open interval $(a,b)$. Once again, if $n$ is even,
+the degree of precision is $(n+1)$ and the error is $O(h^{n+3})$. If $n$ is odd,
+the degree of precision is only $n$ and the error is only $O(h^{n+2})$.
+
+Some examples of open Newton-Cotes formulas are:
+
+\begin{tabular}{c| l}
+    $n$ & \\
+    \hline
+    0 & $\displaystyle 2h f(x_0) + \frac{h^3}{3} f''(\xi), \quad \text{where } \xi \in (a,b)$ \\[10pt]
+    1 & $\displaystyle \frac{3h}{2} \left[ f(x_0) + f(x_1) \right] + \frac{3h^3}{4} f''(\xi), \quad \text{where } \xi \in (a,b)$ \\[10pt]
+    2 & $\displaystyle \frac{4h}{3} \left[ 2f(x_0) - f(x_1) + 2f(x_2) \right] + \frac{14h^5}{45} f^{(4)}(\xi)$ \\[10pt]
+    3 & $\displaystyle \frac{5h}{24} \left[ 11f(x_0) + f(x_1) + f(x_2) + 11f(x_3) \right] + \frac{95}{144} h^5 f^{(4)}(\xi)$ \\
+\end{tabular}
+
+$n=0$ is also called the \textbf{Midpoint Rule}. 
+
+\section{Composite Numerical Integration}
+\label{sec:composite_numerical_integration}
+Typically, we do not apply Newton-Cotes formulas directly onto the interval
+$[a,b]$. If we did, then high degree formulas would be required to obtain
+accurate solutions, but as we have already seen, these high degree polynomials
+would give an oscillatory and innacurate interpolation. To avoid this problem,
+we prefer a piecewise approach to numerical integration that uses low order
+Newton-Cotes formulas.
+
+\Ex Simpson's Rule
+
+\begin{center}
+  \begin{tikzpicture}[scale=2.0]
+    % Draw axes
+    \draw[->] (-0.1,0) -- (6.5,0) node[below] {$x$};
+    \draw[->] (0,-0.1) -- (0,2.2) node[left] {$y$};
+
+    % Define function
+    \draw[thick, red, domain=0:6, samples=100] 
+      plot(\x, {0.05375*\x*\x*\x - 0.520625*\x*\x + 1.4803125*\x});
+
+    % Draw dotted vertical lines
+    \foreach \x in {0.5,1,1.5,2,2.5,4.5,5,5.5} {
+      \draw[thick, dotted, blue] (\x,0) -- (\x,{0.05375*\x*\x*\x - 0.520625*\x*\x + 1.4803125*\x});
+    }
+
+    \foreach \x in {0.5, 1.5, 2.5, 4.5, 5.5} {
+      \draw[thick, blue] (\x,0) -- (\x,{0.05375*\x*\x*\x - 0.520625*\x*\x + 1.4803125*\x});
+      % \node[below] at (\x,-0.05) {$x_{\x}$};
+    }
+
+    % \node at (3.5, 0.5) {$\LARGE{\dots}$};
+    \foreach \i in {0,1,2} {
+        \fill (3.3 + \i*0.2, 0.5) circle (1.0pt);
+    }
+
+    \node[below] at (0.5, -0.05) {$x_0$};
+    \node[below] at (1.5, -0.05) {$x_2$};
+    \node[below] at (2.5, -0.05) {$x_4$};
+    \node[below] at (4.5, -0.05) {$x_{n-2}$};
+    \node[below] at (5.5, -0.05) {$b=x_n$};
+
+  \end{tikzpicture}
+\end{center}
+
+% image goes here
+
+We divide the interval into an even number of subintervals. Simpson's rule is
+applied on each consecutive pair of subintervals.
+
+\[
+  \frac{h}{3} \left[f(x_i) + 4f(\frac{x_i+x_{i+2}}{2}) + f(x_{i+2})\right]
+.\]
+
+Take $\displaystyle h=\frac{(b-1)}{n}$ and $x_j = a + jh$. Then,
+
+\begin{align*}
+  \int_{a}^{b} f(x) \, dx &= \sum_{j=1}^{\frac{n}{2}} \int_{x_{2j-2}}^{x_{2j}}
+  f(x) \, dx \\
+                          &= \sum_{j=1}^{\frac{n}{2}} \left\{
+                            \frac{h}{3} \left[
+                              f(x_{2j-2}) + 4f(x_{2j-1}) + f(x_{2j})
+                            \right] - \frac{h^5}{90} f^{(4)}(\xi_j)
+                          \right\} \\
+                          &\qquad\text{where } x_{2j-2} < \xi_j < x_{2j} \\
+                          &\qquad\text{and } f \in C^4[a,b]
+\end{align*}
+
+taking into account that $f(x_{2j}), 0 < j < \frac{n}{2}$ appears in 2 terms,
+this summation can be simplified somewhat
+
+\[
+  \int_{a}^{b} f(x) \, dx = \frac{h}{3} \left[
+    f(x_0) + 2 \sum_{j=1}^{\frac{n}{2}-1} f(x_{2j}) + 4 \sum_{j=1}^{\frac{n}{2}}
+    f(x_{2j-1}) + f(x_n)
+  \right] + \text{error}
+.\]
+
+
+got to page 41/80 (32/54 in the published lecture slides)

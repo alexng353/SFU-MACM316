@@ -1,0 +1,234 @@
+\section{Adaptive Quadrature}
+\label{sec:adaptive_quadrature}
+
+Composative quadrature rules necessitate the use of equally spaced points. This
+does not take into account that some portions of the curve may have large
+functional variations that require more attention than other portions of the
+curve. It is useful to introduce a method that adjusts the step size to be
+smaller over portions of the curve where a larger functional variation occurs.
+Thi technique is called adaptive quadrature. We will now discuss an adaptive
+based on Simpson's Rule. The other composite procedures can be modified in a
+similar manner.
+
+We want to approximate 
+
+\begin{equation*}
+  \int_{a}^{b} f(x) \, dx
+\end{equation*}
+
+to within a specified tolerance $\bigEps > 0$.
+
+We will start by applying Simpson's Rule with a step size $h=\frac{(b-a)}{2}$
+
+\begin{align*}
+  \int_{a}^{b} f(x) \, dx &= S(a,b) - \frac{h^5}{90}f^{(4)} (\mu)\\
+  \text{where} \quad  S(a,b) &= \frac{h}{3}\left[f(a) + 4f(a+h) +f(b)\right]
+  \qquad (*)\\
+    \text{and} \quad  \mu &\in (a,b)
+.\end{align*}
+
+We want to know if we should further subdivide the interval, so we need an
+estimate for the error. Unfortunately, we don't know $f^{(4)}(\mu)$. Instead, we
+will estimate the error using Simpson's Rule with a step size $\frac{(b-a)}{4}$
+
+\begin{align*}
+  \int_{a}^{b} f(x) \, dx &= \frac{h}{6} \left[
+    f(a) + 4f(a+\frac{h}{2}) + 2f(a+h) +4f(a+ \frac{3h}{2}) + f(b)
+  \right] \\
+                          &- (\frac{h}{2})^4 \frac{(b-a)}{180} f^{(4)} (\tilde{\mu})
+.\end{align*}
+
+for some $\tilde{\mu} \in (a,b)$.
+
+\uline{OR}
+
+\begin{align*}
+  \int_{a}^{b} f(x) \, dx &= S(a, \frac{(a+b)}{2}) + S(\frac{(a+b)}{2}, b) -
+  \frac{1}{16} \frac{h^5}{90} f^{(4)} (\tilde\mu) \\
+  \text{where} \quad  S(a, \frac{(a+b)}{2}) &= \frac{h}{6} \left[
+    f(a) + 4f(a+\frac{h}{2}) + f(a+h)
+  \right] \qquad (**)\\
+    \text{and} \quad  S(\frac{(a+b)}{2},b) &= \frac{h}{6} \left[
+      f(a+h) + 4f(a+\frac{3h}{2}) + f(b)
+      \right]
+\end{align*}
+
+Now, we assume $f^{(4)}(\mu) \approx f^{(4)}(\tilde\mu)$.
+
+\noindent
+\uline{Note:} if $f^{(4)}$ is continuous, this assumption will hold for
+sufficiently small $h$.
+
+Subtract (**) from (*) to obtain
+
+\[
+0 \equiv S(a,b) - S\left(a, \frac{a+b}{2}\right) - S\left(\frac{a+b}{2}, b\right) - \frac{15}{16} \cdot \frac{h^5}{90} f^{(4)}(\mu)
+\]
+\[
+\text{or} \frac{h^5}{90} f^{(4)}(\mu) \approx \frac{16}{15} \left[ \mathcal{I}(a,b) - \mathcal{I}\left(a, \frac{a+b}{2}\right) - \mathcal{I}\left(\frac{a+b}{2}, b\right) \right]
+.\]
+
+\begin{align*}
+\therefore \quad \left| \text{error} \right| 
+&= \left| \int_a^b f(x) \, dx - \mathcal{I}\left(a, \frac{a+b}{2}\right) - \mathcal{I}\left(\frac{a+b}{2}, b\right) \right| \\
+&\equiv \frac{1}{16} \left| \frac{h^5}{90} f^{(4)}(\mu) \right| \\
+&\equiv \frac{1}{15} \left| \mathcal{I}(a,b) - \mathcal{I}\left(a, \frac{a+b}{2}\right) - \mathcal{I}\left(\frac{a+b}{2}, b\right) \right|
+\end{align*}
+
+Thus if we want $|\text{error}|<\bigEps $, we typically insist that 
+
+\[
+\frac{1}{10} |S(a,b)-S(a,\frac{a+b}{2}) - S(\frac{a+b}{2}, b)| \leq \bigEps
+.\]
+
+Often, a factor of $\frac{1}{10}$ is used rather than $\frac{1}{15}$ since we
+had to make the assumption that $f^{(4)}(\mu) \approx f^{(4)}(\tilde\mu)$ and we
+prefer to be somewhat conservative in our error estimates.
+
+From last day, we had an error estimate for Simpson's Rule: 
+
+\[
+E = \frac{1}{15} |S(a,b)-S(a,\frac{a+b}{2}) - S(\frac{a+b}{2}, b)|
+.\]
+
+\Ex Compute the Simpson's Rule approximations for
+
+\[
+\int_{a}^{1.5} x^2 \ln(x) \, dx = 0.19225935
+.\]
+
+and calculate the error estimate and the actual error.
+
+In deriving our eror estimate, we had to make the assumption that $f^{(4)}(\mu)
+\approx f^{(4)}(\tilde\mu)$, and to compensate for this error we typically
+insist that
+
+\[
+\frac{1}{15} |S(a,b)-S(a,\frac{a+b}{2}) - S(\frac{a+b}{2}, b)| < \frac{2}{3}
+\bigEps \equiv \tilde\bigEps
+.\]
+
+Adaptive quadrature methods are built on top of this condition. If the error
+estimate is less than $\frac{2}{3}$ the desired tolerance $\bigEps$, then 
+
+\[
+S(a, \frac{(a+b)}{2}) + S(\frac{(a+b)}{2}, b)
+.\]
+
+is assumed to be a sufficiently accurate approximation to $\int_{a}^{b} f(x) \, dx$ 
+
+Otherwise, we apply Simpson's Rule to the subintervals $[a, \frac{a+b}{2}]$ and
+$[\frac{a+b}{2}, b]$. We also use the error estimation in each of the
+subintervals. If each error estimate is less than $\frac{\bigEps}{2}$, then we
+sum the approximations to get an approximation of $\int_{a}^{b} f(x) \, dx$.
+
+If the approximation on one of the subintervals fails to be within the tolerance
+$\frac{\tilde \bigEps}{2}$ then that subinterval is itself subdivided and the
+procedure is reapplied to the two subintervals to determine if the approximation
+on each subinterval is accurate to within $\frac{\tilde \bigEps}{2}$.
+
+This recursive procedure is continued until each portion is within the desired
+tolerance.
+
+\section{Gaussian Quadrature}
+
+Thus far we hvae onlyd ealt with quadrature formulae
+
+\[
+\int_{a}^{b} f(x) \, dx \approx \sum_{j=1}^{n} a_j f(x_j)
+.\]
+
+that relied on nodes that are equally spaced. This is a nice feature for
+composite rules because it reduces the number of function evaluations. However,
+if we allow ourselves to use unequally spaced points, then we can construct
+quadrature formulas of higher order accuracy.
+
+Notice that with $n$ nodes and $n$ weights we have $2n$ free parameters and we
+may hope to find an optimal quadrature formula which is exact for polynomials of
+degree $\leq 2n-1$.
+
+First, note that an integral
+
+\[
+\int_{a}^{b} f(x) \, dx
+.\]
+
+over an interval $[a,b]$ can be transformed into an integral over $[-1, 1]$ by
+using a change of variables
+
+\begin{align*}
+\text{let}\quad t &= \frac{2x-a-b}{b-a} \\
+\text{then}\quad  x &= \frac{1}{2}[(b-a) + a + b] \\
+\text{and} \quad \,dx &= \frac{1}{2}(b-a) \,dt
+\end{align*}
+
+So 
+
+\[
+  \int_{a}^{b} f(x) \, dx = \int_{-1}^{1} f(\frac{1}{2}[(b-a)t + a+b]) \,
+  \frac{1}{2}(b-a)dt
+.\]
+
+so without loss of generality, we will consider integrals over the interval $[-1,1]$.
+
+Suppose that $n=2$ (2 nodes) and that we want to determine $c_1, c_2, x_1, x_2$
+so that the integration formula
+
+\[
+\int_{-1}^{1} f(x) \, dx = c_1 f(x_1) + c_2 f(x_2)
+.\]
+
+gives the exact result whenever $f(x)$ is a polynomial of degree $2(2)-1 =3$.
+
+\[
+\ie f(x) = a_0 + a_1 x + a_2 x^2 + a_3 x^3
+.\]
+
+Since 
+
+\begin{align*}
+&\int_{-1}^{1} a_0 + a_1 x + a_2 x^2 + a_3x^3 \, dx  \\
+&= a_0 \int_{-1}^{1}  \, da + a_1 \int_{-1}^{1} x \, dx + a_2 \int_{-1}^{1} x^2 \, dx + a_3 \int_{-1}^{1} x^3 \, dx \\
+\end{align*}
+
+This problem is equivalent to showing that the formula is exact for $f(x) = 1,
+x, x^2, x^3$.
+
+cases:
+
+\begin{center}
+  \begin{tabular}{c|c}
+    Function $f(x)$ & Equation \\
+    \hline
+    $1$ & $c_1 + c_2 = a_0 \int_{-1}^{1} \, dx$ \\
+    $x$ & $c_1x_1 + c_2x_2 = \int_{-1}^{1} x \, dx$ \\
+    $x^2$ & $c_1x_1^2 + c_2x_2^2 = \int_{-1}^{1} x^2 \, dx$ \\
+    $x^3$ & $c_1x_1^3 + c_2x_2^3 = \int_{-1}^{1} x^3 \, dx$ \\
+  \end{tabular}
+\end{center}
+
+Solving this system gives us that
+
+\[
+c_1 = 1, c_2 = 1, x_1 = - \frac{\sqrt{3}}{3}, x_2 = \frac{\sqrt{3}}{3}
+.\]
+
+$\implies$ the approximation formula is 
+\[
+  \int_{-1}^{1} f(x) \, dx = f\left(-\frac{\sqrt{3}}{3}\right) +
+  f\left(\frac{\sqrt{3}}{3}\right)
+.\]
+
+This approach can be used to obtain the nodes and coefficients for larger $n$,
+but Legendre polynomials can be used to obtain them more easily.
+
+\subsection{Legendre Polynomials}
+
+The Legendre Polynomials are defined according to the following two properties:
+
+\begin{enumerate}
+\item $P_n(x)$ is a polynomial of degree $n$
+\item $\int_{-1}^{1} P(x)P_n(x) \, dx = 0$ whenever $P(x)$ is a polynomial of
+  degree less than $n$.
+\end{enumerate}
+

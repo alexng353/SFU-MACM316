@@ -1,0 +1,126 @@
+\documentclass[12pt]{book}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{physics}
+\usepackage{pgfplots} % TODO: remove this
+
+\ifPDFTeX % ensure generation of machine readable output
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\fi
+
+\usepackage{csquotes}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\setlength{\arraycolsep}{12pt}
+
+\newcommand{\Eg}{\textbf{Eg.}\xspace}
+\newcommand{\Ex}{\textbf{Ex.}\xspace}
+\newcommand{\Ie}{\textbf{I.e.}\xspace}
+\newcommand{\bigEps}{\mathcal{E}}
+\newcommand{\bproof}{\textit{Proof ($\impliedby$).}\xspace}
+\newcommand{\defn}{\textbf{Def.}\xspace}
+\newcommand{\eg}{\textbf{e.g.}\xspace}
+\newcommand{\ex}{\textbf{ex.}\xspace}
+\newcommand{\fproof}{\textit{Proof ($\implies$).}\xspace}
+\newcommand{\ie}{\textbf{i.e.}\xspace}
+\newcommand{\lemma}{\textit{Lemma}\xspace}
+\newcommand{\soln}{\textit{Soln.}\xspace}
+\newcommand{\thm}{\textbf{Thm.}\xspace}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+}
+
+\newcommand{\ulhref}[2]{\href{#1}{\color{blue}\uline{#2}}}
+
+\begin{document}
+
+\title{MACM 316 Spring 2025}
+\author{Alexander Ng}
+\date{Monday, April 14, 2025}
+
+\maketitle
+
+\section{Preface}
+
+Hi reader, the following is a collection of notes I took while taking SFU's MACM
+316 (Numerical Analysis) in Spring 2025. Many of the notes are heavily based on
+the lecture notes given by Professor Steven Ruuth, which can be found in this
+repository at \texttt{./steve's notes}. I have tried to make the notes as
+readable as possible, and every file is compiled in a machine-readable format so
+you can easily stick them into an AI knowledge base to help you with your
+studies.
+
+If you need help getting back up to speed on Linear Algebra, I highly recommend
+taking a look at \ulhref{https://venhance.github.io/napkin/Napkin.pdf#part.4}{An Infinitely Large Napkin} by Venhance. It's a great book that covers all of the
+theory of mathematics that you will need to understand the material in this
+course.
+Overtime, I will be updating these notes to be better structured based on the
+chapters of the textbook that the course is structured around.
+
+\include{cleaned/Lecture001}
+\include{cleaned/Lecture002}
+\include{cleaned/Lecture003}
+\include{cleaned/Lecture004}
+\include{cleaned/Lecture005}
+\include{cleaned/Lecture006}
+\include{cleaned/Lecture007}
+\include{cleaned/Lecture008}
+\include{cleaned/Lecture009}
+\include{cleaned/Lecture010}
+\include{cleaned/Lecture011-a}
+\include{cleaned/Lecture011-b}
+\include{cleaned/Lecture012}
+\include{cleaned/Lecture013}
+\include{cleaned/Lecture014-b}
+\include{cleaned/Lecture014}
+\include{cleaned/Lecture015}
+\include{cleaned/Lecture016}
+\include{cleaned/Lecture017}
+\include{cleaned/Lecture018}
+\include{cleaned/Lecture019}
+\include{cleaned/Lecture020}
+\include{cleaned/Lecture021}
+\include{cleaned/Lecture022}
+\include{cleaned/Lecture023}
+\include{cleaned/Lecture024}
+\include{cleaned/Lecture025}
+\include{cleaned/Lecture026}
+\include{cleaned/Lecture027}
+\include{cleaned/Lecture028}
+\include{cleaned/Lecture029}
+\include{cleaned/Lecture030}
+\include{cleaned/Lecture031-b}
+\include{cleaned/Lecture031}
+\include{cleaned/Lecture032}
+\include{cleaned/Lecture033}
+\include{cleaned/Lecture034}
+\include{cleaned/Lecture035}
+
+\end{document}

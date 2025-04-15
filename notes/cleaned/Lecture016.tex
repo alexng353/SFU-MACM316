@@ -1,0 +1,219 @@
+We want to convert from $0 = f(x)$ to $x=g(x)$, which is to convert from a root
+finding problem to a fixed point problem.
+
+One way to do this, very simply, is to just add $x$ to both sides of the
+equation.
+
+\begin{align*}
+  x^3 + 4x^2 -10 &= 0 \\
+  x^3 + 4x^2 -10 + x &= x
+\end{align*}
+
+In general, if your iterative method converges very quickly, you will not have
+a guarantee of convergence. Therefore, you should use a mix of methods to
+get a good initial guess and then quickly converge to the fixed point.
+
+\section{Convergence}
+
+Why do some methods converge and some diverge? Why do they converge with
+different rates?
+
+Consider a simple example:
+
+\ex
+
+\[
+g(x) = ax+b
+.\]
+
+We have
+
+\begin{align*}
+  x_1 &=  ax_0 + b \\
+  x_2 &=  ax_1 + b = a(ax_0 + b) + b = a^2x_0 + (1+a)b \\
+  x_3 &=  ax_2 + b = a^3x_0 + (a+a+a^2)b \\
+\end{align*}
+
+and by induction,
+
+\begin{equation*}
+  x_n = \begin{cases}
+    a^nx_0 + \pqty{\frac{1-a^n}{1-a}} b & a \ne 1 \\
+    x_0 + nb & a = 1
+  .\end{cases}
+.\end{equation*}
+
+\begin{equation*}
+  \therefore \lim_{n \to \infty} x_n = \begin{cases}
+    \frac{1}{1-a}b & |a| < 1 \\
+    x_0 &  a = 1, b = 0
+  .\end{cases}
+\end{equation*}
+
+No proper limit exists for all other values of $a, b$.
+
+\section{Fixed Point Theorem}
+
+When does a fixed point iteration converge? How quickly does it converge?
+
+For this, we turn to the \textbf{fixed point theorem}.
+
+\thm Let $g\in C[a,b]$ and suppose $g(x) \in [a, b]$ for all $x \in [a,b]$.
+
+Suppose, in addition, that $g'$ exists on $(a,b)$ and a positive constant $k<1$
+exists with 
+
+\[
+|g'(x)| \leq k \text{ for all } x \in (a,b)
+.\]
+
+Then for any number $p_0$ in $(a,b)$, the sequence defined by
+
+\[
+  p_n = g(p_{n-1}) \qquad n \geq 1
+.\]
+
+converges to the unique fixed point $p$ in $[a, b]$
+
+\proof
+
+Our earlier \thm (existence + uniqueness) tells us that a unique fixed point
+exists in $[a,b]$. Notice that $g$ maps $[a, b]$ into itself, so the sequence 
+$\displaystyle \left\{ p_n \right\}_{n=0}^\infty$ is defined for all $n \geq 0$
+and $p_n \in [a, b]$ for all $n$.
+
+We may apply the \textbf{mean value theorem} to $g$ to show that for any $n$
+
+\begin{align*}
+  |p_n-p| &= |g(p_{n-1}) - g(p)| \\
+          &= |g'(c)||p_{n-1}-p| \\
+          &\leq k|p_{n-1}-p|
+\end{align*}
+
+Where $c \in (a,b)$. Applying the inequality inductively gives 
+
+\[
+some garbage i haven't written down yet
+.\]
+
+Since $k<1$, $\displaystyle \lim_{n\to\infty} |p_n-p| \leq \lim_{n\to\infty} k^n|p_0-p| = 0$
+
+\[
+  \therefore \left\{ p_n \right\}_{n=0}^\infty \text{ converges to } p 
+.\]
+
+This proof also gives us a natural bound for the error. 
+
+\section{Newton's Method}
+
+(or Newton-Raphson Method)
+
+One of the most powerful and well-known methods for solving a root-finding problem
+
+\[
+f(x) = 0
+.\]
+
+\textbf{Pros:} Much faster than bisection
+
+\textbf{Cons:} Needs $f'(x)$, not guaranteed to converge
+
+\textbf{Want:} $x=p$ s.t. $f(x)=0$
+
+\textbf{Idea:} Use slope as well as function values
+
+\subsection{Derivation (by Taylor's Thm.)}
+
+\textbf{Want:} $x=p$ s.t. $f(x) = 0$
+
+Suppsoe $f\in C^2[a,b]$. Let $\overline{x} \in [a,b]$ be an approximation to $p$
+s.t. $f'(\overline{x})\ne 0$ and $|\overline{x}-p|$ is sufficiently small. Then
+
+\[
+  f(x) = f(\overline{x}) + f'(\overline{x})(x - \overline{x}) + \frac{1}{2}f''(\xi(x))(x-\overline{x})^2 \qquad \xi\text{ lies between } x, \overline{x}
+.\]
+
+Set $x=p$
+
+\[
+0 = f(\overline{x}) + f'(\overline{x}) (p - \overline{x}) + \frac{1}{2}f''(\xi(p))(p-\overline{x})^2
+.\]
+
+$p- \overline{x}$ is very small $\implies |p- \overline{x}|$ is even smaller.
+So we just drop the error term $\frac{1}{2}f''(\xi(p))(p-\overline{x})^2$
+
+\[
+  0 \approx f(\overline{x}) + f'(\overline{x}) (p-\overline{x})
+.\]
+
+Solve for $p$:
+
+\[
+  \tilde{p} = \overline{x} - \frac{f(\overline{x})}{f'(\overline{x})}
+.\]
+
+Take $p_n = p_{n-1} - \frac{f(p_{n-1})}{f'(p_{n-1})}$ 
+
+As a stopping criterion, we might use 
+
+\[
+  |p_n-p_{n-1}| \leq \text{\textit{TOLERANCE}} \quad \epsilon
+.\]
+
+Called \enquote{absolute error approximation}.
+
+We might also use \enquote{relative error approximation}
+
+\[
+  \frac{|p_n - p_{n-1}|}{|p_{n-1}|} \leq \epsilon
+.\]
+
+(1) Newton's method fails:
+
+\[
+f'(p_n) = 0
+.\]
+ 
+$\implies$ method is not effective if $f'$ is equal to zero at $p$. It will
+also not perform well if $f'$ is close to $0$.
+
+Also we see in the derivation that $|p- \overline{x}|$ needs to be small,
+which implies we need a good initial guess.
+
+\ex:
+
+Use Newton's Method to compute the square root of a number $R$. We want to find
+the roots of $p^2 - R = 0$. 
+
+Let
+
+\begin{align*}
+  f(x) &= x^2 - R \\
+  f'(x) &= 2x \\
+\end{align*}
+
+Newton's Method takes the form
+
+\begin{align*}
+p_n &= p_{n-1} - \frac{f(p_{n-1})}{f'(p_{n-1})} \\
+    &= p_{n-1} - \frac{p_{n-1}^2 - R}{2p_{n-1}} \\
+    &= \frac{1}{2}(p_{n-1} + \frac{R}{p_{n-1}})
+\end{align*}
+
+Method is credited to Heron, a Greek Engineer circa 100BC -> 100AD.
+
+Try $R-2$: 
+
+\begin{align*}
+p_0 &= 2 \\
+p_1 &= 1.5 \\
+p_2 &= 1.416666 \\
+p_3 &= 1.41425162 \\
+p_4 &= 1.414211356 \qquad \text{12 digits correct}  \\
+\end{align*}
+
+Newton's method can be shown to converge under reasonable assumptions
+(smoothness of $f(\cdot)$, $f'(p)\neq 0$ and a good initial guess)
+
+\thm (Convergence):
+

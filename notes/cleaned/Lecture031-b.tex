@@ -1,0 +1,111 @@
+\section{Initial Value Problems for ordinary Differential Equations}
+
+Many natural, scientific and engineering problems can be described in terms of 
+\uline{differential equations}. Differential equations give us a way to
+mathematically expres rates of change. We will be considering methods for
+treating ordinary differential equations (ODEs) in this lecture. ODEs only
+consider derivatives with respect to one variable.
+
+\Ex Let $y(t)$ denote the number of individuals in a certain population. If this
+population has a constant growth rate $\alpha$ (the difference between a
+constant birth rate and death rate), then the differential equation 
+
+\[
+y'(t) = \alpha y(t)
+.\]
+
+with initial condition $y(0) = y_0$ describes the population growth.
+
+\soln 
+
+% \begin{align*}
+%   \frac{y'}{y} &= \alpha \\
+%   \frac{dy}{y} &= \alpha \, dx \\
+%   \int \frac{dy}{y} &= \int \alpha \, dx \\
+%   \ln |y| &= \alpha x + C \\
+%   |y| &= e^{\alpha x + C} = e^C \cdot e^{\alpha x} \\
+%   y &= C_1 e^{\alpha x} \quad \text{where } C_1 = \pm e^C
+% \end{align*}
+
+\begin{align*}
+  \frac{y'(t)}{y(t)} &= \alpha \\
+  D_t[\ln(y(t))] &= \alpha \\
+  \ln(y(t)) &= \alpha t + \text{const}  \\
+  y(t) &= ce^{\alpha t} \qquad c = e^{\text{const}}\\
+\end{align*}
+
+\begin{equation*}
+  y(0) = y_0 \implies y(t) = y_0 e^{\alpha t}
+.\end{equation*}
+
+To include other effects such as overcrowding, competition for food, etc, one
+might introduce a second term into the equation
+
+\begin{equation*}
+  y'(t) = \alpha y(t) - \beta [y(t)]^2
+.\end{equation*}
+
+where $\beta > 0$ and $\beta$ is small. Introducing a nonlinear term makes the
+problem much more difficult to study analytically.
+
+Indeed, few problems originating from the study of physical phenomena can be
+solved exactly. We begin by studying numerical methods for approximating the
+solution $y(t)$ to a problem.
+
+\[
+  \frac{dy}{dt} = f(t, y) \qquad \text{for } a \leq t \leq b
+.\]
+
+subject to the initial condition 
+
+\[
+y(a) = \alpha
+.\]
+
+\subsection{The elementary theory of initial value problems}
+
+We want/need some theoretical results, in particular, we would like to show that
+solutions to equations exist and are unique.
+
+\defn A function $f(t,y)$ satisfies a Lipschitz condition in the variable $y$ on
+a set $D \in \mathbb{R}^2$ if a constant $L > 0$ exists such that
+
+\[
+  |f(t,y_1) - f(t, y_2)| \leq L|y_1 - y_2| \qquad \text{for all } (t,y_1), (t,y_2) \in D
+.\]
+
+The constant $L$ is called a \uline{Lipschitz constant} for $f$.
+
+\pagebreak
+\subsubsection{Example}
+
+Does $f(t,y) = ty$ satisfy a Lipschitz condition on 
+
+\[
+D  = \{(t,y) : 0 \leq t \leq 1, -\infty < y < \infty\}
+?\]
+
+\noindent
+\soln
+
+% \begin{align*}
+% &|f(t,y_1) - f(t, y_2)| \\
+% &= |-ty_1 + \frac{4t}{y_1} + ty_2 - \frac{4t}{y_2}|\\
+% \end{align*}
+
+\begin{equation*}
+|f(t,y_1) - f(t, y_2)| = |-ty_1 + \frac{4t}{y_1} + ty_2 - \frac{4t}{y_2}|
+.\end{equation*}
+
+
+Consider $y_1 = -1, t=1$, $y_2 \to 0^+$. Under these conditions, we have
+$|f(t,y_1) - f(t,y_2)| \to \infty$.
+
+RHS = $L|y_1-y_2| \to L$
+
+$L$ is finite.
+
+We cannot have $|f(t,y_1) - f(t,y_2)| \leq L|y_1 - y_2|$ for any finite $L$
+
+$\therefore$ Lipschitz condition does not hold.
+

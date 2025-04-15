@@ -1,0 +1,222 @@
+\section{Thm (2.7 of Text)}
+
+Let $g\in C[a,b]$ s.t. $g(x) \in [a, b]$ for all $x \in [a, b]$.
+
+Suppose, in addition, that $g'$ is continuous on $(a,b)$ and a constant
+$0\leq k<1$ exists with $|g'(x)|\leq k$ for all $x\in (a,b)$.
+
+If $g'(p) \neq 0$, then for any number $p_0$ in $[a,b]$ the sequence 
+
+\[
+  p_n = g(p_{n-1}) \text{ for } n\geq 1
+.\]
+
+converges only linearly to the unique fixed point $p$ in $[a,b]$.
+
+\proof We know from the fixed point theorem that the sequence converges to $p$.
+since $g'$ exists on $[a,b]$ we can apply the mean value theorem to g:
+
+\[
+\underbrace{g(p_n) - g(p)}_{p_{n+1} - p} = g'(\xi_n)(p_n - p)
+.\]
+
+where $\xi_n$ is between $p_n$ and $p$. Thus,
+
+\[
+  \frac{p_{n+1}-p}{p_n-p} = g'(\xi_n)
+.\]
+
+and fixed point iteration gives linear convergence with asymptotic error
+constant $|g'(p)|$ whenever $g'(p) \neq 0$.
+
+\proof...
+
+Thus $\displaystyle \lim_{n\to\infty} \frac{|p_{n+1}-p|}{|p_n-p|} = |g'(p)|$
+and fixed-point iteration gives linear convergence with asymptotic error 
+constant $|g'(p)|$ whenever $g'(p) \neq 0$.
+
+Method $A$ was the fixed-point iteration method defined by the iteration
+function
+
+\[
+  g(x) = \frac{1}{2} (10-x^3)^{1/2}
+.\]
+
+Notice that:
+
+\begin{align*}
+g'(p=1.365230013)
+&= -\frac{3}{4}x^2(10-x^3)^{-1/2} \\
+&= -0.51 \neq 0
+\end{align*}
+
+so the theorem applies if we consider the interval $[1, 1.5]$ and we see that
+linear convergence is obtained. On the other hand, Method $B$ was the fixed
+point iteration method defined by the iteration function
+
+\[
+g(x) = x-\frac{x^3+4x^2-10}{3x^2+8x}
+.\]
+
+This method gave quadratic convergence, but the theorem cannot be applied 
+because
+
+\[
+g'(p) = 0
+.\]
+
+We saw last day that higher order convergence for fixed point method can 
+occur only when $g'(p) = 0$. It is possible under certain reasonable conditions
+to obtain quadratic convergence...
+
+\section{Theorem (2.8 of Text)}
+
+Let $p$ be a solution of the equation $x = g(x)$.
+
+Suppose $g'(p) = 0$ and $g''$ is continuous and strictly bounded by $M$ on an
+open interval $I$ containing $p$. Then, there exists a $\delta > 0$ such that
+for $p_0 \in [p-\delta, p+\delta]$, the sequence defined by $p_n = g(p_{n-1})$
+when $n\geq 1$ converges at least quadratically to $p$.
+
+Moreover, for sufficiently large values of $n$, 
+
+\[
+|p_{n+1} - p| < \frac{M}{2} |p_n - p|^2
+.\]
+
+\proof... (see lecture notes)
+
+Thus the sequence $\{ p_n \}_{n=0}^\infty$ converges quadratically if
+$g''(p) \neq 0$ and higher order convergent if $g''(p) = 0$. Also, we know
+$|g''| < M $ so 
+
+\[
+|p_{n+1} - p| < \frac{M}{2} |p_n - p|^2
+.\]
+
+So the idea behind finding iteration methods with a high order of convergence
+is to look for schemes whose derivatives are zero at the fixed point.
+
+\section{Newton's Method}
+
+\begin{align*}
+  g(x) &= x-\frac{f(x)}{f'(x)} \\
+  g'(x) &= 1-\frac{[f'(x)]^2 - f(x) f''(x)}{[f'(x)]^2} \\
+        &= \frac{f(x)f''(x)}{[f'(x)]^2} \\
+\end{align*}
+
+$\therefore g'(p) = 0$ provided $f'(p) \neq 0$.
+
+$\therefore$ Newton's Method satisfies the derivative condition for \thm 2.8.
+
+\pagebreak
+
+Let's take another look at Newton's Method. Consider using Newton's Method to
+find the roots of
+
+\[
+p^3 - p^3 - p + 1 = 0
+.\]
+
+Newton's Method here is
+
+\[
+  p_{n+1} = p_n = \frac{p_n^3 - p_n^2 - p_n + 1}{3p_n^2 - 2p_n -1}
+.\]
+
+Starting from $p_0 = 1.1$ we find
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{c|c}
+    \textbf{Iteration} & \textbf{Value} \\
+    \hline
+    $p_0$ & 1.1 \\
+    $p_1$ & 1.05116\ldots \\
+    $p_2$ & 1.02589\ldots \\
+    $p_3$ & 1.01303\ldots \\
+    $p_4$ & 1.00653\ldots \\
+    $p_5$ & 1.00327\ldots \\
+    \vdots & \vdots
+  \end{tabular}
+  \caption{Numerical Iterations}
+  \label{tab:iterations}
+\end{table}
+
+Which is very slow (Linear) convergence to the root (which is $p=1$).
+
+Why is this?
+
+In Newton's Method, we need to find $f'(p) \neq 0 $ to obtaine quadratic 
+convergence. Notice that
+
+\[
+  f'(p) = 3p^2 - 2p - 1 |_{p=1} = 0
+.\]
+
+So the theorem doesn't hold. Moreover, factoring $f$:
+
+\[
+f(x) = (x-1)^2(x+1)
+.\]
+
+we see that $x=1$ is a zero with multiplicity of $2$.
+
+\defn A solution $p$ of $f(x) = 0$ is a zero of multiplicity $m$ of $f$ if for 
+$x\ne p$ we can write $f(x) = (x-p)^m q(x)$ where $\lim_{x\to p} q(x) \neq 0$.
+
+Simple zeros are those that have multiplicity $1$.
+
+Thus Newton's Method can only be applied to simple zeros of a function.
+Identification fo the multiplicity of a zero is often made easier by the two
+following theorems.
+
+\thm 2.10
+
+$f\in C'[a,b]$ has a simple zero at $p$ in $(a,b)$ if and only if $f(p) = 0$
+but $f'(p) \neq 0$.
+
+\thm 2.11
+
+The function $f\in C^m[a,b]$ has a zero of multiplicity $m$ at $p$ if and only
+if 
+
+\[
+  0 = f(p) = f'(p) = f''(p) = \dots = f^{(m-1)}(p)
+.\]
+
+but $f^{(m)}(p) \neq 0$.
+
+We want to obtain quadratic convergence with Newton's Method for multiple roots.
+
+One approach is to define a new function
+
+\[
+  \mu(x) = f\frac{(x)}{f'(x)}
+.\]
+
+We assume $p$ is a zero of multiplicity $m$ and $f(x) = (x-p)^m q(x)$ where
+$q(p) \neq 0$. Then,
+
+\begin{align*}
+  \mu(x) &= \frac{(x-p)^m}{m(x-p)^{m-1} q(x) + q'(x)(x-p)^m} \\
+  &= \frac{(x-p)q(x)}{mq(x) + q'(x) (x-p)}  \\
+  &= (x-p) \frac{q(x)}{mq(x)+q'(x-p)} \\
+  q(p) \neq 0 \quad\text{therefore, } &\mu(p) \text{ has a simple root at } x=p
+\end{align*}
+
+so $\mu(p) = 0$, but $\displaystyle \frac{q(p)}{mq(p) + q'(p)(p-p)} = \frac{1}{m} \neq 0$.
+and $p$ is a zero of multiplicity $1$ of $\mu(x)$.
+
+\textbf{Good:}
+\begin{itemize}
+  \item Quadratic convergence for all roots
+\end{itemize}
+
+\textbf{Bad:}
+\begin{itemize}
+  \item Need $f''$
+  \item $\mu$ is more expensive to work with
+  \item $\mu$ might give more roundoff error
+\end{itemize}
+
