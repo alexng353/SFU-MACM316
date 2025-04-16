@@ -15,8 +15,24 @@
 \usepackage{xspace}
 \usepackage{booktabs}
 \usepackage{physics}
-\usepackage{pgfplots} % TODO: remove this
 \usepackage{titlesec}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{greenquote}{
+  colback=green!10,
+  colframe=green!80,
+  % fonttitle=\bfseries,
+  coltitle=black,
+  left=1em,
+  right=1em,
+  top=0.5em,
+  bottom=0.5em,
+  boxrule=0.4pt,
+  % title={Quote},
+  before skip=10pt,
+  after skip=10pt,
+  sharp corners,
+}
 
 \titleformat{\chapter}[display]
   {\normalfont\huge\bfseries}
@@ -53,6 +69,7 @@
 \newcommand{\lemma}{\textit{Lemma}\xspace}
 \newcommand{\soln}{\textit{Soln.}\xspace}
 \newcommand{\thm}{\textbf{Thm.}\xspace}
+\newcommand{\fl}{\operatorname{fl}}
 
 \renewcommand{\arraystretch}{1.25} % Adjust row spacing
 
@@ -77,6 +94,11 @@
 \clearpage
 
 \chapter{An Introduction to Numerical Analysis}
+\begin{greenquote}
+  The first four lectures of this course are an introduction to numerical
+  analysis and the main recurring concepts that will be used throughout the
+  course.
+\end{greenquote}
 Many real-world problems stem from numerical analysis, particularly poor 
 execution. Rounding errors, insufficient representation problems, and other 
 such problems represent the significant impact of computation in the real world.
@@ -87,10 +109,11 @@ Check out the following resources for more information:
   \item \ulhref{https://web.ma.utexas.edu/users/arbogast/misc/disasters.html}{https://web.ma.utexas.edu/users/arbogast/misc/disasters.html}
 \end{enumerate}
 
-\include{cleaned/Lecture001}
-\include{cleaned/Lecture002}
-\include{cleaned/Lecture003}
-\include{cleaned/Lecture004}
+\include{sections/chapter1}
+% \include{cleaned/Lecture001}
+% \include{cleaned/Lecture002}
+% \include{cleaned/Lecture003}
+% \include{cleaned/Lecture004}
 % TODO: put this in it's own section
 \section{Review}
 
@@ -122,7 +145,18 @@ $\alpha_h = cos h + \frac{1}{2} h^2$
 \end{align*}
 
 \chapter{Direct Methods for Solving Linear Systems}
-Chapter 6 of the textbook.
+\begin{greenquote}
+  Chapter 6 of the textbook.
+\end{greenquote}
+
+In MATH 240, we learned methods for solving linear systems of equations where
+our $n \times m$ matrix has few rows and few columns. In Numerical Analysis, we
+will learn methods for solving linear systems where our matrix has thousands or
+millions of rows and columns.
+
+We will first study methods that give an answer in a fixed number of steps, 
+subject only to roundoff errors. This method only has error from the accumulation
+of numerical representation errors.
 
 \include{cleaned/Lecture005}
 \include{cleaned/Lecture006}
@@ -131,7 +165,9 @@ Chapter 6 of the textbook.
 \include{cleaned/Lecture009}
 
 \chapter{Iterative Techniques in Matrix Algebra}
-Chapter 7 of the textbook.
+\begin{greenquote}
+  Chapter 7 of the textbook.
+\end{greenquote}
 
 We are interested in solving large linear systems $Ax = b$. We can use certain
 properties of $A$, such as $A$ being sparse (\ie having a high percentage of
@@ -149,7 +185,9 @@ properties we are interested in. For this reason, we will be considering
 \include{cleaned/Lecture014}
 
 \chapter{Solutions of Nonlinear Equations} 
-Chapter 2 of the text.
+\begin{greenquote}
+  Chapter 2 of the text.
+\end{greenquote}
 
 We are interested in finding a root $x \in \mathbb{R}$ of an equation of the
 form $f(x) = 0$ for a given continuous function $f$. In most cases, it is
@@ -168,7 +206,9 @@ iterative methods to approximate the solution.
 \include{cleaned/Lecture019} % chapter 3 supposed to start here
 
 \chapter{Approximation and Interpolation}
-Chapter 3 of the textbook.
+\begin{greenquote}
+  Chapter 3 of the textbook.
+\end{greenquote}
 
 This is the section about splines! You are going to love splines.
 
@@ -179,9 +219,11 @@ This is the section about splines! You are going to love splines.
 \include{cleaned/Lecture024}
 
 \chapter{Numerical Differentiation}
-Chapter 4 of the textbook. This section is also about Numerical Integration,
-Richardson's Extrapolation, Romberg Integration, Adaptive Quadrature and
-Gaussian Quadrature.
+\begin{greenquote}
+  Chapter 4 of the textbook. This section is also about Numerical Integration,
+  Richardson's Extrapolation, Romberg Integration, Adaptive Quadrature and
+  Gaussian Quadrature.
+\end{greenquote}
 
 \include{cleaned/Lecture025}
 \include{cleaned/Lecture026}

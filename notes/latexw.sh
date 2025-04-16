@@ -25,5 +25,6 @@ fi
 
 # ls -G "$1" | entr -r latexmk -quiet -pdf "$1"
 
-WATCH_FILES=$(ls -1 cleaned/*.tex "$1" 2>/dev/null)
+WATCH_FILES=$(ls -1 cleaned/*.tex sections/*.tex "$1" 2>/dev/null)
+echo "Watching $WATCH_FILES"
 echo "$WATCH_FILES" | entr -r latexmk -quiet -pdf "$1"
