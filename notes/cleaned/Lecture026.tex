@@ -1,80 +1,80 @@
-\section*{Key Takeaways from this Lecture}
-
-Be aware that most of what we did in this chapter is looking over formulas for
-approximating derivatives. So this entire notes package is just math. The key
-takeaways are just point forms of what we went over.
-
-\begin{enumerate}
-  \item Numerical Differentiation (\ref{sec:numerical_differentiation})
-    \begin{enumerate}[label=(\alph*)]
-      \item We approximate derivatives using interpolation of easier functions 
-        (\ex Lagrange polynomials)
-      \item Simplest case: using two points to approximate the first derivative
-      \item The \textbf{Forward Difference Formula} (for $h>0$) and
-        \textbf{Backward Difference Formula} (for $h<0$) are basic numerical
-        differentiation methods \eqref{eq:difference_formula}
-    \end{enumerate}
-  \item More General Approximation Formulas (\ref{sec:more_general_approximation_formulas})
-    \begin{enumerate}[label=(\alph*)]
-      \item Using $(n+1)$-point formulas, we get more accurate derivative
-        approximations
-      \item These formulas all follow from differentiating Lagrange polynomials
-      \item Three, five and higher-order point formulas are commonly used
-      \item Formula reference: \eqref{eq:three_point_formula}. The error term
-        depends on the highest derivative of $f(x)$ and the spacing of the
-        nodes.
-    \end{enumerate}
-  \item Equally Spaced Three-Point Formulas (\ref{sec:equally_spaced_three_point_formulas})
-    \begin{enumerate}[label=(\alph*)]
-      \item When the points are evenly spaced, the formulas for approximating
-        derivatives become \eqref{eq:three_point_formula_1}, \eqref{eq:three_point_formula_2}
-        and \eqref{eq:three_point_formula_3}
-      \item These three formulas correspond to 
-        \begin{enumerate}
-          \item Forward Difference (uses two points ahead)
-          \item Centered Difference (uses one point in front and one point behind)
-          \item Backward Difference (uses two points behind)
-        \end{enumerate}
-      \item Check out Example~1 (Section~\ref{sec:example_1})
-    \end{enumerate}
-  \item Second Derivative Approximation (\ref{sec:second_derivative_approximation})
-    \begin{enumerate}[label=(\alph*)]
-      \item We approximate $f''(x)$ by using function values at three points.
-      \item The formulas are derived using Taylor series expansion: \eqref{eq:second_derivative_approximation}
-    \end{enumerate}
-  \item Remarks on Error \ref{sec:remarks_on_error}
-    \begin{enumerate}[label=(\alph*)]
-      \item \textbf{Small $h$ leads to large roundoff errors.}
-      \item Since numerical differentiation involves dividing by $h$ and higher
-        orders of $h$, extremely small $h$ values can exaggerate computational
-        errors.
-      \item Typically, beyond $h\approx 10^{-6}$, roundoff errors dominate the
-        calculation.
-    \end{enumerate}
-  \item Richardson's Extrapolation \ref{sec:richardson_extrapolation}
-    \begin{enumerate}[label=(\alph*)]
-      \item If the error depends on some parameter (such as the step size $h$)
-        and the dependency of the error is predictable (we know the erroe
-        behaviour), we can extrapolate to obtain more accurate approximations.
-      \item We use multiple approximations at different step sizes and
-        \textbf{combine them to cancel error terms}.
-      \item There's a step by step process here: \eqref{eq:*}, \eqref{eq:**},
-        \eqref{eq:?}, \eqref{eq:***}, \eqref{eq:****}, \eqref{eq:???}
-      \item This process gives increasing accuracy with each step.
-    \end{enumerate}
-  \item Final Remarks
-    \begin{enumerate}[label=(\alph*)]
-      \item Numerical differentiation can \textbf{amplify errors}, so careful
-        step-size selection is crucial.
-      \item Centered difference methods are generally more accurate than forward
-        or backward differences.
-      \item \textbf{Richardson's Extrapolation} is a systematic way to improve
-        accuracy.
-      \item In numerical integration (covered in a later part of this chapter),
-        we will integrate the Lagrange polynomial instead of differentiating it.
-    \end{enumerate}
-  \item Also check out Random Stuff Steve said during lecture \ref{sec:random_stuff}
-\end{enumerate}
+% \section*{Key Takeaways from this Lecture}
+%
+% Be aware that most of what we did in this chapter is looking over formulas for
+% approximating derivatives. So this entire notes package is just math. The key
+% takeaways are just point forms of what we went over.
+%
+% \begin{enumerate}
+%   \item Numerical Differentiation (\ref{sec:numerical_differentiation})
+%     \begin{enumerate}[label=(\alph*)]
+%       \item We approximate derivatives using interpolation of easier functions 
+%         (\ex Lagrange polynomials)
+%       \item Simplest case: using two points to approximate the first derivative
+%       \item The \textbf{Forward Difference Formula} (for $h>0$) and
+%         \textbf{Backward Difference Formula} (for $h<0$) are basic numerical
+%         differentiation methods \eqref{eq:difference_formula}
+%     \end{enumerate}
+%   \item More General Approximation Formulas (\ref{sec:more_general_approximation_formulas})
+%     \begin{enumerate}[label=(\alph*)]
+%       \item Using $(n+1)$-point formulas, we get more accurate derivative
+%         approximations
+%       \item These formulas all follow from differentiating Lagrange polynomials
+%       \item Three, five and higher-order point formulas are commonly used
+%       \item Formula reference: \eqref{eq:three_point_formula}. The error term
+%         depends on the highest derivative of $f(x)$ and the spacing of the
+%         nodes.
+%     \end{enumerate}
+%   \item Equally Spaced Three-Point Formulas (\ref{sec:equally_spaced_three_point_formulas})
+%     \begin{enumerate}[label=(\alph*)]
+%       \item When the points are evenly spaced, the formulas for approximating
+%         derivatives become \eqref{eq:three_point_formula_1}, \eqref{eq:three_point_formula_2}
+%         and \eqref{eq:three_point_formula_3}
+%       \item These three formulas correspond to 
+%         \begin{enumerate}
+%           \item Forward Difference (uses two points ahead)
+%           \item Centered Difference (uses one point in front and one point behind)
+%           \item Backward Difference (uses two points behind)
+%         \end{enumerate}
+%       \item Check out Example~1 (Section~\ref{sec:example_1})
+%     \end{enumerate}
+%   \item Second Derivative Approximation (\ref{sec:second_derivative_approximation})
+%     \begin{enumerate}[label=(\alph*)]
+%       \item We approximate $f''(x)$ by using function values at three points.
+%       \item The formulas are derived using Taylor series expansion: \eqref{eq:second_derivative_approximation}
+%     \end{enumerate}
+%   \item Remarks on Error \ref{sec:remarks_on_error}
+%     \begin{enumerate}[label=(\alph*)]
+%       \item \textbf{Small $h$ leads to large roundoff errors.}
+%       \item Since numerical differentiation involves dividing by $h$ and higher
+%         orders of $h$, extremely small $h$ values can exaggerate computational
+%         errors.
+%       \item Typically, beyond $h\approx 10^{-6}$, roundoff errors dominate the
+%         calculation.
+%     \end{enumerate}
+%   \item Richardson's Extrapolation \ref{sec:richardson_extrapolation}
+%     \begin{enumerate}[label=(\alph*)]
+%       \item If the error depends on some parameter (such as the step size $h$)
+%         and the dependency of the error is predictable (we know the erroe
+%         behaviour), we can extrapolate to obtain more accurate approximations.
+%       \item We use multiple approximations at different step sizes and
+%         \textbf{combine them to cancel error terms}.
+%       \item There's a step by step process here: \eqref{eq:*}, \eqref{eq:**},
+%         \eqref{eq:?}, \eqref{eq:***}, \eqref{eq:****}, \eqref{eq:???}
+%       \item This process gives increasing accuracy with each step.
+%     \end{enumerate}
+%   \item Final Remarks
+%     \begin{enumerate}[label=(\alph*)]
+%       \item Numerical differentiation can \textbf{amplify errors}, so careful
+%         step-size selection is crucial.
+%       \item Centered difference methods are generally more accurate than forward
+%         or backward differences.
+%       \item \textbf{Richardson's Extrapolation} is a systematic way to improve
+%         accuracy.
+%       \item In numerical integration (covered in a later part of this chapter),
+%         we will integrate the Lagrange polynomial instead of differentiating it.
+%     \end{enumerate}
+%   \item Also check out Random Stuff Steve said during lecture \ref{sec:random_stuff}
+% \end{enumerate}
 
 \section{Numerical Differentiation (C4*1-17.1)}\label{sec:numerical_differentiation}
 
@@ -296,7 +296,7 @@ Thus,
     f''(x_0) &= \frac{1}{h^2} \left[ f(x_0 - h) - 2 f(x_0) + f(x_0 + h) \right] - \frac{h^2}{24} f^{(4)}(\xi).
 \end{align*}
 
-\subsubsection{Remarks on Error (17.9)}\label{sec:remarks_on_error}
+\subsubsection{Remarks on Error (17.9)}%\label{sec:remarks_on_error}
 
 Notice that all the differentiation formulas divide by some power of $h$.
 Division by small numbers tends to exaggerate roundoff error, but this is an
@@ -308,7 +308,7 @@ The exact value at which $h$ becomes too small depends on the scaling of your
 problem and your specific function $f$. However, for most problems, scaled
 nicely, you will start to see roundoff errors at around $h=10^{-6}$.
 
-\section{Richardson's Extrapolation (C4*1-17.10)}\label{sec:richardson_extrapolation}
+\section{Richardson's Extrapolation (C4*1-17.10)}%\label{sec:richardson_extrapolation}
 
 When the error depends on some parameter such as the step size $h$ and the
 dependency is predictable, we can often derive higher order accuracy from low
@@ -318,8 +318,8 @@ truncation error and that we know the expression for the first few terms of the
 trunction error,
 
 \begin{equation}
-M = N(h) + k_1h + k_2h^2 + k_3h^3 + \dots
-\label{eq:*}
+  M = N(h) + k_1h + k_2h^2 + k_3h^3 + \dots
+  \label{eq:N_h}
 \end{equation}
 
 \noindent where the $k_i$'s are constants, $h$ is a positive parameter and
@@ -328,18 +328,18 @@ parameter $\frac{h}{2}$. Now:
 
 \begin{equation}
 M=N(\frac{h}{2}) + \frac{k_1}{2}h + \frac{k_2}{4}h^2 + \frac{k_3}{8}h^3 + \dots
-\label{eq:**}
+\label{eq:N_h_2}
 .\end{equation}
 
 We want to obtain a higher order method by using some combination of these
 results. 
 
-Subctracting \eqref{eq:*} from twice \eqref{eq:**} gives:
+Subctracting \eqref{eq:N_h} from twice \eqref{eq:N_h_2} gives:
 
 \begin{equation}
   M = [2N(\frac{h}{2}) - N(h)] + k_2(\frac{h^2}{2} - h^2) + k_3
   (\frac{h^3}{4}-h^3) + \dots
-  \label{eq:?}
+  \label{eq:2N_h_2}
 \end{equation}
 
 which is an $O(h^2)$ approximation formula for $M$. For ease of notiation, 
@@ -352,7 +352,7 @@ Now
 
 \begin{equation}
   M = N_2(h) - \frac{1}{2} k_2 h^2 - \frac{3}{4} k_3 h^3 - \dots
-  \label{eq:***}
+  \label{eq:N_2_h}
 \end{equation}
 
 We can repeat this calculation with $\frac{h}{2}$:
@@ -361,15 +361,15 @@ Now
 
 \begin{equation}
   M = N_2(\frac{h}{2}) -\frac{1}{8} k_2 h^2 - \frac{3k^3}{32}h^3 - \dots
-  \label{eq:****}
+  \label{eq:N_2_h_2}
   \end{equation}
 
 We want to eliminate the $h^2$ term. We can do this by subtracting four times 
-\eqref{eq:***} from \eqref{eq:****}, which gives:
+\eqref{eq:N_2_h} from \eqref{eq:N_2_h_2}, which gives:
 
 \begin{equation}
   3M = 4N_2(\frac{h}{2}) -N_2(h) + \frac{3k_3}{8}h^3 + \dots
-  \label{eq:???}
+  % \label{eq:4N_2_h_2}
 \end{equation}
 
 which gives an $O(h^3)$ formula for approximating $M$. 
@@ -402,7 +402,7 @@ then for each \( j = 2, 3, \dots, m \), we have an \( O(h^j) \) approximation of
     N_j(h) = N_{j-1} \left(\frac{h}{2}\right) + \frac{N_{j-1} \left(\frac{h}{2}\right) - N_{j-1}(h)}{2^{j-1} - 1}.
 \end{align*}
 
-\subsection{More remarks - things that Steve said during lecture}\label{sec:random_stuff}
+\subsection{More remarks - things that Steve said during lecture}%\label{sec:random_stuff}
 Chapter 4 also considers numerical integration. We know how to integrate
 polynomials, so we can just integrate the lagrange polynomial and call it a day.
 

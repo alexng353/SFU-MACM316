@@ -16,40 +16,42 @@ We might choose to approximate:
 
 This gives the secant method:
 
-% TODO: rewrite this graph
 \begin{center}
-  \begin{tikzpicture}
-    \begin{axis}[
-      axis lines = middle,
-      xmin=0, xmax=6,
-      ymin=-2, ymax=4,
-      xlabel={$x$}, ylabel={$y$},
-      samples=100,
-      domain=0:6,
-      grid=major,
-      xtick={4,5}, 
-      xticklabels={$p_{k-1}$, $p_{k-2}$}
-      ]
-            % Function plot
-      \addplot[blue, thick] {0.01*(x+3)^3 - 2};
+  \begin{tikzpicture}[scale=1]
+  % Axes
+    \draw[->] (0,0) -- (6.5,0) node[right] {$x$};
+    \draw[->] (0,-2.5) -- (0,4.5) node[above] {$y$};
 
-            % Compute function values
-      \pgfmathsetmacro{\yA}{0.01*(4+3)^3 - 2}
-      \pgfmathsetmacro{\yB}{0.01*(5+3)^3 - 2}
+  % Grid
+    \foreach \x in {1,...,6} {
+      \draw[gray!20] (\x,-2.5) -- (\x,4.5);
+    }
+    \foreach \y in {-2,-1,0,1,2,3,4} {
+      \draw[gray!20] (0,\y) -- (6.5,\y);
+    }
 
-            % Plot points
-      \addplot[red, only marks, mark=*] coordinates {(4, \yA)};
-      \addplot[red, only marks, mark=*] coordinates {(5, \yB)};
+  % Labels for xticks
+    \node[below] at (4,0) {$p_{k-1}$};
+    \node[below] at (5,0) {$p_{k-2}$};
 
-            % Draw secant line
-      \addplot[red, dashed, thick] 
-        {(\yB - \yA) / (5 - 4) * (x - 4) + \yA};
-      %
-      %       % Equation label near midpoint
-      % \node[anchor=south, red] at (axis cs: 4.5, (\yA+\yB)/2) 
-      %   {\small $y = \frac{\yB - \yA}{5 - 4} (x - 4) + \yA$};
+  % Function plot
+    \draw[blue, thick, domain=0:6, samples=100, smooth, variable=\x] 
+      plot ({\x}, {0.01*(\x + 3)^3 - 2});
 
-    \end{axis}
+  % Points
+    \pgfmathsetmacro{\yA}{0.01*(4+3)^3 - 2} % = 0.01 * 343 - 2 = 3.43 - 2 = 1.43
+    \pgfmathsetmacro{\yB}{0.01*(5+3)^3 - 2} % = 0.01 * 512 - 2 = 5.12 - 2 = 3.12
+    \fill[red] (4,\yA) circle (2pt);
+    \fill[red] (5,\yB) circle (2pt);
+
+  % Secant line: from (4, \yA) to (5, \yB)
+    \draw[red, dashed, thick] 
+      (4,\yA) -- (5,\yB);
+
+  % Optional: label the line
+  % \node[anchor=south, red] at (4.5,{(\yA+\yB)/2}) 
+  %   {\small $y = \frac{\yB - \yA}{1} (x - 4) + \yA$};
+
   \end{tikzpicture}
 \end{center}
 

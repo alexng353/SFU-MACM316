@@ -234,7 +234,14 @@ For illustration, consider $n=4$. To evaluate
 $P(x) = a_4x^4 + a_3x^3 + a_2x^2 + a_1x+a_0$, we write:
 
 \[
-  P(x) = \left(\left(\left(\left(a_4x+a_3\right)x+a_2\right)x+a_1\right)x+a_0
+  % P(x) = \left(\left(\left(\left(a_4x+a_3\right)x+a_2\right)x+a_1\right)x+a_0
+    P(x) = \pqty{
+      \pqty{
+        \pqty{
+          a_4x + a_3
+        } x + a_2
+      } x + a_1
+    } x + a_0
 .\]
 
 Algorithmically,
